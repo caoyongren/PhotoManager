@@ -172,5 +172,5 @@
   <string name="tags_update_photos">更新受影响的照片中的标签</string>
   <string name="tags_update_result_format">已经更新 %1$d 照片的标签</string>
   <string name="tags_hint">在标签名上长按打开菜单</string>
-  <string name="tags_defaults">活动、人们、地点、主题、项目</string>
+  <string name="tags_defaults">活动,人们,地点,主题,项目</string>
 </resources>

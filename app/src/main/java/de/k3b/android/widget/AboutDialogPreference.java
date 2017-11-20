@@ -90,14 +90,14 @@ public class AboutDialogPreference extends DialogPreference {
         }
 
         html = html.replace("$about$",
-                context.getText(R.string.about_content_about));
+                context.getText(R.string.about_content_about_html));
 
         // Fix for "Wrong charset in serbian translations" https://github.com/k3b/LocationMapViewer/issues/5
         // (for android 4.x) see http://stackoverflow.com/questions/4933069/android-webview-with-garbled-utf-8-characters
         wv.loadData(html, "text/html; charset=utf-8", "UTF-8");
-        wv.setVerticalScrollBarEnabled(true);
+        wv.setVerticalScrollBarEnabled(false);
 
-        wv.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
+        //wv.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_OVERLAY);
         wv.setScrollbarFadingEnabled(false);
         return wv;
     }

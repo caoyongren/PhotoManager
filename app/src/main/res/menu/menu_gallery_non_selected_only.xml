@@ -30,12 +30,12 @@
         android:orderInCategory="2"
         android:showAsAction="ifRoom" />
 
-    <item android:id="@+id/cmd_select_lat_lon"
+    <!--<item android:id="@+id/cmd_select_lat_lon"
         android:title="@string/area_menu_title"
         android:icon="@android:drawable/ic_dialog_map"
-        android:visible="true"
+        android:visible="false"
         android:orderInCategory="2"
-        android:showAsAction="ifRoom" />
+        android:showAsAction="ifRoom"/>-->
 
 
     <item android:id="@+id/cmd_select_tag"
@@ -50,6 +50,7 @@
         android:visible="true"
         android:orderInCategory="70"
         android:showAsAction="never" />
+
     <item android:id="@+id/cmd_selection_remove_all"
         android:title="@string/selection_remove_menu_title"
         android:visible="true"

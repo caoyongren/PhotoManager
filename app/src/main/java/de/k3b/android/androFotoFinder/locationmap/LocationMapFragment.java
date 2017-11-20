@@ -633,8 +633,9 @@ public class LocationMapFragment extends DialogFragment {
                     Log.d(Global.LOG_CONTEXT, mDebugPrefix + "reloadFotoMarker(" + why + ")"
                             + world + ", zoom " + mLastZoom);
                 }
-
-                reloadFotoMarker(world, groupingFactor, oldItems);
+                if (oldItems != null) {
+                    reloadFotoMarker(world, groupingFactor, oldItems);
+                }
             } else {
                 // background load is already active. Remember that at least one scroll/zoom was missing
                 mFotoMarkerPendingLoads++;
@@ -947,8 +948,9 @@ public class LocationMapFragment extends DialogFragment {
                 QueryParameter query = new QueryParameter(FotoSql.queryGps);
                 FotoSql.setWhereSelectionPks(query, mSelectedItems);
                 FotoSql.addWhereLatLonNotNull(query);
-
-                mCurrentSelectionMarkerLoader = new SelectionMarkerLoaderTask(createHashMap(oldItems));
+                if (oldItems != null) {
+                    mCurrentSelectionMarkerLoader = new SelectionMarkerLoaderTask(createHashMap(oldItems));
+                }
                 mCurrentSelectionMarkerLoader.execute(query);
             }
         }
@@ -957,9 +959,11 @@ public class LocationMapFragment extends DialogFragment {
     @NonNull
     private HashMap<Integer, FotoMarker> createHashMap(List<Overlay> oldItems) {
         HashMap<Integer, FotoMarker> oldItemsHash = new HashMap<Integer, FotoMarker>();
-        for (Overlay o : oldItems) {
-            FotoMarker marker = (FotoMarker) o;
-            oldItemsHash.put(marker.getID(), marker);
+        if (oldItems != null && oldItemsHash != null) {
+            for (Overlay o : oldItems) {
+                FotoMarker marker = (FotoMarker) o;
+                oldItemsHash.put(marker.getID(), marker);
+            }
         }
         return oldItemsHash;
     }

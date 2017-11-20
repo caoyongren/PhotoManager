@@ -426,6 +426,7 @@ public class GalleryFilterActivity extends LocalizedActivity
 
         protected void showLatLon(boolean noGeoInfo) {
             show(noGeoInfo, R.id.cmd_select_lat_lon, R.id.lbl_latitude, R.id.cmd_lat_from_history, R.id.edit_latitude_from,
+                    //show(noGeoInfo, R.id.cmd_select_lat_lon, R.id.lbl_latitude, R.id.cmd_lat_from_history, R.id.edit_latitude_from,
                     R.id.cmd_lat_to_history, R.id.edit_latitude_to, R.id.lbl_longitude, R.id.cmd_lon_from_history,
                     R.id.edit_longitude_from,R.id.cmd_lon_to_history, R.id.edit_longitude_to);
         }
