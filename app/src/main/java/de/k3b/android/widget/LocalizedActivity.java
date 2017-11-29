@@ -19,7 +19,6 @@
 
 package de.k3b.android.widget;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -89,7 +88,7 @@ public abstract class LocalizedActivity extends Activity {
         }
     }
 
-    /** force all open activity to recreate */
+    /** 强制所有打开的活动重新创建 **/
     public static void recreate(Activity child) {
         Activity context = child;
         while (context != null) {

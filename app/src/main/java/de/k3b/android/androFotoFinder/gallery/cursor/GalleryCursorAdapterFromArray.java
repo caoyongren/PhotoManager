@@ -44,7 +44,7 @@ import de.k3b.database.SelectedItems;
  */
 public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
 
-    /** not null data comes from array instead from base implementation */
+    /**不是null数据来自数组而不是基础实现 */
     private AdapterArrayHelper mArrayImpl = null;
 
     public GalleryCursorAdapterFromArray(final Activity context, SelectedItems selectedItems, String name, String fullPhotoPath) {
@@ -55,7 +55,7 @@ public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
         }
     }
 
-    /** get informed that cursordata may be available so array can be disabled */
+    /** 得知cursordata可能是可用的，所以数组可以被禁用. */
     @Override
     public Cursor swapCursor(Cursor newCursor) {
         Cursor oldCursor = super.swapCursor(newCursor);
@@ -124,7 +124,8 @@ public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
     /** converts imageID to uri */
     @Override
     public Uri getUri(long imageID) {
-        if (mArrayImpl != null) return Uri.parse("file:"+mArrayImpl.getFullFilePathfromArray(mArrayImpl.convertBetweenPositionAndId((int) imageID)));
+        if (mArrayImpl != null)
+            return Uri.parse("file:"+mArrayImpl.getFullFilePathfromArray(mArrayImpl.convertBetweenPositionAndId((int) imageID)));
         return super.getUri(imageID);
     }
 

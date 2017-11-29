@@ -85,7 +85,7 @@ import de.k3b.io.OSDirectory;
 import de.k3b.tagDB.Tag;
 
 /**
- * A {@link Fragment} to show ImageGallery content based on ContentProvider-Cursor.
+ * A {@link Fragment} 根据Content Provider-Cursor显示图片库内容.
  * Activities that contain this fragment must implement the
  * {@link OnGalleryInteractionListener} interface
  * to handle interaction events.
@@ -147,9 +147,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
     /**************** construction ******************/
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
+     *使用此工厂方法使用提供的参数创建此片段的新实例.
      * @return A new instance of fragment GalleryCursorFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -531,10 +529,6 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     }
 
     private void requery(String why) {
-        if (Global.debugEnabled) {
-            Log.i(Global.LOG_CONTEXT, mDebugPrefix + why + " requery\n" + ((mGalleryContentQuery != null) ? mGalleryContentQuery.toSqlString() : null));
-        }
-
         if (mGalleryContentQuery != null) {
             // query has been initialized
             if (mCurorLoader == null) {
@@ -585,9 +579,6 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     }
 
     private void onOpenChildGallery(QueryParameter subGalleryQuery) {
-        if (Global.debugEnabledSql) {
-            Log.i(Global.LOG_CONTEXT, "Exec child gallery\n\t" + subGalleryQuery.toSqlString());
-        }
         FotoGalleryActivity.showActivity(getActivity(), null, subGalleryQuery, 0);
     }
 
@@ -610,13 +601,8 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     /** Set curent selection to absolutePath */
     @Override
     public void navigateTo(String absolutePath) {
-        if (Global.debugEnabled) {
-            Log.i(Global.LOG_CONTEXT, mDebugPrefix + " navigateTo : " + absolutePath);
-        }
-
         mCurrentPath = absolutePath;
         reloadDirGuiIfAvailable("navigateTo " + absolutePath);
-        // requeryGallery(); done by owning activity
     }
 
     private void reloadDirGuiIfAvailable(String why) {
@@ -731,7 +717,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
                     mShareOnlyToggle.setIcon(android.R.drawable.checkbox_on_background);
                     mShareOnlyToggle.setChecked(true);
                 } else { // if (mode != MODE_VIEW) {
-                    inflater.inflate(R.menu.menu_gallery_non_selected_only, menu);
+                    inflater.inflate(R.menu.menu_gallery_item_selected_only, menu);
                 }
                 MenuItem shareItem = menu.findItem(R.id.menu_item_share);
                 shareItem.setActionProvider(mShareActionProvider);

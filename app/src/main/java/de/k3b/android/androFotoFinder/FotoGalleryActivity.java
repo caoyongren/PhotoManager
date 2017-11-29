@@ -69,6 +69,17 @@ import de.k3b.io.IGalleryFilter;
 import de.k3b.io.ListUtils;
 import de.k3b.tagDB.Tag;
 
+/*****************************
+ * Create by MasterMan
+ * Description:
+ *   首页, launch　activity
+ * Email: MatthewCaoYongren@gmail.com
+ * Blog: http://blog.csdn.net/zhenxi2735768804/
+ * Githup: https://github.com/caoyongren
+ * Motto: 坚持自己的选择, 不动摇！
+ * Date:
+ *****************************/
+
 public class FotoGalleryActivity extends LocalizedActivity implements Common,
         OnGalleryInteractionListener, DirectoryPickerFragment.OnDirectoryInteractionListener,
         LocationMapFragment.OnDirectoryInteractionListener,
@@ -87,6 +98,7 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
             invalidateDirectories(mDebugPrefix + "#onChange from mMediaObserverDirectory");
         }
     };
+
     private final BookmarkController.IQueryConsumer mLoadBookmarkResultConsumer = new BookmarkController.IQueryConsumer() {
         @Override
         public void setQuery(String fileName, QueryParameter newQuery) {
@@ -529,14 +541,11 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
         String action = (intent != null) ? intent.getAction() : null;
         if ((action == null) || (((Intent.ACTION_PICK.compareTo(action) != 0) && (Intent.ACTION_GET_CONTENT.compareTo(action) != 0)))) {
             MenuInflater inflater = getMenuInflater();
-
-            inflater.inflate(R.menu.menu_gallery_non_selected_only, menu);
+            /**
+             * 填充菜单选项的视图。
+             * */
+            inflater.inflate(R.menu.menu_gallery_item_selected_only, menu);
             inflater.inflate(R.menu.menu_gallery_non_multiselect, menu);
-            /*
-            getActionBar().setListNavigationCallbacks();
-            MenuItem sorter = menu.getItem(R.id.cmd_sort);
-            sorter.getSubMenu().
-            */
             Global.fixMenu(this, menu);
         }
 
@@ -758,7 +767,8 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
     public void onGalleryImageClick(long imageId, Uri imageUri, int position) {
         Global.debugMemory(mDebugPrefix, "onGalleryImageClick");
         QueryParameter imageDetailQuery = this.mGalleryQueryParameter.calculateEffectiveGalleryContentQuery();
-        ImageDetailActivityViewPager.showActivity(this, imageUri, position, imageDetailQuery, ImageDetailActivityViewPager.ACTIVITY_ID);
+        ImageDetailActivityViewPager.showActivity(this, imageUri, position, imageDetailQuery,
+                ImageDetailActivityViewPager.ACTIVITY_ID);
     }
 
     /** GalleryFragment tells the Owning Activity that querying data has finisched */
