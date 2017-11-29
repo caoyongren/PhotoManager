@@ -40,8 +40,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Toast;
 
-// import com.squareup.leakcanary.RefWatcher;
-
 import org.osmdroid.api.IGeoPoint;
 
 import java.io.File;
@@ -54,8 +52,6 @@ import de.k3b.android.androFotoFinder.Global;
 import de.k3b.android.androFotoFinder.R;
 import de.k3b.android.androFotoFinder.SettingsActivity;
 import de.k3b.android.androFotoFinder.directory.DirectoryPickerFragment;
-import de.k3b.android.androFotoFinder.locationmap.GeoEditActivity;
-import de.k3b.android.androFotoFinder.locationmap.MapGeoPickerActivity;
 import de.k3b.android.androFotoFinder.queries.FotoSql;
 import de.k3b.android.androFotoFinder.tagDB.TagSql;
 import de.k3b.android.androFotoFinder.tagDB.TagTask;
@@ -78,6 +74,8 @@ import de.k3b.io.IDirectory;
 import de.k3b.io.OSDirectory;
 import de.k3b.media.MediaUtil;
 import de.k3b.tagDB.Tag;
+
+// import com.squareup.leakcanary.RefWatcher;
 
 /**
  * Shows a zoomable imagee.<br>
@@ -789,13 +787,15 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         unhideActionBar(Global.actionBarHideTimeInMilliSecs * 3, "onPrepareOptionsMenu");
         AboutDialogPreference.onPrepareOptionsMenu(this, menu);
 
+/*
         MenuItem item = menu.findItem(R.id.cmd_show_geo);
 
         if (item != null) {
             item.setVisible(hasCurrentGeo());
         }
+*/
 
-        item = menu.findItem(R.id.cmd_show_geo_as);
+        MenuItem item = menu.findItem(R.id.cmd_show_geo_as);
 
         if (item != null) {
             item.setVisible(hasCurrentGeo());
@@ -857,9 +857,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
                 return true;
             }
 
-            case R.id.cmd_show_geo:
+/*            case R.id.cmd_show_geo:
                 MapGeoPickerActivity.showActivity(this, getCurrentFoto());
-                return true;
+                return true;*/
 
             case R.id.cmd_show_geo_as: {
                 final long imageId = getCurrentImageId();
@@ -878,11 +878,12 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
                 return true;
             }
 
-            case R.id.cmd_edit_geo: {
+/*            case R.id.cmd_edit_geo: {
                 SelectedFiles selectedItem = getCurrentFoto();
                 GeoEditActivity.showActivity(this, selectedItem, GeoEditActivity.RESULT_ID);
                 return true;
-            }
+            }*/
+
             case R.id.cmd_edit_tags: {
                 SelectedFiles selectedItem = getCurrentFoto();
                 tagsShowEditDialog(selectedItem);

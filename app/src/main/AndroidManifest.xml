@@ -149,7 +149,7 @@
             </intent-filter>
 
             <!-- ImageDetail mime image/* for SEND(_TO)/(RE)VIEW for null-schema -->
-            <intent-filter>
+            <intent-filter tools:ignore="AppLinkUrlError">
                 <action android:name="android.intent.action.SEND" />
                 <action android:name="android.intent.action.SENDTO" />
                 <action android:name="android.intent.action.VIEW" />
@@ -174,10 +174,12 @@
             android:name=".GalleryFilterActivity"
             android:icon="@drawable/ic_action_search"
             android:label="@string/filter_menu_title" />
+
         <activity
             android:name=".locationmap.GeoEditActivity"
             android:icon="@drawable/ic_geo_edit"
             android:label="@string/geo_edit_menu_title" />
+
         <activity
             android:name=".locationmap.MapGeoPickerActivity"
             android:icon="@drawable/ic_foto_map"
@@ -354,7 +356,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="file" />
+                <data android:scheme="file"
+                      tools:ignore="AppLinkUrlError"/>
                 <data android:mimeType="text/comma-separated-values" />
                 <data android:pathPattern=".*\\.csv" />
             </intent-filter>

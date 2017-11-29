@@ -37,8 +37,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-// import com.squareup.leakcanary.RefWatcher;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -563,14 +561,13 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.cmd_select_folder:
+            case R.id.cmd_select_folder://文件夹
                 openFolderPicker();
                 return true;
-
-            case R.id.cmd_select_lat_lon:
+            case R.id.cmd_select_lat_lon://
                 openLatLonPicker();
                 return true;
-            case R.id.cmd_select_tag:
+            case R.id.cmd_select_tag://标签
                 openTagPicker();
                 return true;
             case R.id.cmd_filter:
@@ -612,7 +609,6 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void loadBookmark() {

@@ -24,25 +24,27 @@
             android:title="@string/settings_multisel_clear_title"
             android:summary="@string/settings_multisel_clear_summary" />
 
-        <CheckBoxPreference android:key="mapsForgeEnabled"
+<!--        <CheckBoxPreference android:key="mapsForgeEnabled"
             android:defaultValue="false"
+            android:visibility="gone"
             android:title="@string/settings_maps_forge_enable_tile"
-            android:summary="@string/settings_maps_forge_enable_summary" />
+            android:summary="@string/settings_maps_forge_enable_summary" />-->
 
-        <de.k3b.android.widgets.EditTextPreferenceWithSummary
+<!--        <de.k3b.android.widgets.EditTextPreferenceWithSummary
             android:key="mapsForgeDir"
-            android:title="@string/settings_maps_forge_dir_title" />
+            android:title="@string/settings_maps_forge_dir_title" />-->
 
-        <de.k3b.android.widgets.EditTextPreferenceWithSummary
+<!--        <de.k3b.android.widgets.EditTextPreferenceWithSummary
             android:key="maxSelectionMarkersInMap"
-            android:title="@string/settings_map_selmarker_max_title" />
+            android:title="@string/settings_map_selmarker_max_title" />-->
 
-        <de.k3b.android.widgets.EditTextPreferenceWithSummary
+<!--        <de.k3b.android.widgets.EditTextPreferenceWithSummary
             android:key="pickHistoryMax"
-            android:title="@string/settings_geo_history_max_title" />
-        <de.k3b.android.widgets.EditTextPreferenceWithSummary
+            android:title="@string/settings_geo_history_max_title" />-->
+
+<!--        <de.k3b.android.widgets.EditTextPreferenceWithSummary
             android:key="pickHistoryFile"
-            android:title="@string/settings_geo_history_file_title" />
+            android:title="@string/settings_geo_history_file_title" />-->
 
         <de.k3b.android.widgets.EditTextPreferenceWithSummary
             android:key="slideshowIntervallInMilliSecs"
@@ -68,6 +70,7 @@
 			android:key="about"
 			android:title="@string/about_summary" />
 	</PreferenceCategory>
+
 	<PreferenceCategory android:title="@string/settings_group_debug_title"
 		android:key="second_category">
         <CheckBoxPreference android:key="debugEnabledSql"

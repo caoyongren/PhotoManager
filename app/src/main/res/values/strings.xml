@@ -19,7 +19,7 @@
  */
  -->
 <resources>
-    <string name="app_name">A Photo Manager</string>
+    <string name="app_name">Photo Manager</string>
     <string name="app_map_title">A Photo Map</string>
 
     <string name="about_summary">About \"A Photo Manager%1$s\"</string>

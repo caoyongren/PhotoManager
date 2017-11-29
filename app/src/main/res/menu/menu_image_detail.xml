@@ -53,6 +53,7 @@
         android:visible="true"
         android:orderInCategory="1000"
         android:showAsAction="never" />
+
     <item android:id="@+id/cmd_about"
         android:title="@string/about_summary"
         android:visible="true"

@@ -20,13 +20,13 @@
 package de.k3b.android.androFotoFinder.gallery.cursor;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -53,16 +53,14 @@ import java.util.List;
 import de.k3b.android.androFotoFinder.Common;
 import de.k3b.android.androFotoFinder.FotoGalleryActivity;
 import de.k3b.android.androFotoFinder.Global;
+import de.k3b.android.androFotoFinder.OnGalleryInteractionListener;
+import de.k3b.android.androFotoFinder.R;
 import de.k3b.android.androFotoFinder.directory.DirectoryGui;
 import de.k3b.android.androFotoFinder.directory.DirectoryPickerFragment;
 import de.k3b.android.androFotoFinder.imagedetail.ImageDetailActivityViewPager;
 import de.k3b.android.androFotoFinder.imagedetail.ImageDetailMetaDialogBuilder;
-import de.k3b.android.androFotoFinder.locationmap.GeoEditActivity;
-import de.k3b.android.androFotoFinder.locationmap.MapGeoPickerActivity;
-import de.k3b.android.androFotoFinder.queries.FotoViewerParameter;
 import de.k3b.android.androFotoFinder.queries.FotoSql;
-import de.k3b.android.androFotoFinder.R;
-import de.k3b.android.androFotoFinder.OnGalleryInteractionListener;
+import de.k3b.android.androFotoFinder.queries.FotoViewerParameter;
 import de.k3b.android.androFotoFinder.queries.Queryable;
 import de.k3b.android.androFotoFinder.queries.SqlJobTaskBase;
 import de.k3b.android.androFotoFinder.tagDB.TagTask;
@@ -781,12 +779,12 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
                 return cmdMoveOrCopyWithDestDirPicker(false, fileCommands.getLastCopyToPath(), selectedFiles);
             case R.id.cmd_move:
                 return cmdMoveOrCopyWithDestDirPicker(true, fileCommands.getLastCopyToPath(), selectedFiles);
-            case R.id.cmd_show_geo:
+/*            case R.id.cmd_show_geo:
                 MapGeoPickerActivity.showActivity(this.getActivity(), selectedFiles);
-                return true;
-            case R.id.cmd_edit_geo:
+                return true;*/
+/*            case R.id.cmd_edit_geo:
                 GeoEditActivity.showActivity(this.getActivity(), selectedFiles, GeoEditActivity.RESULT_ID);
-                return true;
+                return true;*/
             case R.id.cmd_edit_tags: {
                 return tagsShowEditDialog(selectedFiles);
             }

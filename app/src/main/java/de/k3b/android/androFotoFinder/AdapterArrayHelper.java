@@ -56,19 +56,11 @@ public class AdapterArrayHelper {
         mFullPhotoPaths = mRootDir.list(MediaScanner.JPG_FILENAME_FILTER);
         if ((mFullPhotoPaths != null) && (mFullPhotoPaths.length == 0)) {
             mFullPhotoPaths = null;
-            Log.i(Global.LOG_CONTEXT, mDebugPrefix + why + "AdapterArrayHelper.refreshLocal(" + mRootDir +") " + 0);
         } else if (mFullPhotoPaths != null) {
-            if (Global.debugEnabled) {
-                Log.i(Global.LOG_CONTEXT, mDebugPrefix + why + "AdapterArrayHelper.refreshLocal(" + mRootDir +") " + mFullPhotoPaths.length);
-            }
-
-            // #33
-            // convert to absolute paths
             String parentDirString = mRootDir.getAbsolutePath();
             for (int i = 0; i < mFullPhotoPaths.length; i++) {
                 mFullPhotoPaths[i] = parentDirString + "/" + mFullPhotoPaths[i];
             }
-
         }
     }
 
