@@ -182,13 +182,16 @@ public class BookmarkController {
             fileNamesPlusReset.addAll(Arrays.asList(fileNames));
         }
         Dialogs dlg = new Dialogs() {
-            @Override protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
+            @Override
+            protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
                 return onBookmarkMenuItemClick(menuItemId, itemIndex, items);
             }
 
-            @Override protected void onDialogResult(String fileName, Object[] parameters) {onLoadFromAnswer(fileName, consumer);}
+            @Override
+            protected void onDialogResult(String fileName, Object[] parameters) {onLoadFromAnswer(fileName, consumer);}
         };
-        dlg.pickFromStrings(mContext, mContext.getString(R.string.bookmark_load_from_menu_title), R.menu.menu_bookmark_context, fileNamesPlusReset);
+        dlg.pickFromStrings(mContext, mContext.getString(R.string.bookmark_load_from_menu_title),
+                R.menu.menu_bookmark_context, fileNamesPlusReset);
     }
 
     public void onLoadFromAnswer(final String fileName, final IQueryConsumer consumer) {

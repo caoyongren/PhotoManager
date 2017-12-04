@@ -21,7 +21,6 @@ package de.k3b.android.widget;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.preference.DialogPreference;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -106,24 +105,17 @@ public class AboutDialogPreference extends DialogPreference {
         final AlertDialog.Builder alert = new AlertDialog.Builder(context);
         alert.setTitle(getAboutTitle(context));
         alert.setIcon(R.drawable.foto_gallery);
-        alert.setNeutralButton(R.string.btn_cancel,
+
+        /*alert.setNegativeButton(R.string.btn_cancel,
                 new DialogInterface.OnClickListener() {
-
                     @Override
-                    public void onClick(
-                            final DialogInterface paramDialogInterface,
-                            final int paramInt) {
+                    public void onClick(final DialogInterface paramDialogInterface, final int paramInt) {
                         paramDialogInterface.cancel();
-
                     }
                 }
-        );
-
+        );*/
         final WebView wv =  setAboutText(context, new WebView(context));
         alert.setView(wv);
-
         return alert.create();
     }
-
-
 }

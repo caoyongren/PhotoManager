@@ -573,23 +573,23 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
             case R.id.cmd_select_folder://文件夹
                 openFolderPicker();
                 return true;
-            case R.id.cmd_select_lat_lon://
-                openLatLonPicker();
+            case R.id.cmd_select_lat_lon://地图
+                //openLatLonPicker();
                 return true;
             case R.id.cmd_select_tag://标签
                 openTagPicker();
                 return true;
-            case R.id.cmd_filter:
+            case R.id.cmd_filter://
                 openFilter();
                 return true;
-            case R.id.cmd_load_bookmark:
+            case R.id.cmd_load_bookmark://加载书签
                 loadBookmark();
                 return true;
-            case R.id.cmd_sort_date:
+            case R.id.cmd_sort_date://根据日期排序
                 this.mGalleryQueryParameter.setSortID(FotoSql.SORT_BY_DATE);
                 reloadGui("sort date");
                 return true;
-            case R.id.cmd_sort_directory:
+            case R.id.cmd_sort_directory://
                 this.mGalleryQueryParameter.setSortID(FotoSql.SORT_BY_NAME);
                 reloadGui("sort dir");
                 return true;
@@ -597,20 +597,19 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
                 this.mGalleryQueryParameter.setSortID(FotoSql.SORT_BY_NAME_LEN);
                 reloadGui("sort len");
                 return true;
-            case R.id.cmd_sort_location:
+            case R.id.cmd_sort_location://
                 this.mGalleryQueryParameter.setSortID(FotoSql.SORT_BY_LOCATION);
                 reloadGui("sort geo");
                 return true;
-            case R.id.cmd_settings:
+            case R.id.cmd_settings://设置
                 SettingsActivity.show(this);
                 return true;
-            case R.id.cmd_about:
+            case R.id.cmd_about://关于
                 AboutDialogPreference.createAboutDialog(this).show();
                 return true;
-            case R.id.cmd_more:
+            case R.id.cmd_more://更多
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        // reopen after some delay
                         openOptionsMenu();
                     }
                 }, 200);
@@ -621,7 +620,8 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
     }
 
     private void loadBookmark() {
-        mBookmarkController.onLoadFromQuestion(mLoadBookmarkResultConsumer, this.mGalleryQueryParameter.calculateEffectiveGalleryContentQuery());
+        mBookmarkController.onLoadFromQuestion(mLoadBookmarkResultConsumer,
+                            this.mGalleryQueryParameter.calculateEffectiveGalleryContentQuery());
     }
     /**
      * Call back from sub-activities.<br/>
@@ -659,16 +659,13 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
         if (filter != null) {
             this.mGalleryQueryParameter.setCurrentFilterSettings(filter);
             this.mGalleryQueryParameter.setHasUserDefinedQuery(false);
-
             invalidateDirectories(mDebugPrefix + "#filter changed " + why);
-
             reloadGui("filter changed");
         }
     }
 
     private void openLatLonPicker() {
         mGalleryQueryParameter.mCurrentSubFilterMode = GalleryQueryParameter.SUB_FILTER_MODE_GEO;
-
         final FragmentManager manager = getFragmentManager();
         LocationMapFragment dialog = new LocationMapFragment();
         dialog.defineNavigation(this.mGalleryQueryParameter.getCurrentFilterSettings(),
@@ -677,9 +674,11 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
         dialog.show(manager, DLG_NAVIGATOR_TAG);
     }
 
+    /**
+     * 标签筛选器
+     * */
     private void openTagPicker() {
         mGalleryQueryParameter.mCurrentSubFilterMode = GalleryQueryParameter.SUB_FILTER_MODE_TAG;
-
         final FragmentManager manager = getFragmentManager();
         TagsPickerFragment dlg = new TagsPickerFragment();
         dlg.setFragmentOnwner(this);
@@ -709,6 +708,7 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
     public boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag) {
         return TagsPickerFragment.handleMenuShow(menuItemItemId, selectedTag, this, this.mGalleryQueryParameter.getCurrentFilterSettings());
     }
+
 
     private void openFolderPicker() {
         mGalleryQueryParameter.mCurrentSubFilterMode = GalleryQueryParameter.SUB_FILTER_MODE_PATH;
@@ -797,7 +797,6 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
 
     @Override
     public void invalidateDirectories(String why) {
-
         if (mDirectoryRoot != null) {
             if (Global.debugEnabled) {
                 StringBuilder name = new StringBuilder(mDirectoryRoot.getAbsolute());
@@ -831,27 +830,23 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
 
         if (selectedAbsolutePath != null) {
             if (mGalleryQueryParameter.mCurrentSubFilterMode == GalleryQueryParameter.SUB_FILTER_MODE_GEO) {
-                Log.d(Global.LOG_CONTEXT, "FotoGalleryActivity.navigateTo " + selectedAbsolutePath + " from " + mGalleryQueryParameter.mCurrentLatLonFromGeoAreaPicker);
                 this.mGalleryQueryParameter.mCurrentLatLonFromGeoAreaPicker.get(DirectoryFormatter.parseLatLon(selectedAbsolutePath));
-
                 reloadGui("navigate to geo");
-
             } else if (mGalleryQueryParameter.mCurrentSubFilterMode == GalleryQueryParameter.SUB_FILTER_MODE_TAG) {
-                Log.d(Global.LOG_CONTEXT, "FotoGalleryActivity.navigateTo " + selectedAbsolutePath + " from "
-                        + ListUtils.toString(this.mGalleryQueryParameter.mCurrentTagsFromPicker));
                 this.mGalleryQueryParameter.mCurrentTagsFromPicker = new ArrayList<>(ListUtils.fromString(selectedAbsolutePath));
                 reloadGui("navigate to tags");
             } else if (mGalleryQueryParameter.mCurrentSubFilterMode == GalleryQueryParameter.SUB_FILTER_MODE_PATH) {
-                Log.d(Global.LOG_CONTEXT, "FotoGalleryActivity.navigateTo " + selectedAbsolutePath + " from " + this.mGalleryQueryParameter.mCurrentPathFromFolderPicker);
                 this.mGalleryQueryParameter.mCurrentPathFromFolderPicker = selectedAbsolutePath;
                 this.mGalleryQueryParameter.mDirQueryID = queryTypeId;
                 setTitle();
-
                 reloadGui("navigate to dir");
             }
         }
     }
 
+    /**
+     * 加载img数据
+     * */
     private void reloadGui(String why) {
         if (mGalleryGui != null) {
             QueryParameter query = this.mGalleryQueryParameter.calculateEffectiveGalleryContentQuery();
@@ -859,7 +854,6 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
                 this.mGalleryGui.requery(this, query, mDebugPrefix + why);
             }
         }
-
         if (mDirGui != null) {
             String currentPath = this.mGalleryQueryParameter.mCurrentPathFromFolderPicker;
             if (currentPath != null) {
@@ -880,17 +874,12 @@ public class FotoGalleryActivity extends LocalizedActivity implements Common,
             if (Global.debugEnabled) {
                 StringBuilder name = new StringBuilder(mDirectoryRoot.getAbsolute());
                 Directory.appendCount(name, mDirectoryRoot, Directory.OPT_DIR | Directory.OPT_SUB_DIR);
-                Log.i(Global.LOG_CONTEXT, mDebugPrefix + "onDirectoryDataLoadComplete(" +
-                        "mustDefineNavigation=" + mustDefineNavigation +
-                        ", mustShowFolderPicker=" + mustShowFolderPicker +
-                        ", content=" + name + ")");
             }
 
             if (mustDefineNavigation) {
                 mDirGui.defineDirectoryNavigation(directoryRoot, this.mGalleryQueryParameter.getDirQueryID(), this.mGalleryQueryParameter.mCurrentPathFromFolderPicker);
             }
             Global.debugMemory(mDebugPrefix, "onDirectoryDataLoadComplete");
-
             if (mustShowFolderPicker) {
                 openFolderPicker();
             }

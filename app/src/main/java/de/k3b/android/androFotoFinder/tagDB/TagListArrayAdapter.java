@@ -19,6 +19,7 @@
 package de.k3b.android.androFotoFinder.tagDB;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,7 +80,9 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 
 		public void setAdd(boolean value) {
 			this.isAdd = value;
-			if (TagListArrayAdapter.this.mAddNames == null) TagListArrayAdapter.this.mAddNames = new ArrayList<String>();
+			if (TagListArrayAdapter.this.mAddNames == null) {
+				TagListArrayAdapter.this.mAddNames = new ArrayList<>();
+			}
 			handleToggle(value, TagListArrayAdapter.this.mAddNames, addIcon ,
 					android.R.drawable.ic_input_add, android.R.drawable.ic_menu_add);
 		}
@@ -90,16 +93,20 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 					android.R.drawable.ic_delete, android.R.drawable.ic_menu_close_clear_cancel);
 		}
 
-
-		private void handleToggle(boolean onOffValue, List<String> onNames, ImageView icon, int id_drawable_on, int id_drawable_off) {
+		private void handleToggle(boolean onOffValue, List<String> onNames, ImageView icon,
+								                      int id_drawable_on, int id_drawable_off) {
 			if (onNames != null) {
 				String name = (currentTag != null) ? currentTag.getName() : null;
+				Log.i(TAG, "Tag name::" + name);
 				if (name != null) {
-					if (onOffValue && !onNames.contains(name))
+					if (onOffValue && !onNames.contains(name)) {
 						onNames.add(name);
-					if (!onOffValue && onNames.contains(name))
+					}
+					if (!onOffValue && onNames.contains(name)) {
 						onNames.remove(name);
-					icon.setImageDrawable(getContext().getResources().getDrawable((onOffValue) ? id_drawable_on : id_drawable_off));
+					}
+					icon.setImageDrawable(getContext().getResources().getDrawable((onOffValue) ?
+							                                          id_drawable_on : id_drawable_off));
 				}
 			}
 		}
@@ -127,6 +134,7 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 	}
 
 	public void reloadList() {
+		Log.i(TAG, "mLastFilterParam: " + mLastFilterParam);
 		setFilterParam(mLastFilterParam);
 		notifyDataSetChanged();
 	}
@@ -137,11 +145,15 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 		View convertView = _convertView;
 		// Check if an existing view is being reused, otherwise inflate the view
 		if (convertView == null) {
-			convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_tag_search, parent, false);
+			convertView = LayoutInflater.from(getContext()).inflate(
+					                     R.layout.list_item_tag_search, parent, false);
 			holder = new Holder();
 			convertView.setTag(holder);
-			holder.name = (TextView) convertView.findViewById(R.id.name);
+			holder.name = (TextView) convertView.findViewById(R.id.tag_name);
 			holder.name.setTag(holder);
+
+			//textViewTagName.setText(holder.name +"");
+			Log.i(TAG, "tag name: :" + holder.name);
 
 			holder.bookmarkIcon = (ImageView) convertView.findViewById(R.id.bookmark);
 			if (mBookMarkNames != null) {
@@ -162,12 +174,14 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 				holder.bookmarkIcon.setVisibility(View.GONE);
 			}
 
-			holder.addIcon = (ImageView) convertView.findViewById(R.id.add);
+			holder.addIcon = (ImageView) convertView.findViewById(R.id.add_tag);
 			holder.addIcon.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
 					holder.setAdd(!holder.isAdd);
-					if (holder.isAdd) holder.setRemove(false);
+					if (holder.isAdd) {
+						holder.setRemove(false);
+					}
 				}
 			});
 			holder.addIcon.setOnLongClickListener(new View.OnLongClickListener() {
@@ -179,7 +193,8 @@ public class TagListArrayAdapter extends ArrayAdapterEx<Tag> {
 			});
 
 			holder.removeIcon = (ImageView) convertView.findViewById(R.id.remove);
-			if ((mRemoveNames != null) && (mAffectedNames != null)  && ((TagListArrayAdapter.ALL_REMOVEABLE == mAffectedNames) || (mAffectedNames.size() > 0))) {
+			if ((mRemoveNames != null) && (mAffectedNames != null)  &&
+					((TagListArrayAdapter.ALL_REMOVEABLE == mAffectedNames) || (mAffectedNames.size() > 0))) {
 				holder.removeIcon.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View v) {

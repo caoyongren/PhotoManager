@@ -23,7 +23,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -64,10 +63,9 @@ import de.k3b.tagDB.Tag;
 import de.k3b.tagDB.TagRepository;
 
 /**
- * A DialogFragment to select Tags to be added/removed.
- * Closes on screen rotation.
- * Needs additional Parameters that are currently not backed up by settings/preferences.
- *
+ *一个DialogFragment选择标签添加/删除。
+ *关闭屏幕旋转。
+ * 需要额外的参数，这些参数目前尚未由设置/首选项进行备份。
  * Created by k3b on 04.01.2017.
  */
 
@@ -78,7 +76,7 @@ public class TagsPickerFragment  extends DialogFragment  {
     private ImageView mFilterMode;
     private ImageView mBookmarkMode;
 
-    /** Owning Activity must implement this if it wants to handle the result of ok and cancel */
+    /** 如果它想处理好和取消的结果, activity必须implements这个，*/
     public interface ITagsPicker {
         /** tag-dialog cancel pressed */
         boolean onCancel(String msg);
@@ -86,7 +84,6 @@ public class TagsPickerFragment  extends DialogFragment  {
         /** tag-dialog ok pressed */
         boolean onOk(List<String> addNames,
                      List<String> removeNames);
-
         boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag);
     };
 
@@ -94,22 +91,15 @@ public class TagsPickerFragment  extends DialogFragment  {
 
     private static final String TAG = "TagsPicker";
     private static final java.lang.String INSTANCE_STATE_CONTEXT_MENU = "contextmenu";
-
-    private static final java.lang.String INSTANCE_STATE_FILTER = "filter";
-    private static final java.lang.String INSTANCE_STATE_BOOKMARKS = "filter";
     private static final String PREFS_LAST_TAG_FILTER = "LAST_TAG_FILTER";
     private static final String PREFS_LAST_TAG_BOOKMARKS = "LAST_TAG_BOOKBARKS";
 
     private TagListArrayAdapter mDataAdapter;
     private EditText mFilterEdit;
-
-    // not null when dialog is open that must be closed.
     private AlertDialog mSubDialog = null;
-
 
     private int mContextMenueId = R.menu.menu_tags_context;
     private int mTitleId = 0;
-
     // local data
     protected Activity mContext;
     private Tag mCurrentMenuSelection;
@@ -168,7 +158,6 @@ public class TagsPickerFragment  extends DialogFragment  {
     public void onStart() {
         super.onStart();
         if (mFragmentOnwner == null) {
-            Log.d(Global.LOG_CONTEXT, debugPrefix + "onStart: mFragmentOnwner == null (after screen rotate). Closing dialog.");
             dismiss();
         }
 
@@ -181,7 +170,6 @@ public class TagsPickerFragment  extends DialogFragment  {
 
         if (mFragmentOnwner == null) {
             super.onCreate(savedInstanceState);
-            Log.d(Global.LOG_CONTEXT, debugPrefix + "onCreateView: mFragmentOnwner == null (after screen rotate). Closing dialog.");
             return null;
         }
 
@@ -191,17 +179,14 @@ public class TagsPickerFragment  extends DialogFragment  {
         SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(this.getActivity());
 
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment/ default: /活动/人们/地点/主题/项目/
         View view = inflater.inflate(R.layout.fragment_tags, container, false);
 
         mContext = this.getActivity();
-        if (Global.debugEnabled && (mContext != null) && (mContext.getIntent() != null)){
-            Log.d(Global.LOG_CONTEXT, "TagsPickerFragment onCreateView " + mContext.getIntent().toUri(Intent.URI_INTENT_SCHEME));
-        }
-
         mBookMarkNames.clear();
         String lastBookMarkNames = prefs.getString(PREFS_LAST_TAG_BOOKMARKS, null);
         if (lastBookMarkNames != null) {
+            Log.i(TAG, "lastBookMarkNames: " + lastBookMarkNames);
             mBookMarkNames.addAll(ListUtils.fromString(lastBookMarkNames));
         }
 
@@ -214,14 +199,11 @@ public class TagsPickerFragment  extends DialogFragment  {
         final ListView list = (ListView)view.findViewById(R.id.list);
         list.setAdapter(mDataAdapter);
 
-        if (mContextMenueId != 0)
-
-        {
+        if (mContextMenueId != 0) {
             list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     mCurrentMenuSelection = (position >= 0) ? mDataAdapter.getItem(position) : null;
-                    Log.d(Global.LOG_CONTEXT,"tag-OnItemLongClick-" + ((mCurrentMenuSelection != null) ? mCurrentMenuSelection.getPath() : ""));
                     onShowPopUp(mContextMenueId, view, mCurrentMenuSelection);
                     return true;
                 }
@@ -401,9 +383,6 @@ public class TagsPickerFragment  extends DialogFragment  {
     private boolean onPopUpClick(MenuItem menuItem) {
         if (mFragmentOnwner.onTagPopUpClick(menuItem.getItemId(), mCurrentMenuSelection)) return true;
         switch (menuItem.getItemId()) {
-                    /*!!!!!
-                    mCurrentMenuSelection = mDataAdapter.getItem(position);
-                    */
             /*
             case R.id.cmd_photo:
                 return showPhoto(mCurrentMenuSelection);
@@ -422,18 +401,10 @@ public class TagsPickerFragment  extends DialogFragment  {
                 return showTagRenameDialog(mCurrentMenuSelection);
             case R.id.cmd_delete:
                 return showTagDeleteDialog(mCurrentMenuSelection);
-/*
-    implemented by owner
-            case R.id.cmd_photo:
-            case R.id.cmd_gallery:
-                return showGallery(mCurrentMenuSelection);
-            case R.id.cmd_show_geo:
-*/
             default:break;
         }
         return false;
     }
-
 
     public static boolean handleMenuShow(int menuItemItemId, Tag selectedTag, Activity context, IGalleryFilter parentFilter) {
         switch (menuItemItemId) {
@@ -528,6 +499,9 @@ public class TagsPickerFragment  extends DialogFragment  {
     private List<Tag> loadTagRepositoryItems(boolean reload) {
         List<Tag> result = reload ? TagRepository.getInstance().reload() : TagRepository.getInstance().load();
         if (result.size() == 0) {
+            /**
+             * default: 活动,人们,地点,主题,项目
+             * */
             TagRepository.include(result,null,null,getString(R.string.tags_defaults));
         }
         return result;
@@ -738,7 +712,6 @@ public class TagsPickerFragment  extends DialogFragment  {
             mClipboardItem = null;
             return true;
         }
-
         return false;
     }
 
