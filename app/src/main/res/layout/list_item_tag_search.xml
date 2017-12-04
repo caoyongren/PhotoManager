@@ -42,7 +42,7 @@
         />
 
     <ImageView
-        android:id="@+id/add_tag"
+        android:id="@+id/add"
         android:src="@android:drawable/ic_menu_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -68,7 +68,7 @@
 
 	<!-- ellipsize&singleLine right align text with preceeding "..." if space is not long enough -->
     <TextView
-        android:id="@+id/tag_name"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="hello world"
