@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.util;
 
 import android.os.Environment;
@@ -34,9 +34,9 @@ public class OsUtils {
         File extDir = Environment.getExternalStorageDirectory();
 
         // i.e. /mnt
-        File mountRoot = (extDir == null) ? null :extDir.getParentFile();
+        File mountRoot = (extDir == null) ? null : extDir.getParentFile();
 
-        return  (mountRoot != null) ? mountRoot.listFiles() : null;
+        return (mountRoot != null) ? mountRoot.listFiles() : null;
     }
 
     private static boolean isAllowed(File mountFile) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder;
 
 /**
@@ -36,10 +36,14 @@ import android.net.Uri;
  * >Communicating with Other Fragments</a> for more information.
  */
 public interface OnGalleryInteractionListener {
-    /** GalleryFragment tells the Owning Activity that an Image in the FotoGallery was clicked */
+    /**
+     * GalleryFragment tells the Owning Activity that an Image in the FotoGallery was clicked
+     */
     void onGalleryImageClick(long imageId, Uri imageUri, int position);
 
-    /** GalleryFragment tells the Owning Activity that querying data has finisched */
+    /**
+     * GalleryFragment tells the Owning Activity that querying data has finisched
+     */
     void setResultCount(int count);
 }
 

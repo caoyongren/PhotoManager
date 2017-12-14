@@ -67,28 +67,36 @@ import de.k3b.tagDB.TagRepository;
  * A DialogFragment to select Tags to be added/removed.
  * Closes on screen rotation.
  * Needs additional Parameters that are currently not backed up by settings/preferences.
- *
+ * <p>
  * Created by k3b on 04.01.2017.
  */
 
-public class TagsPickerFragment  extends DialogFragment  {
+public class TagsPickerFragment extends DialogFragment {
 
     private ITagsPicker mFragmentOnwner = null;
     private boolean mIsFilterMode = true;
     private ImageView mFilterMode;
     private ImageView mBookmarkMode;
 
-    /** Owning Activity must implement this if it wants to handle the result of ok and cancel */
+    /**
+     * Owning Activity must implement this if it wants to handle the result of ok and cancel
+     */
     public interface ITagsPicker {
-        /** tag-dialog cancel pressed */
+        /**
+         * tag-dialog cancel pressed
+         */
         boolean onCancel(String msg);
 
-        /** tag-dialog ok pressed */
+        /**
+         * tag-dialog ok pressed
+         */
         boolean onOk(List<String> addNames,
                      List<String> removeNames);
 
         boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag);
-    };
+    }
+
+    ;
 
     public static final int ACTIVITY_ID = 78921;
 
@@ -127,7 +135,7 @@ public class TagsPickerFragment  extends DialogFragment  {
 
     public TagsPickerFragment() {
         // Required empty public constructor
-        debugPrefix = this.getClass().getSimpleName() + "#" + (id++)  + " ";
+        debugPrefix = this.getClass().getSimpleName() + "#" + (id++) + " ";
         Global.debugMemory(debugPrefix, "ctor");
         // Required empty public constructor
         if (Global.debugEnabled) {
@@ -195,7 +203,7 @@ public class TagsPickerFragment  extends DialogFragment  {
         View view = inflater.inflate(R.layout.fragment_tags, container, false);
 
         mContext = this.getActivity();
-        if (Global.debugEnabled && (mContext != null) && (mContext.getIntent() != null)){
+        if (Global.debugEnabled && (mContext != null) && (mContext.getIntent() != null)) {
             Log.d(Global.LOG_CONTEXT, "TagsPickerFragment onCreateView " + mContext.getIntent().toUri(Intent.URI_INTENT_SCHEME));
         }
 
@@ -211,7 +219,7 @@ public class TagsPickerFragment  extends DialogFragment  {
                 mAddNames, mRemoveNames, mAffectedNames, mBookMarkNames
         );
 
-        final ListView list = (ListView)view.findViewById(R.id.list);
+        final ListView list = (ListView) view.findViewById(R.id.list);
         list.setAdapter(mDataAdapter);
 
         if (mContextMenueId != 0)
@@ -221,7 +229,7 @@ public class TagsPickerFragment  extends DialogFragment  {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                     mCurrentMenuSelection = (position >= 0) ? mDataAdapter.getItem(position) : null;
-                    Log.d(Global.LOG_CONTEXT,"tag-OnItemLongClick-" + ((mCurrentMenuSelection != null) ? mCurrentMenuSelection.getPath() : ""));
+                    Log.d(Global.LOG_CONTEXT, "tag-OnItemLongClick-" + ((mCurrentMenuSelection != null) ? mCurrentMenuSelection.getPath() : ""));
                     onShowPopUp(mContextMenueId, view, mCurrentMenuSelection);
                     return true;
                 }
@@ -276,7 +284,7 @@ public class TagsPickerFragment  extends DialogFragment  {
         super.onCreate(savedInstanceState);
 
         return view;
-        
+
     }
 
     private void setFilterMode(boolean newValue) {
@@ -311,14 +319,17 @@ public class TagsPickerFragment  extends DialogFragment  {
         super.onDetach();
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         if (mSubDialog != null) mSubDialog.dismiss();
         mSubDialog = null;
         super.onDestroy();
     }
 
 
-    /** handle init for dialog-only controlls: cmdOk, cmdCancel, status */
+    /**
+     * handle init for dialog-only controlls: cmdOk, cmdCancel, status
+     */
     private void onCreateViewDialog(View view) {
         ImageButton cmdOk = (ImageButton) view.findViewById(R.id.cmd_ok);
         cmdOk.setOnClickListener(new View.OnClickListener() {
@@ -355,7 +366,8 @@ public class TagsPickerFragment  extends DialogFragment  {
                         List<String> removeNames) {
         Log.d(Global.LOG_CONTEXT, debugPrefix + "onOk: " + mCurrentMenuSelection);
 
-        if ((mFragmentOnwner != null) && (!mFragmentOnwner.onOk(addNames, removeNames))) return false;
+        if ((mFragmentOnwner != null) && (!mFragmentOnwner.onOk(addNames, removeNames)))
+            return false;
 
         saveSettings();
         dismiss();
@@ -363,7 +375,9 @@ public class TagsPickerFragment  extends DialogFragment  {
         return true;
     }
 
-    /** called via pathBar-Button-LongClick, tree-item-LongClick, popUp-button */
+    /**
+     * called via pathBar-Button-LongClick, tree-item-LongClick, popUp-button
+     */
     private void onShowPopUp(int contextMenueId, View anchor, Tag selection) {
         PopupMenu popup = onCreatePopupMenu(contextMenueId, anchor, selection);
 
@@ -399,7 +413,8 @@ public class TagsPickerFragment  extends DialogFragment  {
     };
 
     private boolean onPopUpClick(MenuItem menuItem) {
-        if (mFragmentOnwner.onTagPopUpClick(menuItem.getItemId(), mCurrentMenuSelection)) return true;
+        if (mFragmentOnwner.onTagPopUpClick(menuItem.getItemId(), mCurrentMenuSelection))
+            return true;
         switch (menuItem.getItemId()) {
                     /*!!!!!
                     mCurrentMenuSelection = mDataAdapter.getItem(position);
@@ -429,7 +444,8 @@ public class TagsPickerFragment  extends DialogFragment  {
                 return showGallery(mCurrentMenuSelection);
             case R.id.cmd_show_geo:
 */
-            default:break;
+            default:
+                break;
         }
         return false;
     }
@@ -443,7 +459,8 @@ public class TagsPickerFragment  extends DialogFragment  {
             case R.id.cmd_gallery:
                 FotoGalleryActivity.showActivity(context, createSubFilterByTag(parentFilter, selectedTag), null, 0);
                 return true;
-            default:break;
+            default:
+                break;
         }
         return false;
     }
@@ -498,7 +515,7 @@ public class TagsPickerFragment  extends DialogFragment  {
                     chkUpdateAffectedPhotos.setText(getString(R.string.tags_update_photos) + " (" +
                             ((chkDeleteChildren.isChecked())
                                     ? allTagReferenceCount
-                                    : rootTagReferenceCount )  + ")");
+                                    : rootTagReferenceCount) + ")");
                 }
             });
         }
@@ -528,7 +545,7 @@ public class TagsPickerFragment  extends DialogFragment  {
     private List<Tag> loadTagRepositoryItems(boolean reload) {
         List<Tag> result = reload ? TagRepository.getInstance().reload() : TagRepository.getInstance().load();
         if (result.size() == 0) {
-            TagRepository.include(result,null,null,getString(R.string.tags_defaults));
+            TagRepository.include(result, null, null, getString(R.string.tags_defaults));
         }
         return result;
     }
@@ -601,11 +618,11 @@ public class TagsPickerFragment  extends DialogFragment  {
                 if (newFileName != null) {
                     tagRename(tag, newFileName, chkUpdatePhotos.isChecked(), false);
                 }
-                mSubDialog=null;
+                mSubDialog = null;
 
             }
         };
-        mSubDialog=dialog.editFileName(getActivity(), getString(R.string.rename_menu_title), tag.getName(), tag);
+        mSubDialog = dialog.editFileName(getActivity(), getString(R.string.rename_menu_title), tag.getName(), tag);
 
         return true;
     }
@@ -618,11 +635,11 @@ public class TagsPickerFragment  extends DialogFragment  {
                 if (newFileName != null) {
                     tagAdd(tagParent, newFileName);
                 }
-                mSubDialog=null;
+                mSubDialog = null;
 
             }
         };
-        mSubDialog=dialog.editFileName(getActivity(), getString(R.string.tags_add_menu_title), defaultName, tagParent);
+        mSubDialog = dialog.editFileName(getActivity(), getString(R.string.tags_add_menu_title), defaultName, tagParent);
 
         return true;
     }
@@ -680,9 +697,9 @@ public class TagsPickerFragment  extends DialogFragment  {
 
     private int updateLists(String oldName, String newName, List<String>... lists) {
         int changes = 0;
-        for (List<String> list :lists) {
+        for (List<String> list : lists) {
             if ((list != null) && list.remove(oldName)) {
-                changes ++;
+                changes++;
                 if (newName != null) {
                     list.add(newName);
                 }
@@ -743,7 +760,7 @@ public class TagsPickerFragment  extends DialogFragment  {
     }
 
 	/*----------------------------
-	 * Delayed Processing: <br/>
+     * Delayed Processing: <br/>
 	 * textchange->HANDLER_FILTER_TEXT_CHANGED(reload list)->HANDLER_FILTER_COUNT_UPDATE(update itemcount)
 	 -----------------------------*/
 
@@ -758,21 +775,21 @@ public class TagsPickerFragment  extends DialogFragment  {
     private final Handler delayProcessor = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
-        TagsPickerFragment.this.clearDelayProcessor();
-        switch (msg.what) {
-            case TagsPickerFragment.HANDLER_FILTER_TEXT_CHANGED:
-                TagsPickerFragment.this.refershResultList();
-                TagsPickerFragment.this.sendDelayed(
-                        TagsPickerFragment.HANDLER_FILTER_COUNT_UPDATE,
-                        TagsPickerFragment.HANDLER_FILTER_COUNT_DELAY);
-                break;
-            case TagsPickerFragment.HANDLER_FILTER_COUNT_UPDATE:
-                TagsPickerFragment.this.refreshCounter();
-                break;
-            default:
-                // not implemented
-                throw new IllegalStateException();
-        }
+            TagsPickerFragment.this.clearDelayProcessor();
+            switch (msg.what) {
+                case TagsPickerFragment.HANDLER_FILTER_TEXT_CHANGED:
+                    TagsPickerFragment.this.refershResultList();
+                    TagsPickerFragment.this.sendDelayed(
+                            TagsPickerFragment.HANDLER_FILTER_COUNT_UPDATE,
+                            TagsPickerFragment.HANDLER_FILTER_COUNT_DELAY);
+                    break;
+                case TagsPickerFragment.HANDLER_FILTER_COUNT_UPDATE:
+                    TagsPickerFragment.this.refreshCounter();
+                    break;
+                default:
+                    // not implemented
+                    throw new IllegalStateException();
+            }
         }
 
     };
@@ -792,7 +809,7 @@ public class TagsPickerFragment  extends DialogFragment  {
         TagsPickerFragment.this.delayProcessor.sendMessageDelayed(msg,
                 delayInMilliSec);
     }
-    
+
     private void refershResultList() {
         final String filter = (mIsFilterMode) ? TagsPickerFragment.this.mFilterEdit.getText()
                 .toString() : "@@@@";

@@ -31,7 +31,7 @@ import de.k3b.android.androFotoFinder.Global;
 /**
  * Write geo data (lat/lon) to photo
  * Based on http://stackoverflow.com/questions/5280479/how-to-save-gps-coordinates-in-exif-data-on-android
- *
+ * <p>
  * Created by k3b on 25.08.2015.
  */
 public class JpgMetaWorkflow {
@@ -151,8 +151,7 @@ public class JpgMetaWorkflow {
             int orientation = exif.getAttributeInt(ExifInterfaceEx.TAG_ORIENTATION, 0);
             if ((orientation >= 0) && (orientation < exifOrientationCode2RotationDegrees.length))
                 return exifOrientationCode2RotationDegrees[orientation];
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
         }
         return 0;
     }

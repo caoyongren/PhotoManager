@@ -13,6 +13,7 @@ import org.osmdroid.api.IMapView;
 import org.osmdroid.views.MapView;
 
 import de.k3b.android.osmdroid.infowindow.IMarkerInfoData;
+
 import org.osmdroid.library.R;
 
 import java.lang.ref.WeakReference;
@@ -29,7 +30,9 @@ public class MarkerBubblePopup<Datatype extends IMarkerInfoData> extends MarkerB
     private final int m_id_bubble_image;
     private final int m_id_bubble_moreinfo;
 
-    /** is called to populate the popupBubble */
+    /**
+     * is called to populate the popupBubble
+     */
 
     public MarkerBubblePopup(Activity owner) {
         this(owner, org.osmdroid.library.R.layout.bonuspack_bubble, R.id.bubble_title,
@@ -39,7 +42,7 @@ public class MarkerBubblePopup<Datatype extends IMarkerInfoData> extends MarkerB
 
     public MarkerBubblePopup(Activity owner, int id_bubble_layout, int id_bubble_title, int id_bubble_description, int id_bubble_subdescription, int id_bubble_image, int id_bubble_moreinfo) {
         super(id_bubble_layout);
-        this.owner = (owner == null) ? null :  new WeakReference(owner);
+        this.owner = (owner == null) ? null : new WeakReference(owner);
         m_id_bubble_title = id_bubble_title;
         m_id_bubble_description = id_bubble_description;
         m_id_bubble_subdescription = id_bubble_subdescription;
@@ -85,7 +88,7 @@ public class MarkerBubblePopup<Datatype extends IMarkerInfoData> extends MarkerB
                 }
 
             } else {
-                Log.w(IMapView.LOGTAG,this.getClass().getSimpleName() + ".bindString : resource "
+                Log.w(IMapView.LOGTAG, this.getClass().getSimpleName() + ".bindString : resource "
                         + debugContext + " not found");
             }
         }

@@ -16,26 +16,34 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.queries;
 
 import de.k3b.database.QueryParameter;
 
 /**
  * Data to be shared between activities and fragments
- *
+ * <p>
  * Created by k3b on 16.06.2015.
  */
 public class FotoViewerParameter {
-    /** getFrom orderBy for directory chooser */
+    /**
+     * getFrom orderBy for directory chooser
+     */
     public static QueryParameter currentDirOrderByQuery = null;
 
-    /** true: load images from folder and its subfolders. false: do not load images from subfolders */
+    /**
+     * true: load images from folder and its subfolders. false: do not load images from subfolders
+     */
     public static boolean includeSubItems = true;
 
-    /** getFrom data for gallery */
+    /**
+     * getFrom data for gallery
+     */
     public static QueryParameter currentGalleryContentQuery = FotoSql.queryDetail;
 
-    /** true: gallery contains inline dir-picker */
+    /**
+     * true: gallery contains inline dir-picker
+     */
     public static boolean galleryHasEmbeddedDirPicker = false;
 }

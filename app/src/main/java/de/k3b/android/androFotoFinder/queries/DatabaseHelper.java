@@ -73,6 +73,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private static DatabaseHelper instance = null;
+
     public static SQLiteDatabase getWritableDatabase(Activity context) {
         if (instance == null) {
             instance = new DatabaseHelper(new DatabaseContext(context), "APhotoManager");

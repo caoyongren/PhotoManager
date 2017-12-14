@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.gallery.cursor;
 
 import android.app.Activity;
@@ -40,22 +40,25 @@ import de.k3b.database.SelectedItems;
  * Purpose: allow viewing images from ".nomedia" folders where no data is available in mediadb/cursor.
  * Same as GalleryCursorAdapter but while underlaying cursor has
  * no data photos are taken from array instead.
- *
  */
 public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
 
-    /**不是null数据来自数组而不是基础实现 */
+    /**
+     * 不是null数据来自数组而不是基础实现
+     */
     private AdapterArrayHelper mArrayImpl = null;
 
     public GalleryCursorAdapterFromArray(final Activity context, SelectedItems selectedItems, String name, String fullPhotoPath) {
         super(context, selectedItems, name);
 
-        if (MediaScanner.isNoMedia(fullPhotoPath,MediaScanner.DEFAULT_SCAN_DEPTH)) {
+        if (MediaScanner.isNoMedia(fullPhotoPath, MediaScanner.DEFAULT_SCAN_DEPTH)) {
             mArrayImpl = new AdapterArrayHelper(context, fullPhotoPath, "debugContext");
         }
     }
 
-    /** 得知cursordata可能是可用的，所以数组可以被禁用. */
+    /**
+     * 得知cursordata可能是可用的，所以数组可以被禁用.
+     */
     @Override
     public Cursor swapCursor(Cursor newCursor) {
         Cursor oldCursor = super.swapCursor(newCursor);
@@ -81,7 +84,9 @@ public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
         return super.getFullFilePath(position);
     }
 
-    /** translates offset in adapter to id of image */
+    /**
+     * translates offset in adapter to id of image
+     */
     @Override
     public long getImageId(int position) {
         if (mArrayImpl != null) return mArrayImpl.getImageId(position);
@@ -103,34 +108,39 @@ public class GalleryCursorAdapterFromArray extends GalleryCursorAdapter {
                 v = convertView;
             }
             final GridCellViewHolder holder = (GridCellViewHolder) v.getTag();
-            holder.url =  fullPhotoPathFromArray;
+            holder.url = fullPhotoPathFromArray;
 
             final File file = new File(fullPhotoPathFromArray);
             ThumbNailUtils.getThumb(fullPhotoPathFromArray, holder.image);
-            holder.image.setImageBitmap(HugeImageLoader.loadImage(file, 32,32));
+            holder.image.setImageBitmap(HugeImageLoader.loadImage(file, 32, 32));
 
             holder.image.setImageURI(Uri.parse(holder.url));
             holder.imageID = this.getImageId(position);
             holder.icon.setVisibility(((mSelectedItems != null) && (mSelectedItems.contains(holder.imageID))) ? View.VISIBLE : View.GONE);
 
-            if (Global.debugEnabledViewItem) Log.i(Global.LOG_CONTEXT, mDebugPrefix + "bindView for " + holder);
+            if (Global.debugEnabledViewItem)
+                Log.i(Global.LOG_CONTEXT, mDebugPrefix + "bindView for " + holder);
             return v;
 
         } else {
-            return super.getView(position,convertView, parent);
+            return super.getView(position, convertView, parent);
         }
     }
 
-    /** converts imageID to uri */
+    /**
+     * converts imageID to uri
+     */
     @Override
     public Uri getUri(long imageID) {
         if (mArrayImpl != null)
-            return Uri.parse("file:"+mArrayImpl.getFullFilePathfromArray(mArrayImpl.convertBetweenPositionAndId((int) imageID)));
+            return Uri.parse("file:" + mArrayImpl.getFullFilePathfromArray(mArrayImpl.convertBetweenPositionAndId((int) imageID)));
         return super.getUri(imageID);
     }
 
 
-    /** SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database. */
+    /**
+     * SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database.
+     */
     @Override
     public String[] getFileNames(SelectedItems items) {
         if (mArrayImpl != null) return mArrayImpl.getFileNames(items);

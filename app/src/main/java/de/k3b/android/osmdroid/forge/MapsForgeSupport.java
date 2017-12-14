@@ -76,7 +76,9 @@ public class MapsForgeSupport {
         }
     }
 
-    /** simple function to scan all *.map files */
+    /**
+     * simple function to scan all *.map files
+     */
     private static File[] scan(File mapDir) {
         File[] files = (mapDir == null) ? null : mapDir.listFiles(new FileFilter() {
             @Override

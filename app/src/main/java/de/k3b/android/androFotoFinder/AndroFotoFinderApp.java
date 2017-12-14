@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder;
 
 import android.app.Application;
@@ -64,7 +64,8 @@ public class AndroFotoFinderApp extends Application {
             LeakCanary.install(this);
         }
         */
-    @Override public void onCreate() {
+    @Override
+    public void onCreate() {
         // StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyDialog().build());
         // StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyDeath().build());
         FotoSqlBase.init();
@@ -120,6 +121,7 @@ public class AndroFotoFinderApp extends Application {
             mCrashSaveToFile.saveToFile();
         }
     }
+
     public void clear() {
         if (mCrashSaveToFile != null) {
             mCrashSaveToFile.clear();

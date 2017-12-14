@@ -38,9 +38,9 @@ import de.k3b.android.androFotoFinder.R;
  * Additional Guestures for {@see org.osmdroid.views.MapView}:<br/>
  * - DoubleTapDrag: Zoomin to the selected carret. The Zoomlevel is adjusted to fill the carret.<br/>
  * - DoubleTap: Zoomin one level. The click position becomes the new Center.<br/>
- *
+ * <p>
  * Note DoubleTapDrag : TapDown+TapUp+TapDown+MoveWhileDown+TapUp
- *
+ * <p>
  * Created by k3b on 10.02.2015.
  */
 public class GuestureOverlay extends Overlay /* Debug */ {
@@ -58,13 +58,15 @@ public class GuestureOverlay extends Overlay /* Debug */ {
         colorDragTo = ctx.getResources().getColor(R.color.drag_to);
     }
 
-    @Override public boolean 	onDoubleTap(MotionEvent ev, MapView mapView) {
+    @Override
+    public boolean onDoubleTap(MotionEvent ev, MapView mapView) {
         super.onDoubleTap(ev, mapView);
 
         return this.isEnabled(); // true: prevent original onDoubleTap: zoom-in. My own zoomIn is better ;-)
     }
 
-    @Override public boolean 	onDoubleTapEvent(MotionEvent ev, MapView mapView) {
+    @Override
+    public boolean onDoubleTapEvent(MotionEvent ev, MapView mapView) {
         if (this.isEnabled()) {
             switch (ev.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
@@ -93,7 +95,9 @@ public class GuestureOverlay extends Overlay /* Debug */ {
                     this.mRectVisible = false;
                     return true; // processed
                 }
-                default:break;            }
+                default:
+                    break;
+            }
         }
         return super.onDoubleTapEvent(ev, mapView); // false: not handled yet
     }
@@ -126,12 +130,12 @@ public class GuestureOverlay extends Overlay /* Debug */ {
         this.mRect.set(minX, minY,minX + dx,minY + dy);
         */
         this.mRectVisible = (dx > 10) || (dy > 10);
-        this.mEnd.set(x,y);
+        this.mEnd.set(x, y);
 
         if (mDebug) {
-            Log.d(mDebugPrefix,context + ": setEndPoint(x=" +
-                    x+",y=" +
-                    y+ ",visible="+ mRectVisible+") for " + mapView);
+            Log.d(mDebugPrefix, context + ": setEndPoint(x=" +
+                    x + ",y=" +
+                    y + ",visible=" + mRectVisible + ") for " + mapView);
         }
         return mRectVisible;
     }
@@ -149,7 +153,7 @@ public class GuestureOverlay extends Overlay /* Debug */ {
     @Override
     protected void draw(Canvas c, MapView mapView, boolean shadow) {
         if ((!shadow) && (this.mRectVisible)) {
-            drawBorder(c , this.mStart.x, this.mStart.y, this.mEnd.x, mEnd.y);
+            drawBorder(c, this.mStart.x, this.mStart.y, this.mEnd.x, mEnd.y);
         }
     }
 
@@ -162,6 +166,6 @@ public class GuestureOverlay extends Overlay /* Debug */ {
 
     public String toString() {
         if (!mRectVisible) return "";
-        return "(" + this.mStart.x+"," + this.mStart.y + ".."  + this.mEnd.x+"," + this.mEnd.y + ")";
+        return "(" + this.mStart.x + "," + this.mStart.y + ".." + this.mEnd.x + "," + this.mEnd.y + ")";
     }
 }

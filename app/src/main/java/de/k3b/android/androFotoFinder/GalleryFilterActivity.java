@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder;
 
 import android.app.Activity;
@@ -68,8 +68,7 @@ import de.k3b.tagDB.Tag;
 public class GalleryFilterActivity extends LocalizedActivity
         implements Common, DirectoryPickerFragment.OnDirectoryInteractionListener,
         LocationMapFragment.OnDirectoryInteractionListener,
-        TagsPickerFragment.ITagsPicker
-{
+        TagsPickerFragment.ITagsPicker {
     private static final String mDebugPrefix = "GalF-";
 
     public static final int resultID = 522;
@@ -130,7 +129,7 @@ public class GalleryFilterActivity extends LocalizedActivity
         Global.debugMemory(mDebugPrefix, "onCreate");
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + "onCreate " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
         setContentView(R.layout.activity_gallery_filter);
@@ -139,7 +138,7 @@ public class GalleryFilterActivity extends LocalizedActivity
 
         GalleryFilterParameter filter = (savedInstanceState == null)
                 ? getFilter(intent)
-                : GalleryFilterParameter.parse(savedInstanceState.getString(FILTER_VALUE, ""),  new GalleryFilterParameter()) ;
+                : GalleryFilterParameter.parse(savedInstanceState.getString(FILTER_VALUE, ""), new GalleryFilterParameter());
 
         if (filter != null) {
             mFilter = filter;
@@ -148,7 +147,7 @@ public class GalleryFilterActivity extends LocalizedActivity
         }
 
         mBookmarkController = new BookmarkController(this);
-        mBookmarkController.loadState(intent,savedInstanceState);
+        mBookmarkController.loadState(intent, savedInstanceState);
     }
 
     private void onCreateButtos() {
@@ -243,10 +242,10 @@ public class GalleryFilterActivity extends LocalizedActivity
     }
 
     @Override
-    protected void onPause () {
+    protected void onPause() {
         Global.debugMemory(mDebugPrefix, "onPause");
         saveLastFilter();
-        if ((mDlg != null) && (mDlg.isVisible()) ){
+        if ((mDlg != null) && (mDlg.isVisible())) {
             mDlg.dismiss();
         }
         mDlg = null;
@@ -254,7 +253,7 @@ public class GalleryFilterActivity extends LocalizedActivity
     }
 
     @Override
-    protected void onResume () {
+    protected void onResume() {
         Global.debugMemory(mDebugPrefix, "onResume");
         loadLastFilter();
         super.onResume();
@@ -273,12 +272,11 @@ public class GalleryFilterActivity extends LocalizedActivity
     }
 
     private void saveLastFilter() {
-        if (dirInfos != null)
-        {
+        if (dirInfos != null) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
             SharedPreferences.Editor edit = sharedPref.edit();
-            
-            for(Integer id : dirInfos.keySet()) {
+
+            for (Integer id : dirInfos.keySet()) {
                 DirInfo dir = dirInfos.get(id);
                 if ((dir != null) && (dir.currentPath != null) && (dir.currentPath.length() > 0)) {
                     edit.putString(SETTINGS_KEY + id, dir.currentPath);
@@ -293,9 +291,8 @@ public class GalleryFilterActivity extends LocalizedActivity
         Global.debugMemory(mDebugPrefix, "onDestroy start");
         super.onDestroy();
 
-        if (dirInfos != null)
-        {
-            for(Integer id : dirInfos.keySet()) {
+        if (dirInfos != null) {
+            for (Integer id : dirInfos.keySet()) {
                 DirInfo dir = dirInfos.get(id);
                 if (dir.directoryRoot != null) {
                     dir.directoryRoot.destroy();
@@ -310,7 +307,9 @@ public class GalleryFilterActivity extends LocalizedActivity
         // refWatcher.watch(this);
     }
 
-    /** gui content seen as IGalleryFilter */
+    /**
+     * gui content seen as IGalleryFilter
+     */
     private class FilterValue implements IGalleryFilter {
         final private java.text.DateFormat isoDateformatter = new SimpleDateFormat(
                 "yyyy-MM-dd", Locale.US);
@@ -325,18 +324,18 @@ public class GalleryFilterActivity extends LocalizedActivity
         private EditText mLatitudeFrom;
         private CheckBox mWithNoGeoInfo;
         private CheckBox mWithNoTags;
-        private CheckBox mPublic        ;
-        private CheckBox mPrivate       ;
-        private EditText mAny            ;
-        private EditText mTagsInclude    ;
-        private EditText mTagsExclude    ;
-        private int      mVisibility = VISIBILITY_DEFAULT;
+        private CheckBox mPublic;
+        private CheckBox mPrivate;
+        private EditText mAny;
+        private EditText mTagsInclude;
+        private EditText mTagsExclude;
+        private int mVisibility = VISIBILITY_DEFAULT;
 
         FilterValue() {
             this.mPath = (EditText) findViewById(R.id.edit_path);
-            this.mAny             = (EditText) findViewById(R.id.edit_any);
-            this.mTagsInclude     = (EditText) findViewById(R.id.edit_tags_include);
-            this.mTagsExclude     = (EditText) findViewById(R.id.edit_tags_exclude);
+            this.mAny = (EditText) findViewById(R.id.edit_any);
+            this.mTagsInclude = (EditText) findViewById(R.id.edit_tags_include);
+            this.mTagsExclude = (EditText) findViewById(R.id.edit_tags_exclude);
             this.mDateFrom = (EditText) findViewById(R.id.edit_date_from);
             this.mDateTo = (EditText) findViewById(R.id.edit_date_to);
             this.mLatitudeFrom = (EditText) findViewById(R.id.edit_latitude_from);
@@ -346,8 +345,8 @@ public class GalleryFilterActivity extends LocalizedActivity
             this.mWithNoGeoInfo = (CheckBox) findViewById(R.id.chk_with_no_geo);
             this.mWithNoTags = (CheckBox) findViewById(R.id.chk_with_no_tags);
 
-            this.mPublic        = (CheckBox) findViewById(R.id.chk_public);
-            this.mPrivate       = (CheckBox) findViewById(R.id.chk_private);
+            this.mPublic = (CheckBox) findViewById(R.id.chk_public);
+            this.mPrivate = (CheckBox) findViewById(R.id.chk_private);
 
             mWithNoGeoInfo.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -371,19 +370,19 @@ public class GalleryFilterActivity extends LocalizedActivity
 
             });
 
-            mHistory = new HistoryEditText(GalleryFilterActivity.this, new int[] {
+            mHistory = new HistoryEditText(GalleryFilterActivity.this, new int[]{
                     R.id.cmd_path_history,
                     R.id.cmd_date_from_history,
                     R.id.cmd_date_to_history,
-                    R.id.cmd_lat_from_history, R.id.cmd_lat_to_history, R.id.cmd_lon_from_history, R.id.cmd_lon_to_history ,
+                    R.id.cmd_lat_from_history, R.id.cmd_lat_to_history, R.id.cmd_lon_from_history, R.id.cmd_lon_to_history,
                     R.id.cmd_any_history,
                     R.id.cmd_tags_include_history,
-                    R.id.cmd_tags_exclude_history} ,
-                    mPath ,
-                    mDateFrom ,
+                    R.id.cmd_tags_exclude_history},
+                    mPath,
+                    mDateFrom,
                     mDateTo, mLatitudeFrom, mLatitudeTo, mLongitudeFrom, mLongitudeTo,
-                    mAny             ,
-                    mTagsInclude     ,
+                    mAny,
+                    mTagsInclude,
                     mTagsExclude);
         }
 
@@ -428,33 +427,41 @@ public class GalleryFilterActivity extends LocalizedActivity
             show(noGeoInfo, R.id.cmd_select_lat_lon, R.id.lbl_latitude, R.id.cmd_lat_from_history, R.id.edit_latitude_from,
                     //show(noGeoInfo, R.id.cmd_select_lat_lon, R.id.lbl_latitude, R.id.cmd_lat_from_history, R.id.edit_latitude_from,
                     R.id.cmd_lat_to_history, R.id.edit_latitude_to, R.id.lbl_longitude, R.id.cmd_lon_from_history,
-                    R.id.edit_longitude_from,R.id.cmd_lon_to_history, R.id.edit_longitude_to);
+                    R.id.edit_longitude_from, R.id.cmd_lon_to_history, R.id.edit_longitude_to);
         }
 
         private void show(boolean checked, int... ids) {
-            for(int id:ids)
-                findViewById(id).setVisibility((!checked) ? View.VISIBLE : View.INVISIBLE );
+            for (int id : ids)
+                findViewById(id).setVisibility((!checked) ? View.VISIBLE : View.INVISIBLE);
         }
 
-        /** minimum latitude, in degrees north. -90..+90 */
+        /**
+         * minimum latitude, in degrees north. -90..+90
+         */
         @Override
         public double getLatitudeMin() {
             return convertLL(mLatitudeFrom.getText().toString());
         }
 
-        /** maximum latitude, in degrees north. -90..+90 */
+        /**
+         * maximum latitude, in degrees north. -90..+90
+         */
         @Override
         public double getLatitudeMax() {
             return convertLL(mLatitudeTo.getText().toString());
         }
 
-        /** minimum longitude, in degrees east. -180..+180 */
+        /**
+         * minimum longitude, in degrees east. -180..+180
+         */
         @Override
         public double getLogituedMin() {
             return convertLL(mLongitudeFrom.getText().toString());
         }
 
-        /** maximum longitude, in degrees east. -180..+180 */
+        /**
+         * maximum longitude, in degrees east. -180..+180
+         */
         @Override
         public double getLogituedMax() {
             return convertLL(mLongitudeTo.getText().toString());
@@ -464,8 +471,9 @@ public class GalleryFilterActivity extends LocalizedActivity
         public String getPath() {
             // smart filter path edit:  if the field does not contain a path element "/" then surround
             // the value with sql wildcard "%"
-            String result = mPath.getText().toString().trim().replace('\\','/');
-            if ((result.length() > 0) && !result.contains("/") && !result.contains(WILDCARD)) result = WILDCARD + result + WILDCARD;
+            String result = mPath.getText().toString().trim().replace('\\', '/');
+            if ((result.length() > 0) && !result.contains("/") && !result.contains(WILDCARD))
+                result = WILDCARD + result + WILDCARD;
             return result;
         }
 
@@ -480,7 +488,7 @@ public class GalleryFilterActivity extends LocalizedActivity
         }
 
         @Override
-        public List<String>  getTagsAllExcluded() {
+        public List<String> getTagsAllExcluded() {
             return GalleryFilterParameter.convertList(mTagsExclude.getText().toString());
         }
 
@@ -514,7 +522,7 @@ public class GalleryFilterActivity extends LocalizedActivity
          */
         @Override
         public int getSortID() {
-            return (mFilter != null) ? mFilter.getSortID() :  SORT_BY_NONE;
+            return (mFilter != null) ? mFilter.getSortID() : SORT_BY_NONE;
         }
 
         /**
@@ -522,7 +530,7 @@ public class GalleryFilterActivity extends LocalizedActivity
          */
         @Override
         public boolean isSortAscending() {
-            return (mFilter != null) ? mFilter.isSortAscending() :  false;
+            return (mFilter != null) ? mFilter.isSortAscending() : false;
         }
 
         @Override
@@ -530,9 +538,9 @@ public class GalleryFilterActivity extends LocalizedActivity
             if (src != null) {
                 get((IGeoRectangle) src);
                 mPath.setText(src.getPath());
-                mAny            .setText(src.getInAnyField());
-                mTagsInclude    .setText(GalleryFilterParameter.convertList(src.getTagsAllIncluded()));
-                mTagsExclude    .setText(GalleryFilterParameter.convertList(src.getTagsAllExcluded()));
+                mAny.setText(src.getInAnyField());
+                mTagsInclude.setText(GalleryFilterParameter.convertList(src.getTagsAllIncluded()));
+                mTagsExclude.setText(GalleryFilterParameter.convertList(src.getTagsAllExcluded()));
                 mDateFrom.setText(convertDate(src.getDateMin()));
                 mDateTo.setText(convertDate(src.getDateMax()));
                 mWithNoGeoInfo.setChecked(src.isNonGeoOnly());
@@ -548,12 +556,13 @@ public class GalleryFilterActivity extends LocalizedActivity
 
         @Override
         public IGalleryFilter get(IGeoRectangle src) {
-            mLongitudeFrom  .setText(convertLL(src.getLogituedMin()));
-            mLongitudeTo    .setText(convertLL(src.getLogituedMax()));
-            mLatitudeFrom   .setText(convertLL(src.getLatitudeMin()));
-            mLatitudeTo     .setText(convertLL(src.getLatitudeMax()));
+            mLongitudeFrom.setText(convertLL(src.getLogituedMin()));
+            mLongitudeTo.setText(convertLL(src.getLogituedMax()));
+            mLatitudeFrom.setText(convertLL(src.getLatitudeMin()));
+            mLatitudeTo.setText(convertLL(src.getLatitudeMax()));
             return this;
         }
+
         /************* local helper *****************/
         private String convertLL(double latLon) {
             if (Double.isNaN(latLon)) return "";
@@ -642,6 +651,7 @@ public class GalleryFilterActivity extends LocalizedActivity
     }
 
     private HashMap<Integer, DirInfo> dirInfos = new HashMap<Integer, DirInfo>();
+
     private DirInfo getOrCreateDirInfo(int queryId) {
         DirInfo result = dirInfos.get(queryId);
         if (result == null) {
@@ -665,14 +675,18 @@ public class GalleryFilterActivity extends LocalizedActivity
         }
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onCancel(String msg) {
         mDlg = null;
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onOk(List<String> addNames, List<String> removeNames) {
         mFilter.setTagsAllIncluded(addNames);
@@ -682,7 +696,9 @@ public class GalleryFilterActivity extends LocalizedActivity
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag) {
         return TagsPickerFragment.handleMenuShow(menuItemItemId, selectedTag, this, this.mFilterValue);
@@ -740,23 +756,31 @@ public class GalleryFilterActivity extends LocalizedActivity
     @Override
     public void onDirectoryPick(String selectedAbsolutePath, int queryTypeId) {
         DirInfo dirInfo = getOrCreateDirInfo(queryTypeId);
-        dirInfo.currentPath=selectedAbsolutePath;
+        dirInfo.currentPath = selectedAbsolutePath;
 
-        FotoSql.set(mFilter,selectedAbsolutePath, queryTypeId);
+        FotoSql.set(mFilter, selectedAbsolutePath, queryTypeId);
         toGui(mFilter);
     }
 
-    /** interface DirectoryPickerFragment.invalidateDirectories not used */
+    /**
+     * interface DirectoryPickerFragment.invalidateDirectories not used
+     */
     @Override
     public void invalidateDirectories(String why) {
     }
 
-    /** interface DirectoryPickerFragment.OnDirectoryInteractionListener not used */
+    /**
+     * interface DirectoryPickerFragment.OnDirectoryInteractionListener not used
+     */
     @Override
-    public void onDirectoryCancel(int queryTypeId) {}
+    public void onDirectoryCancel(int queryTypeId) {
+    }
 
-    /** interface DirectoryPickerFragment.OnDirectoryInteractionListener not used */
+    /**
+     * interface DirectoryPickerFragment.OnDirectoryInteractionListener not used
+     */
     @Override
-    public void onDirectorySelectionChanged(String selectedChild, int queryTypeId) {}
+    public void onDirectorySelectionChanged(String selectedChild, int queryTypeId) {
+    }
 
 }

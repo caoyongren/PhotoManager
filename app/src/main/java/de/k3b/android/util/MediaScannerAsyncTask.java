@@ -13,7 +13,7 @@ import de.k3b.android.androFotoFinder.R;
  * Created by k3b on 04.10.2016.
  */
 
-public class MediaScannerAsyncTask  extends AsyncTask<String[],Object,Integer> {
+public class MediaScannerAsyncTask extends AsyncTask<String[], Object, Integer> {
     private static final String CONTEXT = "MediaScannerAsyncTask.";
 
     protected final MediaScanner mScanner;
@@ -28,7 +28,8 @@ public class MediaScannerAsyncTask  extends AsyncTask<String[],Object,Integer> {
 
     @Override
     protected Integer doInBackground(String[]... pathNames) {
-        if (pathNames.length != 2) throw new IllegalArgumentException(CONTEXT + ".execute(oldFileNames, newFileNames)");
+        if (pathNames.length != 2)
+            throw new IllegalArgumentException(CONTEXT + ".execute(oldFileNames, newFileNames)");
         return mScanner.updateMediaDatabase_Android42(mContext, pathNames[0], pathNames[1]);
     }
 
@@ -46,7 +47,9 @@ public class MediaScannerAsyncTask  extends AsyncTask<String[],Object,Integer> {
         }
     }
 
-    /** do not wait for result. */
+    /**
+     * do not wait for result.
+     */
     public static void updateMediaDBInBackground(MediaScanner scanner, Context context, String why, String[] oldPathNames, String[] newPathNames) {
         if (isGuiThread()) {
             // update_Android42 scanner in seperate background task
@@ -61,7 +64,9 @@ public class MediaScannerAsyncTask  extends AsyncTask<String[],Object,Integer> {
         }
     }
 
-    /** return true if this is executed in the gui thread */
+    /**
+     * return true if this is executed in the gui thread
+     */
     private static boolean isGuiThread() {
         return (Looper.myLooper() == Looper.getMainLooper());
     }

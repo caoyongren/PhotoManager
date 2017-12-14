@@ -19,35 +19,41 @@
 package de.k3b.android.util;
 
 import java.util.Iterator;
+
 import android.database.Cursor;
 
-/** 
-	Iterator that iterates over a Cursor or CursorWrapper.
-    inspired by http://stackoverflow.com/questions/10723770/whats-the-best-way-to-iterate-an-android-cursor/28765773#28765773 
-*/
+/**
+ * Iterator that iterates over a Cursor or CursorWrapper.
+ * inspired by http://stackoverflow.com/questions/10723770/whats-the-best-way-to-iterate-an-android-cursor/28765773#28765773
+ */
 public class IterableCursor<T extends Cursor> implements Iterable<T>, Iterator<T> {
     protected T cursor;
     protected int toVisit;
+
     public IterableCursor(T cursor) {
         this.cursor = cursor;
         toVisit = cursor.getCount();
     }
+
     public Iterator<T> iterator() {
         cursor.moveToPosition(-1);
         toVisit = cursor.getCount();
         return this;
     }
+
     public boolean hasNext() {
-        return toVisit>0;
+        return toVisit > 0;
     }
+
     public T next() {
-    //  if (!hasNext()) {
-    //      throw new NoSuchElementException();
-    //  }
+        //  if (!hasNext()) {
+        //      throw new NoSuchElementException();
+        //  }
         cursor.moveToNext();
         toVisit--;
         return cursor;
     }
+
     public void remove() {
         throw new UnsupportedOperationException();
     }

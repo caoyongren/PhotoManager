@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.imagedetail;
 
 import android.content.Context;
@@ -28,7 +28,7 @@ import android.view.View;
 /**
  * Found at http://stackoverflow.com/questions/7814017/is-it-possible-to-disable-scrolling-on-a-viewpager.
  * Convenient way to temporarily disable ViewPager navigation while interacting with ImageView.
- * 
+ * <p>
  * Julia Zudikova
  */
 
@@ -47,8 +47,8 @@ import android.view.View;
  */
 public class LockableViewPager extends ViewPager {
 
-	private boolean isLocked;
-	
+    private boolean isLocked;
+
     public LockableViewPager(Context context) {
         super(context);
         isLocked = false;
@@ -59,40 +59,41 @@ public class LockableViewPager extends ViewPager {
         isLocked = false;
     }
 
-	private View.OnClickListener onInterceptTouchListener = null;
-	public void setOnInterceptTouchEvent(View.OnClickListener onInterceptTouchListener) {
-		this.onInterceptTouchListener = onInterceptTouchListener;
-	}
+    private View.OnClickListener onInterceptTouchListener = null;
+
+    public void setOnInterceptTouchEvent(View.OnClickListener onInterceptTouchListener) {
+        this.onInterceptTouchListener = onInterceptTouchListener;
+    }
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-		if (onInterceptTouchListener != null) onInterceptTouchListener.onClick(this);
-    	if (!isLocked) {
-	        try {
-	            return super.onInterceptTouchEvent(ev);
-	        } catch (IllegalArgumentException e) {
-	            e.printStackTrace();
-	            return false;
-	        }
-    	}
-    	return false;
+        if (onInterceptTouchListener != null) onInterceptTouchListener.onClick(this);
+        if (!isLocked) {
+            try {
+                return super.onInterceptTouchEvent(ev);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return false;
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return !isLocked && super.onTouchEvent(event);
     }
-    
-	public void toggleLock() {
-		isLocked = !isLocked;
-	}
 
-	public void setLocked(boolean isLocked) {
-		this.isLocked = isLocked;
-	}
+    public void toggleLock() {
+        isLocked = !isLocked;
+    }
 
-	public boolean isLocked() {
-		return isLocked;
-	}
-	
+    public void setLocked(boolean isLocked) {
+        this.isLocked = isLocked;
+    }
+
+    public boolean isLocked() {
+        return isLocked;
+    }
+
 }

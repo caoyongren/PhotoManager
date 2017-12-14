@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.locationmap;
 
 import android.app.Activity;
@@ -57,7 +57,7 @@ import de.k3b.io.DirectoryFormatter;
 /**
  * Defines a gui for global foto filter: only fotos from certain filepath, date and/or lat/lon will be visible.
  */
-public class GeoEditActivity extends LocalizedActivity implements Common  {
+public class GeoEditActivity extends LocalizedActivity implements Common {
     private static final String mDebugPrefix = "GeoEdit-";
 
     public static final int RESULT_ID = 524;
@@ -75,7 +75,9 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
     private Button cmdOk;
     private Button cmdCancel;
 
-    /** != -null will setGeo-asynctask is running. null if activity is destroyed so async-task does not update gui any more */
+    /**
+     * != -null will setGeo-asynctask is running. null if activity is destroyed so async-task does not update gui any more
+     */
     private ProgressBar mProgressBar = null;
     private TextView mLblStatusMessage;
 
@@ -116,7 +118,7 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
         onCreateButtos();
 
         final Intent intent = this.getIntent();
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + "onCreate " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
         SelectedFiles selectedItems = getItems(intent);
@@ -140,8 +142,8 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
     private void onCreateButtos() {
         this.mLatitudeFrom = (EditText) findViewById(R.id.edit_latitude_from);
         this.mLongitudeFrom = (EditText) findViewById(R.id.edit_longitude_from);
-        mHistory = new HistoryEditText(GeoEditActivity.this, new int[] {
-                R.id.cmd_lat_from_history, R.id.cmd_lon_from_history} ,
+        mHistory = new HistoryEditText(GeoEditActivity.this, new int[]{
+                R.id.cmd_lat_from_history, R.id.cmd_lon_from_history},
                 mLatitudeFrom, mLongitudeFrom);
 
         Button cmd = (Button) findViewById(R.id.cmd_select_lat_lon);
@@ -272,9 +274,9 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
 */
 
     private void toGui(GeoPointDto src) {
-        mLongitudeFrom  .setText(convertLL(src.getLongitude()));
-        mLatitudeFrom   .setText(convertLL(src.getLatitude()));
-        mCurrentId  = src.getId();
+        mLongitudeFrom.setText(convertLL(src.getLongitude()));
+        mLatitudeFrom.setText(convertLL(src.getLatitude()));
+        mCurrentId = src.getId();
     }
 
     /************* local helper *****************/
@@ -295,7 +297,9 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
         }
     }
 
-    /** opens lat/lon picker */
+    /**
+     * opens lat/lon picker
+     */
     private void showLatLonPicker(String geoUri) {
         final Intent intent = new Intent();
         intent.setAction(Intent.ACTION_PICK);
@@ -323,7 +327,7 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
             this.startActivityForResult(Intent.createChooser(intent, this.getString(R.string.geo_edit_menu_title)), GeoEditActivity.RESULT_ID);
             // this.startActivityForResult(intent, RESULT_ID);
         } catch (ActivityNotFoundException ex) {
-            Toast.makeText(this, R.string.geo_picker_err_not_found,Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.geo_picker_err_not_found, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -351,7 +355,8 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
             case RESULT_ID:
                 onGeoChanged((intent != null) ? intent.getData() : null);
                 break;
-            default:break;
+            default:
+                break;
         }
     }
 
@@ -396,29 +401,35 @@ public class GeoEditActivity extends LocalizedActivity implements Common  {
         /** encapsulate geo-job into async background task */
         AsyncTask<Object, Integer, Integer> task = new AsyncTask<Object, Integer, Integer>() {
             private AndroidFileCommands engine;
-            @Override protected void onPreExecute() {
+
+            @Override
+            protected void onPreExecute() {
                 engine = new AndroidFileCommands44() {
                     /** map AndroidFileCommands-progress to AsyncTask-progress */
-                    @Override protected void onProgress(int itemcount, int size) {
+                    @Override
+                    protected void onProgress(int itemcount, int size) {
                         publishProgress(itemcount, size);
                     }
                 };
                 engine.setContext(GeoEditActivity.this);
             }
 
-            @Override protected Integer doInBackground(Object... params) {
+            @Override
+            protected Integer doInBackground(Object... params) {
                 engine.setLogFilePath(engine.getDefaultLogFile());
                 int itemcount = engine.setGeo(latitude, longitude, selectedItems, 10);
                 engine.setLogFilePath(null);
                 return itemcount;
             }
 
-            @Override protected void onProgressUpdate(Integer... values) {
+            @Override
+            protected void onProgressUpdate(Integer... values) {
                 if (mProgressBar != null) mProgressBar.setProgress(values[0]);
                 super.onProgressUpdate(values);
             }
 
-            @Override protected void onPostExecute(Integer result) {
+            @Override
+            protected void onPostExecute(Integer result) {
                 if (mProgressBar != null) {
                     // gui is not destoyed yet
                     if ((result != null) && (result.intValue() > 0)) {

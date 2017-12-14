@@ -40,28 +40,30 @@ public class FotoThumbSql {
     public static QueryParameter getQueryImageSizeByPath(String imagePath) {
 
         return FotoSql.setWhereVisibility(new QueryParameter()
-                // .setID(QUERY_TYPE_GROUP_DATE)
-                .addColumn(
-                        "count(*) as " + SQL_COL_COUNT,
-                        "sum(" + FotoSql.SQL_COL_SIZE + ") AS " + SQL_COL_SIZE)
-                .addFrom(FotoSql.SQL_TABLE_EXTERNAL_CONTENT_URI_FILE.toString())
-                .addWhere(FotoSql.SQL_COL_PATH +
-                        " like ?", imagePath + "%"),
+                        // .setID(QUERY_TYPE_GROUP_DATE)
+                        .addColumn(
+                                "count(*) as " + SQL_COL_COUNT,
+                                "sum(" + FotoSql.SQL_COL_SIZE + ") AS " + SQL_COL_SIZE)
+                        .addFrom(FotoSql.SQL_TABLE_EXTERNAL_CONTENT_URI_FILE.toString())
+                        .addWhere(FotoSql.SQL_COL_PATH +
+                                " like ?", imagePath + "%"),
                 IGalleryFilter.VISIBILITY_PRIVATE_PUBLIC)
                 ;
     }
 
-    /** creats statistics row */
+    /**
+     * creats statistics row
+     */
     private static String getStatistic(Context context, QueryParameter query, String type, String path, double factor) {
         StringBuilder result = new StringBuilder();
-		if (path != null) {
-			// http://docs.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html#syntax
-			// ie "Thumbnail[/mnt/sdcard0/] 122 (13.5 MB)"
-			String format = "%1$s[%2$s %5$d] #%3$d (%4$01.1f MB)\n";
-			// java.text.MessageFormat("The disk \"{1}\" contains {0} file(s).").format(testArgs);
-			
-			long countThumbInternal = 0;
-			double sizeKBThumbInternal  = 0.0;
+        if (path != null) {
+            // http://docs.oracle.com/javase/1.5.0/docs/api/java/util/Formatter.html#syntax
+            // ie "Thumbnail[/mnt/sdcard0/] 122 (13.5 MB)"
+            String format = "%1$s[%2$s %5$d] #%3$d (%4$01.1f MB)\n";
+            // java.text.MessageFormat("The disk \"{1}\" contains {0} file(s).").format(testArgs);
+
+            long countThumbInternal = 0;
+            double sizeKBThumbInternal = 0.0;
             long kind = 0;
 
             Cursor c = null;
@@ -92,15 +94,15 @@ public class FotoThumbSql {
                 if (c != null) c.close();
             }
 
-		}
-		return result.toString();
-	}
+        }
+        return result.toString();
+    }
 
     public static String formatDirStatistic(Context context, String imagePath) {
-		StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder();
 
-		result
-            .append(getStatistic(context, getQueryImageSizeByPath(imagePath), "Image", imagePath, 1.0))
+        result
+                .append(getStatistic(context, getQueryImageSizeByPath(imagePath), "Image", imagePath, 1.0))
         ;
 
         return result.toString();

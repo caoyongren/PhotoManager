@@ -33,14 +33,16 @@ import de.k3b.android.androFotoFinder.Global;
 
 /**
  * An activity that can change the locale (language) of its content.
- *
+ * <p>
  * Inspired by http://stackoverflow.com/questions/13181847/change-the-locale-at-runtime
- *
+ * <p>
  * Created by k3b on 07.01.2016.
  */
 
 public abstract class LocalizedActivity extends Activity {
-    /** if myLocale != Locale.Default : activity must be recreated in on resume */
+    /**
+     * if myLocale != Locale.Default : activity must be recreated in on resume
+     */
     private Locale myLocale = null;
 
     @Override
@@ -64,8 +66,7 @@ public abstract class LocalizedActivity extends Activity {
      * Set Activity-s locale to SharedPreferences-setting.
      * Must be called before
      */
-    public static void fixLocale(Context context)
-    {
+    public static void fixLocale(Context context) {
         final SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context);
         String language = prefs.getString(Global.PREF_KEY_USER_LOCALE, "");
@@ -88,7 +89,9 @@ public abstract class LocalizedActivity extends Activity {
         }
     }
 
-    /** 强制所有打开的活动重新创建 **/
+    /**
+     * 强制所有打开的活动重新创建
+     **/
     public static void recreate(Activity child) {
         Activity context = child;
         while (context != null) {

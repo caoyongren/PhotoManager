@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.locationmap;
 
 import android.app.Activity;
@@ -44,20 +44,20 @@ import de.k3b.database.QueryParameter;
  * Load Marker Overlays in a Background Task.<br>
  * Example usage
  * <pre>
- MarkerLoaderTask loader = new MarkerLoaderTask(getActivity(), "MyLoader") {
- // This is called when doInBackground() is finished
- protected void onPostExecute(OverlayManager result) {
- updateGui(result);
- }
-
- // This is called each time you call publishProgress()
- protected void onProgressUpdate(Integer... progress) {
- setStatus("Loaded " + progress[0] + "/" + progress[1]);
- }
- };
- loader.execute(parameters);
- </pre>
+ * MarkerLoaderTask loader = new MarkerLoaderTask(getActivity(), "MyLoader") {
+ * // This is called when doInBackground() is finished
+ * protected void onPostExecute(OverlayManager result) {
+ * updateGui(result);
+ * }
  *
+ * // This is called each time you call publishProgress()
+ * protected void onProgressUpdate(Integer... progress) {
+ * setStatus("Loaded " + progress[0] + "/" + progress[1]);
+ * }
+ * };
+ * loader.execute(parameters);
+ * </pre>
+ * <p>
  * Created by k3b on 16.07.2015.
  */
 public abstract class MarkerLoaderTask<MARKER extends ClickableIconOverlay> extends AsyncTask<QueryParameter, Integer, OverlayManager> {
@@ -127,14 +127,14 @@ public abstract class MarkerLoaderTask<MARKER extends ClickableIconOverlay> exte
                 if (marker != null) {
                     // recycle existing with same content
                     mOldItems.remove(id);
-                    mStatisticsRecycled ++;
+                    mStatisticsRecycled++;
                 } else {
                     marker = createMarker();
-                    GeoPoint point = new GeoPoint(cursor.getDouble(colLat),cursor.getDouble(colLon));
+                    GeoPoint point = new GeoPoint(cursor.getDouble(colLat), cursor.getDouble(colLon));
 
                     if (colCount != -1) markerItemCount = cursor.getString(colCount);
                     BitmapDrawable icon = createIcon(markerItemCount);
-                    marker.set(id, point, icon,null );
+                    marker.set(id, point, icon, null);
                 }
 
                 result.add(marker);
@@ -147,9 +147,8 @@ public abstract class MarkerLoaderTask<MARKER extends ClickableIconOverlay> exte
                     // Escape early if cancel() is called
                     if (isCancelled()) break;
                 }
-                
-                if ((mMarkerCountLimit != NO_MARKER_COUNT_LIMIT) && (itemCount >=mMarkerCountLimit))
-                {
+
+                if ((mMarkerCountLimit != NO_MARKER_COUNT_LIMIT) && (itemCount >= mMarkerCountLimit)) {
                     break;
                 }
             }
@@ -159,15 +158,15 @@ public abstract class MarkerLoaderTask<MARKER extends ClickableIconOverlay> exte
             }
 
             return result;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             if (this.mStatus != null) {
                 this.mStatus.append("\n\texception : ").append(ex.getMessage());
                 Log.e(Global.LOG_CONTEXT, mDebugPrefix + "doInBackground : "
-                    + this.mStatus.toString(), ex);
+                        + this.mStatus.toString(), ex);
             } else {
                 Log.e(Global.LOG_CONTEXT, mDebugPrefix
-                    + "doInBackground (settings[debug(sql)] disabled) : "
-                    + ex.getMessage(), ex);
+                        + "doInBackground (settings[debug(sql)] disabled) : "
+                        + ex.getMessage(), ex);
             }
 
             throw ex;

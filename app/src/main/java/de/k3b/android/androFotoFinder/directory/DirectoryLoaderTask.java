@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.directory;
 
 import android.app.Activity;
@@ -39,21 +39,21 @@ import de.k3b.io.IDirectory;
  * Load Directory in a Background Task.<br>
  * Example usage
  * <pre>
-    DirectoryLoaderTask loader = new DirectoryLoaderTask(getActivity(), "MyLoader") {
-        // This is called when doInBackground() is finished
-        @ Override
-        protected void onPostExecute(IDirectory result) {
-            updateGui(result);
-        }
-
-        // This is called each time you call publishProgress()
-        protected void onProgressUpdate(Integer... progress) {
-            setStatus("Loaded " + progress[0] + "/" + progress[1]);
-        }
-    };
-    loader.execute(parameters);
- </pre>
+ * DirectoryLoaderTask loader = new DirectoryLoaderTask(getActivity(), "MyLoader") {
+ * // This is called when doInBackground() is finished
+ * @ Override
+ * protected void onPostExecute(IDirectory result) {
+ * updateGui(result);
+ * }
  *
+ * // This is called each time you call publishProgress()
+ * protected void onProgressUpdate(Integer... progress) {
+ * setStatus("Loaded " + progress[0] + "/" + progress[1]);
+ * }
+ * };
+ * loader.execute(parameters);
+ * </pre>
+ * <p>
  * Created by k3b on 02.07.2015.
  */
 public class DirectoryLoaderTask extends AsyncTask<QueryParameter, Integer, IDirectory> {
@@ -123,7 +123,7 @@ public class DirectoryLoaderTask extends AsyncTask<QueryParameter, Integer, IDir
                 throw new IllegalArgumentException("Missing SQL Column. Need either " +
                         FotoSql.SQL_COL_DISPLAY_TEXT +
                         " or " + FotoSql.SQL_COL_LAT +
-                                " + " +FotoSql.SQL_COL_LON);
+                        " + " + FotoSql.SQL_COL_LON);
             }
 
             while (cursor.moveToNext()) {
@@ -175,7 +175,7 @@ public class DirectoryLoaderTask extends AsyncTask<QueryParameter, Integer, IDir
         List<IDirectory> children = (result != null) ? result.getChildren() : null;
 
         if (children != null) {
-            for (IDirectory _child: children) {
+            for (IDirectory _child : children) {
                 Directory child = (Directory) _child;
                 if (child.getRelPath().indexOf("/") > 0) {
                     child.setRelPath(DirectoryFormatter.getLastPath(child.getRelPath()));

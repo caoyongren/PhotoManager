@@ -20,9 +20,10 @@ import uk.co.senab.photoview.log.LogManager;
  * If image is bigger that available memory
  * load a scaled down version.
  * see http://developer.android.com/training/displaying-bitmaps/index.html.
- *
+ * <p>
  * Created by k3b on 14.09.2015
- * for https://github.com/k3b/APhotoManager/ */
+ * for https://github.com/k3b/APhotoManager/
+ */
 public class HugeImageLoader {
     // public to allow crash-report to filter logcat for this
     public static final String LOG_TAG = "HugeImageLoader";
@@ -46,10 +47,10 @@ public class HugeImageLoader {
     }
 
     public static Bitmap loadImage(File file, Context context) {
-        WindowManager windowManager = (WindowManager)context.getSystemService(Activity.WINDOW_SERVICE);
+        WindowManager windowManager = (WindowManager) context.getSystemService(Activity.WINDOW_SERVICE);
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB_MR2) {
-            loadImageOld(file,  windowManager);
+            loadImageOld(file, windowManager);
         }
         return loadImageHoneycombMr2(file, windowManager);
     }
@@ -59,7 +60,7 @@ public class HugeImageLoader {
         final Display display = windowManager.getDefaultDisplay();
         DisplayMetrics displaymetrics = new DisplayMetrics();
         display.getMetrics(displaymetrics);
-        return loadImage(file, displaymetrics.widthPixels,displaymetrics.heightPixels);
+        return loadImage(file, displaymetrics.widthPixels, displaymetrics.heightPixels);
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
@@ -86,21 +87,21 @@ public class HugeImageLoader {
             int width = options.outWidth;
             int height = options.outHeight;
             LogManager.getLogger().d(
-                LOG_TAG,
-                "loadImage(" +
-                        "\n\t'" + file +
-                        "', " + width +
-                        "x" + height +
-                        ", max=" + maxWidth +
-                        "x" + maxHeight +
-                        ", size=" + (width*height*4/1024) +
-                        "k, " +
-                        "\n\tmemory(total/free/avail)=(" + r.totalMemory()/1024 + "k,"+ r.freeMemory()/1024+ "k,"+ r.maxMemory()/1024 +
-                        "k) ) " +
-                        "\n\t==> " + width/downscale +
-                        "x" + height/downscale +
-                        ", size=" + (width*height*4/1024/downscale/downscale) +
-                        "k, scale=" + downscale);
+                    LOG_TAG,
+                    "loadImage(" +
+                            "\n\t'" + file +
+                            "', " + width +
+                            "x" + height +
+                            ", max=" + maxWidth +
+                            "x" + maxHeight +
+                            ", size=" + (width * height * 4 / 1024) +
+                            "k, " +
+                            "\n\tmemory(total/free/avail)=(" + r.totalMemory() / 1024 + "k," + r.freeMemory() / 1024 + "k," + r.maxMemory() / 1024 +
+                            "k) ) " +
+                            "\n\t==> " + width / downscale +
+                            "x" + height / downscale +
+                            ", size=" + (width * height * 4 / 1024 / downscale / downscale) +
+                            "k, scale=" + downscale);
         }
 
         // Decode bitmap with inSampleSize set

@@ -24,16 +24,18 @@ import android.database.Cursor;
  * Created by k3b on 15.08.2016.
  */
 public class DBUtils {
-    /** debug support for logging current cursor content */
+    /**
+     * debug support for logging current cursor content
+     */
     public static String debugCursor(Cursor cursor, int maxRows, String delim, String... colmnNames) {
         StringBuilder result = new StringBuilder();
         if ((cursor != null) && (!cursor.isClosed())) {
             int last = Math.min(maxRows - 1, cursor.getCount() - 1);
-            for (int position = 0; position <= last; position ++) {
+            for (int position = 0; position <= last; position++) {
                 result.append("#").append(position);
                 cursor.moveToPosition(position);
                 for (String col : colmnNames) {
-                    result.append(";").append(DBUtils.getString(cursor,col,"???"));
+                    result.append(";").append(DBUtils.getString(cursor, col, "???"));
                 }
                 result.append(delim);
             }
@@ -43,16 +45,16 @@ public class DBUtils {
 
     public static boolean isNull(Cursor cursor, String colId, boolean notFoundValue) {
         int columnIndex = (cursor == null) ? -1 : cursor.getColumnIndex(colId);
-        return (columnIndex == -1)  ? notFoundValue : cursor.isNull(columnIndex);
+        return (columnIndex == -1) ? notFoundValue : cursor.isNull(columnIndex);
     }
 
     public static String getString(Cursor cursor, String colId, String notFoundValue) {
         int columnIndex = (cursor == null) ? -1 : cursor.getColumnIndex(colId);
-        return (columnIndex == -1)  ? notFoundValue : cursor.getString(columnIndex);
+        return (columnIndex == -1) ? notFoundValue : cursor.getString(columnIndex);
     }
 
     public static long getLong(Cursor cursor, String colId, long notFoundValue) {
         int columnIndex = (cursor == null) ? -1 : cursor.getColumnIndex(colId);
-        return (columnIndex == -1)  ? notFoundValue : cursor.getLong(columnIndex);
+        return (columnIndex == -1) ? notFoundValue : cursor.getLong(columnIndex);
     }
 }

@@ -107,13 +107,15 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     private ArrayList<T> mOriginalValues;
     private ArrayFilter mFilter;
 
-    /** Layout inflater used for {@link #getDropDownView(int, View, ViewGroup)}. */
+    /**
+     * Layout inflater used for {@link #getDropDownView(int, View, ViewGroup)}.
+     */
     private LayoutInflater mDropDownInflater;
 
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context  The current context.
      * @param resource The resource ID for a layout file containing a TextView to use when
      *                 instantiating views.
      */
@@ -124,9 +126,9 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     /**
      * Constructor
      *
-     * @param context The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
+     * @param context            The current context.
+     * @param resource           The resource ID for a layout file containing a layout to use when
+     *                           instantiating views.
      * @param textViewResourceId The id of the TextView within the layout resource to be populated
      */
     public ArrayAdapterEx(Context context, @LayoutRes int resource, @IdRes int textViewResourceId) {
@@ -136,10 +138,10 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context  The current context.
      * @param resource The resource ID for a layout file containing a TextView to use when
      *                 instantiating views.
-     * @param objects The objects to represent in the ListView.
+     * @param objects  The objects to represent in the ListView.
      */
     public ArrayAdapterEx(Context context, @LayoutRes int resource, @NonNull T[] objects) {
         this(context, resource, 0, Arrays.asList(objects));
@@ -148,11 +150,11 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     /**
      * Constructor
      *
-     * @param context The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
+     * @param context            The current context.
+     * @param resource           The resource ID for a layout file containing a layout to use when
+     *                           instantiating views.
      * @param textViewResourceId The id of the TextView within the layout resource to be populated
-     * @param objects The objects to represent in the ListView.
+     * @param objects            The objects to represent in the ListView.
      */
     public ArrayAdapterEx(Context context, @LayoutRes int resource, @IdRes int textViewResourceId,
                           @NonNull T[] objects) {
@@ -162,10 +164,10 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     /**
      * Constructor
      *
-     * @param context The current context.
+     * @param context  The current context.
      * @param resource The resource ID for a layout file containing a TextView to use when
      *                 instantiating views.
-     * @param objects The objects to represent in the ListView.
+     * @param objects  The objects to represent in the ListView.
      */
     public ArrayAdapterEx(Context context, @LayoutRes int resource, @NonNull List<T> objects) {
         this(context, resource, 0, objects);
@@ -174,11 +176,11 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
     /**
      * Constructor
      *
-     * @param context The current context.
-     * @param resource The resource ID for a layout file containing a layout to use when
-     *                 instantiating views.
+     * @param context            The current context.
+     * @param resource           The resource ID for a layout file containing a layout to use when
+     *                           instantiating views.
      * @param textViewResourceId The id of the TextView within the layout resource to be populated
-     * @param objects The objects to represent in the ListView.
+     * @param objects            The objects to represent in the ListView.
      */
     public ArrayAdapterEx(Context context, @LayoutRes int resource, @IdRes int textViewResourceId,
                           @NonNull List<T> objects) {
@@ -226,7 +228,7 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      *
      * @param items The items to add at the end of the array.
      */
-    public void addAll(T ... items) {
+    public void addAll(T... items) {
         synchronized (mLock) {
             if (mOriginalValues != null) {
                 Collections.addAll(mOriginalValues, items);
@@ -241,7 +243,7 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      * Inserts the specified object at the specified index in the array.
      *
      * @param object The object to insert into the array.
-     * @param index The index at which the object must be inserted.
+     * @param index  The index at which the object must be inserted.
      */
     public void insert(T object, int index) {
         synchronized (mLock) {
@@ -288,7 +290,7 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      * Sorts the content of this adapter using the specified comparator.
      *
      * @param comparator The comparator used to sort the objects contained
-     *        in this adapter.
+     *                   in this adapter.
      */
     public void sort(Comparator<? super T> comparator) {
         synchronized (mLock) {
@@ -316,7 +318,7 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      * {@link #notifyDataSetChanged}.  If set to false, caller must
      * manually call notifyDataSetChanged() to have the changes
      * reflected in the attached view.
-     *
+     * <p>
      * The default is true, and calling notifyDataSetChanged()
      * resets the flag to true.
      *
@@ -356,7 +358,6 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      * Returns the position of the specified item in the array.
      *
      * @param item The item to retrieve the position of.
-     *
      * @return The position of the specified item.
      */
     public int getPosition(T item) {
@@ -404,7 +405,7 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
 
         T item = getItem(position);
         if (item instanceof CharSequence) {
-            text.setText((CharSequence)item);
+            text.setText((CharSequence) item);
         } else {
             text.setText(item.toString());
         }
@@ -432,10 +433,9 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
      * Creates a new ArrayAdapter from external resources. The content of the array is
      * obtained through {@link android.content.res.Resources#getTextArray(int)}.
      *
-     * @param context The application's environment.
+     * @param context        The application's environment.
      * @param textArrayResId The identifier of the array to use as the data source.
-     * @param textViewResId The identifier of the layout used to create views.
-     *
+     * @param textViewResId  The identifier of the layout used to create views.
      * @return An ArrayAdapter<CharSequence>.
      */
     public static ArrayAdapterEx<CharSequence> createFromResource(Context context,
@@ -517,8 +517,10 @@ public class ArrayAdapterEx<T> extends BaseAdapter implements Filterable {
         }
     }
 
-    /** Can be overwrite: return true for every item that matches the filter.
-     * Default implementation: filters for "startsWith"  with multible words */
+    /**
+     * Can be overwrite: return true for every item that matches the filter.
+     * Default implementation: filters for "startsWith"  with multible words
+     */
     protected boolean match(String lowerCaseSearchString, T value) {
         final String lowerCaseValueText = value.toString().toLowerCase();
 

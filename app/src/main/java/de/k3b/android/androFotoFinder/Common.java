@@ -42,21 +42,33 @@ public interface Common {
 
     static final String EXTRA_SELECTED_ITEM_PATHS = "de.k3b.extra.SELECTED_ITEMS_PATH";
 
-    /** detail,gallery:  sql where ... order by ... group by ... */
+    /**
+     * detail,gallery:  sql where ... order by ... group by ...
+     */
     public static final String EXTRA_QUERY = "de.k3b.extra.SQL";
 
-    /** detail: offset in in the resultset to be shown */
+    /**
+     * detail: offset in in the resultset to be shown
+     */
     public static final String EXTRA_POSITION = "de.k3b.extra.OFFSET";
 
-    /** gallery,geoEdit,picker: app title for picker */
+    /**
+     * gallery,geoEdit,picker: app title for picker
+     */
     public static final String EXTRA_TITLE = Intent.EXTRA_TITLE;
 
-    /**  detail:  getData/EXTRA_STREAM - file/content  */
+    /**
+     * detail:  getData/EXTRA_STREAM - file/content
+     */
     public static final String EXTRA_STREAM = Intent.EXTRA_STREAM;
 
-    /** detail:  Activity.onActivityResult() - resultCode: no photo-files were modified */
+    /**
+     * detail:  Activity.onActivityResult() - resultCode: no photo-files were modified
+     */
     public static final int RESULT_NOCHANGE = Activity.RESULT_CANCELED;
 
-    /** detail,geoEdit:  Activity.onActivityResult() - resultCode:  one or more photo-files were modified. caller must invalidate cached files/directories. */
+    /**
+     * detail,geoEdit:  Activity.onActivityResult() - resultCode:  one or more photo-files were modified. caller must invalidate cached files/directories.
+     */
     public static final int RESULT_CHANGE = Activity.RESULT_OK;
 }

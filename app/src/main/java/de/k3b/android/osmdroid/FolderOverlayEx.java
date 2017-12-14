@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.osmdroid;
 
 import org.osmdroid.views.overlay.FolderOverlay;
@@ -25,7 +25,9 @@ import org.osmdroid.views.overlay.OverlayManager;
 
 public class FolderOverlayEx extends FolderOverlay {
 
-    /** replaces the current overlaymanager. @returns the previous */
+    /**
+     * replaces the current overlaymanager. @returns the previous
+     */
     public OverlayManager setOverlayManager(OverlayManager newFolderOverlayContent) {
         OverlayManager old = mOverlayManager;
         mOverlayManager = newFolderOverlayContent;

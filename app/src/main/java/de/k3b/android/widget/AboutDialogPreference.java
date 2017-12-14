@@ -55,7 +55,7 @@ public class AboutDialogPreference extends DialogPreference {
 
     @NonNull
     public static String getAboutTitle(Context context) {
-        return context.getString(R.string.about_summary,context.getString(R.string.version_postfix));
+        return context.getString(R.string.about_summary, context.getString(R.string.version_postfix));
     }
 
     public static void onPrepareOptionsMenu(Context context, Menu menu) {
@@ -119,7 +119,7 @@ public class AboutDialogPreference extends DialogPreference {
                 }
         );
 
-        final WebView wv =  setAboutText(context, new WebView(context));
+        final WebView wv = setAboutText(context, new WebView(context));
         alert.setView(wv);
 
         return alert.create();

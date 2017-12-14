@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.util;
 
 import android.app.Activity;
@@ -55,13 +55,13 @@ import de.k3b.media.MediaUtil;
 /**
  * Android Media Scanner for images/photos/jpg compatible with android-5.0 Media scanner.
  * This Class handles standard Android-5.0 image fields.
- *
+ * <p>
  * Since android.media.MediaScannerConnection does not work on my android-4.2
  * here is my own implementation.
- *
+ * <p>
  * Created by k3b on 14.09.2015.
  */
-public class MediaScanner  {
+public class MediaScanner {
     private static final String CONTEXT = "MediaScanner.";
 
     /* the DB_XXXX fields are updated by the scanner via ExifInterfaceEx
@@ -85,7 +85,9 @@ public class MediaScanner  {
     public static final int DEFAULT_SCAN_DEPTH = 22;
     public static final String MEDIA_IGNORE_FILENAME = FileUtils.MEDIA_IGNORE_FILENAME; //  MediaStore.MEDIA_IGNORE_FILENAME;
 
-    /** singelton */
+    /**
+     * singelton
+     */
     private static MediaScanner sInstance = null;
 
     public static final FilenameFilter JPG_FILENAME_FILTER = new FilenameFilter() {
@@ -112,7 +114,7 @@ public class MediaScanner  {
 
     public static boolean isNoMedia(int maxLevel, String[] pathNames) {
         if (pathNames != null) {
-            for(String path : pathNames) {
+            for (String path : pathNames) {
                 if (isNoMedia(path, maxLevel)) {
                     return true;
                 }
@@ -122,9 +124,11 @@ public class MediaScanner  {
         return false;
     }
 
-    /** return true, if file is in a ".nomedia" dir */
+    /**
+     * return true, if file is in a ".nomedia" dir
+     */
     public static boolean isNoMedia(String path, int maxLevel) {
-        return FileUtils.isNoMedia(path,maxLevel);
+        return FileUtils.isNoMedia(path, maxLevel);
     }
 
     public static boolean canHideFolderMedia(String absoluteSelectedPath) {
@@ -166,7 +170,8 @@ public class MediaScanner  {
             return renameInMediaDatabase(context, oldPathNames, newPathNames);
         } else if (hasOld) {
             return deleteInMediaDatabase(context, oldPathNames);
-        } if (hasNew) {
+        }
+        if (hasNew) {
             return insertIntoMediaDatabase(context, newPathNames);
         }
         return 0;
@@ -222,7 +227,9 @@ public class MediaScanner  {
         return modifyCount;
     }
 
-    /** delete oldPathNames from media database */
+    /**
+     * delete oldPathNames from media database
+     */
     private int deleteInMediaDatabase(Context context, String[] oldPathNames) {
         int modifyCount = 0;
 
@@ -241,7 +248,9 @@ public class MediaScanner  {
         return modifyCount;
     }
 
-    /** change path and path dependant fields in media database */
+    /**
+     * change path and path dependant fields in media database
+     */
     private int renameInMediaDatabase(Context context, String[] oldPathNames, String... newPathNames) {
         if ((oldPathNames != null) && (oldPathNames.length > 0)) {
             if (Global.debugEnabled) {
@@ -301,7 +310,9 @@ public class MediaScanner  {
         return modifyCount;
     }
 
-    /** updates values with current values of file */
+    /**
+     * updates values with current values of file
+     */
     protected void getExifFromFile(ContentValues values, File file) {
         String absolutePath = FileUtils.tryGetCanonicalPath(file, file.getAbsolutePath());
 
@@ -333,7 +344,7 @@ public class MediaScanner  {
             if (orientation != -1) {
                 // We only recognize a subset of orientation tag values.
                 int degree;
-                switch(orientation) {
+                switch (orientation) {
                     case ExifInterfaceEx.ORIENTATION_ROTATE_90:
                         degree = 90;
                         break;
@@ -357,7 +368,9 @@ public class MediaScanner  {
         setPathRelatedFieldsIfNeccessary(values, absolutePath, null);
     }
 
-    /** @return number of copied properties */
+    /**
+     * @return number of copied properties
+     */
     protected int getExifValues(MediaContentValues dest, File file, ExifInterfaceEx exif) {
         return MediaUtil.copy(dest, exif, false, true);
     }
@@ -379,6 +392,7 @@ public class MediaScanner  {
 
         return null;
     }
+
     public int updatePathRelatedFields(Context context, Cursor cursor, String newAbsolutePath) {
         int columnIndexPk = cursor.getColumnIndex(FotoSql.SQL_COL_PK);
         int columnIndexPath = cursor.getColumnIndex(FotoSql.SQL_COL_PATH);
@@ -394,14 +408,18 @@ public class MediaScanner  {
         return FotoSql.execUpdate("updatePathRelatedFields", context, id, values);
     }
 
-    /** sets the path related fields */
+    /**
+     * sets the path related fields
+     */
     private void setPathRelatedFieldsIfNeccessary(ContentValues values, String newAbsolutePath, String oldAbsolutePath) {
         setFieldIfNeccessary(values, DB_TITLE, generateTitleFromFilePath(newAbsolutePath), generateTitleFromFilePath(oldAbsolutePath));
         setFieldIfNeccessary(values, DB_DISPLAY_NAME, generateDisplayNameFromFilePath(newAbsolutePath), generateDisplayNameFromFilePath(oldAbsolutePath));
         values.put(DB_DATA, newAbsolutePath);
     }
 
-    /** values[fieldName]=newCalculatedValue if current not set or equals oldCalculatedValue */
+    /**
+     * values[fieldName]=newCalculatedValue if current not set or equals oldCalculatedValue
+     */
     private void setFieldIfNeccessary(ContentValues values, String fieldName, String newCalculatedValue, String oldCalculatedValue) {
         String currentValue = values.getAsString(fieldName);
         if ((currentValue == null) || (TextUtils.isEmpty(currentValue.trim())) || (currentValue.equals(oldCalculatedValue))) {
@@ -415,7 +433,7 @@ public class MediaScanner  {
             getExifFromFile(values, file);
             return FotoSql.execUpdate(dbgContext, context, id, values);
         }
-		return 0;
+        return 0;
     }
 
     private int insert_Android42(String dbgContext, Context context, File file) {
@@ -427,7 +445,7 @@ public class MediaScanner  {
             getExifFromFile(values, file);
             return (null != FotoSql.execInsert(dbgContext, context, values)) ? 1 : 0;
         }
-		return 0;
+        return 0;
     }
 
     @NonNull
@@ -461,7 +479,8 @@ public class MediaScanner  {
         return filePath;
     }
 
-    /** update media db via android-s native scanner.
+    /**
+     * update media db via android-s native scanner.
      * Requires android-4.4 and up to support single files
      */
     public static void updateMediaDB_Androd44(Context context, String[] pathNames) {

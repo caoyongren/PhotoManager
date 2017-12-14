@@ -31,13 +31,15 @@ import de.k3b.android.util.MenuUtils;
 
 /**
  * Global Settings used throughout the app.
- *
+ * <p>
  * Non-final values can be modified by the app settings
- *
+ * <p>
  * Created by k3b on 04.06.2015.
  */
 public class Global {
-    /** LOG_CONTEXT is used as logging source for filtering logging messages that belong to this */
+    /**
+     * LOG_CONTEXT is used as logging source for filtering logging messages that belong to this
+     */
     public static final String LOG_CONTEXT = "k3bFoto";
 
     public static final String PREF_KEY_USER_LOCALE = "user_locale";
@@ -46,7 +48,9 @@ public class Global {
      * Global.xxxxx. Non final values may be changed in SettingsActivity
      */
 
-    /** #64: {@link Global#showEditChooser} : true => open editor via chooser. false: donot present chooser */
+    /**
+     * #64: {@link Global#showEditChooser} : true => open editor via chooser. false: donot present chooser
+     */
     public static boolean showEditChooser = false;
     public static boolean debugEnabled = false;
     public static boolean debugEnabledViewItem = false;
@@ -54,86 +58,126 @@ public class Global {
     public static boolean debugEnabledMap = false;
     public static boolean debugEnabledMemory = false;
 
-    /** The maximum number of **Blue selection markers** in the [Geographic-Map](geographic-map). */
+    /**
+     * The maximum number of **Blue selection markers** in the [Geographic-Map](geographic-map).
+     */
     public static int maxSelectionMarkersInMap = 255;
 
-    /** if image-width-height is bigger than this show thumbnail in image detail view.
-     * (memoryefficient, fast, but low-quality). -1: default to screenresolution */
+    /**
+     * if image-width-height is bigger than this show thumbnail in image detail view.
+     * (memoryefficient, fast, but low-quality). -1: default to screenresolution
+     */
     public static int imageDetailThumbnailIfBiggerThan = -1;
 
-    /** where thumbnails are strored. defaults to /extDir/DCIM/.thumbCache */
+    /**
+     * where thumbnails are strored. defaults to /extDir/DCIM/.thumbCache
+     */
     public static File thumbCacheRoot = null;
 
-    /** defines the [Image-View's](Image-View) timing of menu command **slideshow** */
+    /**
+     * defines the [Image-View's](Image-View) timing of menu command **slideshow**
+     */
     public static int slideshowIntervalInMilliSecs = 1500;
 
-    /** defines the timespan after which the [Image-View's](Image-View) ActionBar is hidden */
+    /**
+     * defines the timespan after which the [Image-View's](Image-View) ActionBar is hidden
+     */
     public static int actionBarHideTimeInMilliSecs = 2000;
 
-    /** If checked [multi selection mode](Gallery-View#Multiselection) in [Gallery-View](Gallery-View) is canceled after a command from Actionbar or Menu */
+    /**
+     * If checked [multi selection mode](Gallery-View#Multiselection) in [Gallery-View](Gallery-View) is canceled after a command from Actionbar or Menu
+     */
     public static boolean clearSelectionAfterCommand = false;
 
-    /** true update only if media scanner is not running. false=risky=always allow.  */
+    /**
+     * true update only if media scanner is not running. false=risky=always allow.
+     */
     public static boolean mustCheckMediaScannerRunning = true;
 
-    /** true every time a .nomedia dir/file is opend remeove items from db.  */
+    /**
+     * true every time a .nomedia dir/file is opend remeove items from db.
+     */
     public static final boolean mustRemoveNOMEDIAfromDB = true;
 
     private static final File externalStorageDirectory = Environment.getExternalStorageDirectory();
 
-    /** defines the filesystem's directory where [Bookmark files](Bookmarks) are stored and loaded from. */
+    /**
+     * defines the filesystem's directory where [Bookmark files](Bookmarks) are stored and loaded from.
+     */
     public static File reportDir = (externalStorageDirectory == null)
             ? null
             : new File(externalStorageDirectory, "databases/sql");
     public static final String reportExt = ".query";
 
-    /** defines the filesystem's directory where crash reports are written to. */
+    /**
+     * defines the filesystem's directory where crash reports are written to.
+     */
     public static File logCatDir = (externalStorageDirectory == null)
             ? null
             : new File(Environment.getExternalStorageDirectory(), "copy/log");
 
-    /** #60 where osm-mapsforge-offline-maps (*.map) are found. defaults to /extDir/osmdroid/ */
+    /**
+     * #60 where osm-mapsforge-offline-maps (*.map) are found. defaults to /extDir/osmdroid/
+     */
     public static File mapsForgeDir = (externalStorageDirectory == null)
             ? null
             : new File(Environment.getExternalStorageDirectory(), "osmdroid");
 
-    /** remember last picked geo-s */
+    /**
+     * remember last picked geo-s
+     */
     public static File pickHistoryFile = null; // initialized in app.onCreate with local database file
     public static int pickHistoryMax = 25;
 
-    /** false: cmd setGeo => form(GeoEditActivity) => mapPicker */
+    /**
+     * false: cmd setGeo => form(GeoEditActivity) => mapPicker
+     */
     public static final boolean geoNoEdit = true;
     public static final boolean saveXmpAsHumanReadable = true;
 
     public static class Media {
-        /** Support extra parameters true: experimental. Not fully implemented yet. */
+        /**
+         * Support extra parameters true: experimental. Not fully implemented yet.
+         */
         public static final boolean enableNonStandardMediaFields = true;
 
-        /** true: experimental. Not fully implemented yet. */
+        /**
+         * true: experimental. Not fully implemented yet.
+         */
         public static final boolean enableNonStandardMediaFieldsUpdateLastScanTimestamp = enableNonStandardMediaFields && true;
 
-        /** true: xmp value is more important than jpg-exif (if both values are present.) */
+        /**
+         * true: xmp value is more important than jpg-exif (if both values are present.)
+         */
         public static final boolean xmpOverwritesExif = enableNonStandardMediaFields && true;
 
-        /** true: if there is no xmp-file or entry xmp-entry in csv mark this
-         * SQL_COL_EXT_XMP_LAST_MODIFIED_DATE=EXT_LAST_EXT_SCAN_NO_XMP*. */
+        /**
+         * true: if there is no xmp-file or entry xmp-entry in csv mark this
+         * SQL_COL_EXT_XMP_LAST_MODIFIED_DATE=EXT_LAST_EXT_SCAN_NO_XMP*.
+         */
         public static final boolean enableXmpNone = enableNonStandardMediaFields && true;
     }
 
-    /** #26 which image resolution should the "non zoomed imageView" have? */
+    /**
+     * #26 which image resolution should the "non zoomed imageView" have?
+     */
     public static boolean initialImageDetailResolutionHigh = false; // false: MediaStore.Images.Thumbnails.MINI_KIND; true: FULL_SCREEN_KIND;
     public static boolean mapsForgeEnabled = false;
 
-    /** map with blue selection markers: how much to area to increase */
+    /**
+     * map with blue selection markers: how much to area to increase
+     */
     public static final double mapMultiselectionBoxIncreaseByProcent = 100.0;
-    /** map with blue selection markers: minimum size of zoom box in degrees */
+    /**
+     * map with blue selection markers: minimum size of zoom box in degrees
+     */
     public static final double mapMultiselectionBoxIncreaseMinSizeInDegrees = 0.01;
 
     public static void debugMemory(String modul, String message) {
         if (Global.debugEnabledMemory) {
             Runtime r = Runtime.getRuntime();
             String formattedMessage = String.format(Locale.US, "memory : (total/free/avail) = (%3$dK/%4$dK/%5$dK)\t- %1$s.%2$s",
-                    modul, message, r.totalMemory()/1024, r.freeMemory()/1024, r.maxMemory()/1024);
+                    modul, message, r.totalMemory() / 1024, r.freeMemory() / 1024, r.maxMemory() / 1024);
 
             Log.d(Global.LOG_CONTEXT, formattedMessage);
         }
@@ -141,7 +185,9 @@ public class Global {
 
     public static Locale systemLocale = Locale.getDefault();
 
-    /** move some pre-defined menu-actions into the "more..." submenue */
+    /**
+     * move some pre-defined menu-actions into the "more..." submenue
+     */
     public static void fixMenu(Context context, Menu menu) {
         MenuUtils.mov2SubMenu(menu, context.getString(R.string.more_menu_title),
                 R.id.action_details,

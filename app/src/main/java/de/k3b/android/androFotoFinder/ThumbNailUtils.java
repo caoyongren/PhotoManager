@@ -78,7 +78,7 @@ public class ThumbNailUtils {
     private static final DisplayImageOptions mDisplayImageOptions = ThumbNailUtils.createThumbnailOptions();
 
     public static void getThumb(int iconID, ImageView imageView) {
-        ImageLoader.getInstance().displayImage( FotoSql.getUriString(iconID), imageView, mDisplayImageOptions);
+        ImageLoader.getInstance().displayImage(FotoSql.getUriString(iconID), imageView, mDisplayImageOptions);
     }
 
     public static void getThumb(String fullPath, ImageView imageView) {

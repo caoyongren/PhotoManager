@@ -1,9 +1,10 @@
 package de.k3b.android.osmdroid;
 
-/** {@link de.k3b.android.osmdroid.MarkerBubblePopupBase} is a (pop-up-) View that can
+/**
+ * {@link de.k3b.android.osmdroid.MarkerBubblePopupBase} is a (pop-up-) View that can
  * be displayed on an {@link org.osmdroid.views.MapView}, associated to a
  * {@link org.osmdroid.api.IGeoPoint}.
- *
+ * <p>
  * Typical usage: cartoon-like bubbles displayed when clicking an overlay item (i.e. a
  * {@link org.osmdroid.views.overlay.Marker}).
  * It mimics the InfoWindow class of Google Maps JavaScript API V3.
@@ -12,7 +13,6 @@ package de.k3b.android.osmdroid;
  * <li>Structure and content of the view is let to the responsibility of the caller. </li>
  * <li>The same InfoWindow can be associated to many items. </li>
  * </ul>
- *
  */
 
 import android.view.MotionEvent;
@@ -55,7 +55,7 @@ public abstract class MarkerBubblePopupBase<DataType> {
         mPopupView = OsmdroidUtil.openMapPopupView(mapView, m_id_bubble_layout, geoPosition, MapView.LayoutParams.BOTTOM_CENTER, offsetX, offsetY);
         this.mPopupView.setOnTouchListener(new View.OnTouchListener() {
             public boolean onTouch(View v, MotionEvent e) {
-                if(e.getAction() == MotionEvent.ACTION_UP) {
+                if (e.getAction() == MotionEvent.ACTION_UP) {
                     close();
                 }
 

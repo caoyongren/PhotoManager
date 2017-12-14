@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.gallery.cursor;
 
 import android.app.Activity;
@@ -40,20 +40,20 @@ import de.k3b.database.SelectedItems;
 /**
  * CursorAdapter that queries MediaStore.Images.Media.EXTERNAL_CONTENT_URI
  * for a GridViewItem (gridCell).
- *
-* In android displaying an item with an image in a list or grid works like this (example):
-* 
-*     The grid needs to display item that is at position 35
-*     The grid asks its adapter for a filled griditemview for the item that is at position 35
-*     griditemview is either recycled from an old griditemview that is not visible any more or a new griditemview is created
-*     each griditemview has a corresponding viewHolder with imageID and a bitmap-gui element
-*     the image in the griditemview is initally loaded with a placeholder-image that will be visible until the imagload is complete.
-*     the adapter initiates loading the image in the background (async-task) that gets the viewHolder with imageID.
-*     when loading of the image in the background is finished the viewholder-gui element gets the loaded image.
-* 
+ * <p>
+ * In android displaying an item with an image in a list or grid works like this (example):
+ * <p>
+ * The grid needs to display item that is at position 35
+ * The grid asks its adapter for a filled griditemview for the item that is at position 35
+ * griditemview is either recycled from an old griditemview that is not visible any more or a new griditemview is created
+ * each griditemview has a corresponding viewHolder with imageID and a bitmap-gui element
+ * the image in the griditemview is initally loaded with a placeholder-image that will be visible until the imagload is complete.
+ * the adapter initiates loading the image in the background (async-task) that gets the viewHolder with imageID.
+ * when loading of the image in the background is finished the viewholder-gui element gets the loaded image.
+ * <p>
  * Created by k3b on 02.06.2015.
  */
-public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItems.Id2FileNameConverter  {
+public class GalleryCursorAdapter extends CursorAdapter implements SelectedItems.Id2FileNameConverter {
     // Identifies a particular Loader or a LoaderManager being used in this component
     protected final Activity mContext;
     protected final SelectedItems mSelectedItems;
@@ -94,7 +94,9 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
         return R.layout.grid_item_gallery;
     }
 
-    /** create new empty gridview cell */
+    /**
+     * create new empty gridview cell
+     */
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View iView = View.inflate(context, R.layout.grid_item_gallery, null);
@@ -102,17 +104,20 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
         iView.setTag(holder);
 
         // iView.setLayoutParams(new GridView.LayoutParams(200, 200));
-        if (Global.debugEnabledViewItem) Log.i(Global.LOG_CONTEXT, mDebugPrefix + "newView " + holder);
+        if (Global.debugEnabledViewItem)
+            Log.i(Global.LOG_CONTEXT, mDebugPrefix + "newView " + holder);
         return iView;
     }
 
-    /** load data from cursor-position into gridview cell */
+    /**
+     * load data from cursor-position into gridview cell
+     */
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         final GridCellViewHolder holder = (GridCellViewHolder) view.getTag();
 
         long count = DBUtils.getLong(cursor, FotoSql.SQL_COL_COUNT, 0);
-        boolean gps = !DBUtils.isNull(cursor,FotoSql.SQL_COL_GPS,true);
+        boolean gps = !DBUtils.isNull(cursor, FotoSql.SQL_COL_GPS, true);
 
         holder.filter = DBUtils.getString(cursor, FotoSql.SQL_COL_WHERE_PARAM, null);
 
@@ -139,14 +144,20 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
         return mDebugPrefix;
     }
 
-    /** converts imageID to uri */
+    /**
+     * converts imageID to uri
+     */
     public Uri getUri(long imageID) {
         return FotoSql.getUri(imageID);
     }
 
-    /** data belonging to gridview element */
+    /**
+     * data belonging to gridview element
+     */
     static class GridCellViewHolder {
-        /** used to create a debug-instance name. +=1 for every new instance */
+        /**
+         * used to create a debug-instance name. +=1 for every new instance
+         */
         private static int lastInstanceNo = 0;
         private final String debugPrefix;
 
@@ -154,13 +165,19 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
         final public ImageView icon;
         final public TextView description;
 
-        /** onClick add this as sql-where-filter */
+        /**
+         * onClick add this as sql-where-filter
+         */
         public String filter;
 
-        /** for delay loading */
+        /**
+         * for delay loading
+         */
         public long imageID = 0;
 
-        /** for delay loading */
+        /**
+         * for delay loading
+         */
         public String url = null;
 
         GridCellViewHolder(View parent) {
@@ -170,7 +187,9 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
             this.description = (TextView) parent.findViewById(R.id.text);
             this.image = (ImageView) parent.findViewById(R.id.image);
             this.icon = (ImageView) parent.findViewById(R.id.icon);
-        };
+        }
+
+        ;
 
         @Override
         public String toString() {
@@ -178,7 +197,9 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
         }
     }
 
-    /** SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database. */
+    /**
+     * SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database.
+     */
     @Override
     public String[] getFileNames(SelectedItems items) {
         return FotoSql.getFileNames(mContext, items);
@@ -186,15 +207,19 @@ public class GalleryCursorAdapter extends CursorAdapter  implements SelectedItem
 
     public String getFullFilePath(int position) {
         Cursor cursor = getCursorAt(position);
-        return DBUtils.getString(cursor,FotoSql.SQL_COL_DISPLAY_TEXT, null);
+        return DBUtils.getString(cursor, FotoSql.SQL_COL_DISPLAY_TEXT, null);
     }
 
-    /** internal helper. return null if position is not available */
+    /**
+     * internal helper. return null if position is not available
+     */
     private Cursor getCursorAt(int position) {
         return (Cursor) getItem(position);
     }
 
-    /** translates offset in adapter to id of image */
+    /**
+     * translates offset in adapter to id of image
+     */
     public long getImageId(int position) {
         Cursor cursor = getCursorAt(position);
         return DBUtils.getLong(cursor, FotoSql.SQL_COL_PK, 0);

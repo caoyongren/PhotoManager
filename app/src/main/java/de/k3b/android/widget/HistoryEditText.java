@@ -39,7 +39,7 @@ import de.k3b.io.ListUtils;
  * Add history-popup to EditText.
  * invoke via Clipboard ContextActionBar: star (history) to open a popupmenu with previous values.
  * Long-Press if no selection => popup with previous values.
- *
+ * <p>
  * Created by k3b on 26.08.2015.
  */
 public class HistoryEditText {
@@ -49,8 +49,10 @@ public class HistoryEditText {
     private final int mMaxHisotrySize;
     private final EditorHandler[] mEditorHandlers;
 
-    /** ContextActionBar for one EditText */
-    protected class EditorHandler implements View.OnLongClickListener, View.OnClickListener  {
+    /**
+     * ContextActionBar for one EditText
+     */
+    protected class EditorHandler implements View.OnLongClickListener, View.OnClickListener {
         private final EditText mEditor;
         private final ImageButton mCmd;
         private final String mId;
@@ -120,8 +122,8 @@ public class HistoryEditText {
             return ListUtils.toString(list, mDelimiter);
         }
 
-        private List<String>  include(List<String>  history_, String newValue) {
-            List<String>  history = new ArrayList<String>(history_);
+        private List<String> include(List<String> history_, String newValue) {
+            List<String> history = new ArrayList<String>(history_);
             if ((newValue != null) && (newValue.length() > 0)) {
                 history.remove(newValue);
                 history.add(0, newValue);
@@ -153,12 +155,16 @@ public class HistoryEditText {
         }
     }
 
-    /** define history function for these editors */
+    /**
+     * define history function for these editors
+     */
     public HistoryEditText(Activity context, int[] cmdIds, EditText... editors) {
-        this(context, context.getClass().getSimpleName() + "_history_","';'",  8, cmdIds, editors);
+        this(context, context.getClass().getSimpleName() + "_history_", "';'", 8, cmdIds, editors);
     }
 
-    /** define history function for these editors */
+    /**
+     * define history function for these editors
+     */
     public HistoryEditText(Activity context, String settingsPrefix, String delimiter, int maxHisotrySize, int[] cmdIds, EditText... editors) {
 
         this.mContext = context;
@@ -167,25 +173,27 @@ public class HistoryEditText {
         mEditorHandlers = new EditorHandler[editors.length];
 
         for (int i = 0; i < editors.length; i++) {
-            mEditorHandlers[i] = createHandler(settingsPrefix+i, editors[i], getId(cmdIds, i));
+            mEditorHandlers[i] = createHandler(settingsPrefix + i, editors[i], getId(cmdIds, i));
         }
     }
 
     protected EditorHandler createHandler(String id, EditText editor, int cmdId) {
-        return new EditorHandler(id,editor, cmdId);
+        return new EditorHandler(id, editor, cmdId);
     }
 
     private int getId(int[] ids, int offset) {
-        if ((ids != null) && (offset >= 0) && (offset < ids.length) ) return ids[offset];
+        if ((ids != null) && (offset >= 0) && (offset < ids.length)) return ids[offset];
         return NO_ID;
     }
 
-    /** include current editor-content to history and save to settings */
+    /**
+     * include current editor-content to history and save to settings
+     */
     public void saveHistory() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         SharedPreferences.Editor edit = sharedPref.edit();
 
-        for (EditorHandler instance: mEditorHandlers) {
+        for (EditorHandler instance : mEditorHandlers) {
             instance.saveHistory(sharedPref, edit);
         }
         edit.apply();
@@ -195,7 +203,7 @@ public class HistoryEditText {
     public String toString() {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(mContext);
         StringBuffer result = new StringBuffer();
-        for (EditorHandler instance: mEditorHandlers) {
+        for (EditorHandler instance : mEditorHandlers) {
             result.append(instance.toString(sharedPref)).append("\n");
         }
         return result.toString();

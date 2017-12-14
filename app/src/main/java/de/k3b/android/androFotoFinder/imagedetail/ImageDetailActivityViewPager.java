@@ -86,7 +86,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     private static final String INSTANCE_STATE_MODIFY_COUNT = "mModifyCount";
     public static final int ACTIVITY_ID = 76621;
 
-    /** activityRequestCode: in forward mode: intent is forwarded to gallery */
+    /**
+     * activityRequestCode: in forward mode: intent is forwarded to gallery
+     */
     private static final int ACTION_RESULT_FORWARD = 471102;
 
     // #64: after image edit rescan file
@@ -96,7 +98,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     private static final QueryParameter DEFAULT_QUERY = FotoSql.queryDetail;
     private static final int NO_INITIAL_SCROLL_POSITION = -1;
 
-    /** if smaller that these millisecs then the actionbar autohide is disabled */
+    /**
+     * if smaller that these millisecs then the actionbar autohide is disabled
+     */
     private static final int DISABLE_HIDE_ACTIONBAR = 700;
     private static final int NOMEDIA_GALLERY = 8227;
 
@@ -122,25 +126,37 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     private static int id = 1;
     private String mDebugPrefix;
 
-    /** where data comes from */
+    /**
+     * where data comes from
+     */
     private QueryParameter mGalleryContentQuery = null;
     private GalleryFilterParameter mFilter = null;
 
-    /** if >= 0 after load cursor scroll to this offset */
+    /**
+     * if >= 0 after load cursor scroll to this offset
+     */
     private int mInitialScrollPosition = NO_INITIAL_SCROLL_POSITION;
 
-    /** if not null: after load cursor scroll to this path */
+    /**
+     * if not null: after load cursor scroll to this path
+     */
     private String mInitialFilePath = null;
 
-    /** after 2 secs of user inactive the actionbar is hidden until the screen is touched */
+    /**
+     * after 2 secs of user inactive the actionbar is hidden until the screen is touched
+     */
     private Handler mActionBarHideTimer = null;
 
     class LocalCursorLoader implements LoaderManager.LoaderCallbacks<Cursor> {
-        /** incremented every time a new curster/query is generated */
+        /**
+         * incremented every time a new curster/query is generated
+         */
         private int mRequeryInstanceCount = 0;
 
-        /** called by LoaderManager.getLoader(ACTIVITY_ID) to (re)create loader
-         * that attaches to last query/cursor if it still exist i.e. after rotation */
+        /**
+         * called by LoaderManager.getLoader(ACTIVITY_ID) to (re)create loader
+         * that attaches to last query/cursor if it still exist i.e. after rotation
+         */
         @Override
         public Loader<Cursor> onCreateLoader(int loaderID, Bundle bundle) {
             switch (loaderID) {
@@ -159,7 +175,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             }
         }
 
-        /** called after media db content has changed */
+        /**
+         * called after media db content has changed
+         */
         @Override
         public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
             // to be restored after refreshLocal if there is no mInitialFilePath
@@ -172,7 +190,8 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             // restore position is invalid
             final int newItemCount = mAdapter.getCount();
 
-            if (((newItemCount == 0)) || (mInitialScrollPosition >= newItemCount)) mInitialScrollPosition = NO_INITIAL_SCROLL_POSITION;
+            if (((newItemCount == 0)) || (mInitialScrollPosition >= newItemCount))
+                mInitialScrollPosition = NO_INITIAL_SCROLL_POSITION;
 
             if (Global.debugEnabledSql) {
                 Log.i(Global.LOG_CONTEXT, mDebugPrefix + " onLoadFinished" +
@@ -188,7 +207,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             onLoadCompleted();
         }
 
-        /** called by LoaderManager. after search criteria were changed or if activity is destroyed. */
+        /**
+         * called by LoaderManager. after search criteria were changed or if activity is destroyed.
+         */
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             // rember position where we have to scroll to after refreshLocal is finished.
@@ -217,18 +238,19 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             switch (opCode) {
                 case OP_MOVE:
                 case OP_RENAME:
-                    if ((newPathNames!= null) && (newPathNames.length > 0)) {
+                    if ((newPathNames != null) && (newPathNames.length > 0)) {
                         // so selection will be restored to this after load complete
                         mInitialFilePath = newPathNames[0];
                     }
                     break;
                 case OP_COPY:
-                    if ((oldPathNames!= null) && (oldPathNames.length > 0)) {
+                    if ((oldPathNames != null) && (oldPathNames.length > 0)) {
                         // so selection will be restored to this after load complete
                         mInitialFilePath = oldPathNames[0];
                     }
                     break;
-                default:break;
+                default:
+                    break;
             }
 
             super.onPostProcess(what, oldPathNames, newPathNames, modifyCount, itemCount, opCode);
@@ -284,7 +306,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             String errorMessage = (sFileCommands == null) ? null : sFileCommands.checkWriteProtected(0, new File(path));
             if (errorMessage != null) {
                 int pos = errorMessage.indexOf('\n');
-                return (pos > 0) ? errorMessage.substring(0,pos) : errorMessage;
+                return (pos > 0) ? errorMessage.substring(0, pos) : errorMessage;
             }
             return super.getStatusErrorMessage(path);
         }
@@ -298,12 +320,14 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             sFileCommands.onMoveOrCopyDirectoryPick(getMove(), selection, getSrcFotos());
             dismiss();
         }
-    };
+    }
+
+    ;
 
     private class TagUpdateTask extends TagTask<List<String>> {
 
         TagUpdateTask(SelectedFiles fotos) {
-            super(ImageDetailActivityViewPager.this,R.string.tags_activity_title);
+            super(ImageDetailActivityViewPager.this, R.string.tags_activity_title);
             this.getWorkflow().init(ImageDetailActivityViewPager.this, fotos, null);
 
         }
@@ -318,11 +342,11 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     /**
      * shows a new instance of ImageDetailActivityViewPager.
      *
-     * @param context calling activity
-     * @param imageUri if != null initial image to show
-     * @param position offset of image to display in query or current file directory
+     * @param context          calling activity
+     * @param imageUri         if != null initial image to show
+     * @param position         offset of image to display in query or current file directory
      * @param imageDetailQuery if != null set initial filter to new FotoGalleryActivity
-     * @param requestCode if != 0 start for result. else start without result
+     * @param requestCode      if != 0 start for result. else start without result
      */
     public static void showActivity(Activity context, Uri imageUri, int position, QueryParameter imageDetailQuery, int requestCode) {
         Intent intent;
@@ -343,8 +367,8 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     }
 
     @Override
-	public void onCreate(Bundle savedInstanceState) {
-        mDebugPrefix = "ImageDetailActivityViewPager#" + (id++)  + " ";
+    public void onCreate(Bundle savedInstanceState) {
+        mDebugPrefix = "ImageDetailActivityViewPager#" + (id++) + " ";
         Global.debugMemory(mDebugPrefix, "onCreate");
         this.mWaitingForMediaScannerResult = false;
 
@@ -356,7 +380,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         SettingsActivity.prefs2Global(this);
         Intent intent = getIntent();
 
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + "onCreate " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
 
@@ -396,7 +420,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
                 mModifyCount = 0;
             }
 
-            if ((mInitialFilePath != null) && (mInitialScrollPosition ==-1)) {
+            if ((mInitialFilePath != null) && (mInitialScrollPosition == -1)) {
                 mInitialScrollPosition = mAdapter.getPositionFromPath(mInitialFilePath);
             }
             if ((mInitialScrollPosition >= 0) && (mInitialScrollPosition < mAdapter.getCount())) {
@@ -513,7 +537,8 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         File file = IntentUtil.getFile(uri);
 
         // probably content: url
-        if (file == null) return IntentUtil.isFileUri(uri); // true if file:// with wildcards "%" or "*" goto gallery;
+        if (file == null)
+            return IntentUtil.isFileUri(uri); // true if file:// with wildcards "%" or "*" goto gallery;
 
         // file with wildcard, directory or no read permissions
         return (!file.exists() || !file.isFile() || !file.canRead());
@@ -530,7 +555,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
 
     }
 
-    /** query from EXTRA_QUERY, EXTRA_FILTER, fileParentDir , defaultQuery */
+    /**
+     * query from EXTRA_QUERY, EXTRA_FILTER, fileParentDir , defaultQuery
+     */
     private void getParameter(Intent intent) {
         this.mInitialScrollPosition = intent.getIntExtra(EXTRA_POSITION, this.mInitialScrollPosition);
         this.mGalleryContentQuery = QueryParameter.parse(intent.getStringExtra(EXTRA_QUERY));
@@ -604,7 +631,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
 */
 
     @Override
-    protected void onPause () {
+    protected void onPause() {
         unhideActionBar(DISABLE_HIDE_ACTIONBAR, "onPause");
         Global.debugMemory(mDebugPrefix, "onPause");
         startStopSlideShow(false);
@@ -612,7 +639,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     }
 
     @Override
-    protected void onResume () {
+    protected void onResume() {
         unhideActionBar(Global.actionBarHideTimeInMilliSecs, "onResume");
         Global.debugMemory(mDebugPrefix, "onResume");
         super.onResume();
@@ -717,7 +744,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
      * return false; activity must me closed
      */
     private boolean checkForIncompleteMediaDatabase(String jpgFullFilePath, String why) {
-        if (!MediaScanner.isNoMedia(jpgFullFilePath,MediaScanner.DEFAULT_SCAN_DEPTH)) {
+        if (!MediaScanner.isNoMedia(jpgFullFilePath, MediaScanner.DEFAULT_SCAN_DEPTH)) {
             File fileToLoad = (jpgFullFilePath != null) ? new File(jpgFullFilePath) : null;
 
             if ((!this.mWaitingForMediaScannerResult) && (fileToLoad != null) && (fileToLoad.exists()) && (fileToLoad.canRead())) {
@@ -759,7 +786,7 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
             message.append(debugPrefix).append("updateIncompleteMediaDatabase('")
                     .append(dbPathSearch).append("') : \n\t");
 
-            for(String s : missing) {
+            for (String s : missing) {
                 message.append(s).append("; ");
             }
             Log.d(Global.LOG_CONTEXT, message.toString());
@@ -868,8 +895,8 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
                 GeoPointDto geo = new GeoPointDto(_geo.getLatitude(), _geo.getLongitude(), GeoPointDto.NO_ZOOM);
 
                 geo.setDescription(currentFilePath);
-                geo.setId(""+imageId);
-                geo.setName("#"+imageId);
+                geo.setId("" + imageId);
+                geo.setName("#" + imageId);
                 GeoUri PARSER = new GeoUri(GeoUri.OPT_PARSE_INFER_MISSING);
                 String uri = PARSER.toUriString(geo);
 
@@ -1029,7 +1056,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onCancel(String msg) {
         if (mTagWorflow != null) mTagWorflow.destroy();
@@ -1037,7 +1066,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onOk(List<String> addNames, List<String> removeNames) {
         if (mTagWorflow != null) {
@@ -1047,7 +1078,9 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag) {
         return TagsPickerFragment.handleMenuShow(menuItemItemId, selectedTag, this, this.mFilter);
@@ -1055,8 +1088,8 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
 
     protected SelectedFiles getCurrentFoto() {
         long imageId = getCurrentImageId();
-        SelectedFiles result = new SelectedFiles(new String[] {getCurrentFilePath()}, new Long[] {Long.valueOf(imageId)});
-        return  result;
+        SelectedFiles result = new SelectedFiles(new String[]{getCurrentFilePath()}, new Long[]{Long.valueOf(imageId)});
+        return result;
     }
 
     private long getCurrentImageId() {
@@ -1084,17 +1117,17 @@ public class ImageDetailActivityViewPager extends LocalizedActivity implements C
     }
 
     private boolean isViewPagerActive() {
-    	return (mViewPager != null && mViewPager instanceof LockableViewPager);
+        return (mViewPager != null && mViewPager instanceof LockableViewPager);
     }
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
         if (isViewPagerActive()) {
             outState.putInt(INSTANCE_STATE_LAST_SCROLL_POSITION, mViewPager.getCurrentItem());
-    	}
+        }
         outState.putInt(INSTANCE_STATE_MODIFY_COUNT, mModifyCount);
-		super.onSaveInstanceState(outState);
-	}
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public String toString() {

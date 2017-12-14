@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.locationmap;
 
 import android.app.Activity;
@@ -97,7 +97,9 @@ public class LocationMapFragment extends DialogFragment {
 
     private static final int NO_ZOOM = OsmdroidUtil.NO_ZOOM;
 
-    /** If there is more than 200 millisecs no zoom/scroll update markers */
+    /**
+     * If there is more than 200 millisecs no zoom/scroll update markers
+     */
     protected static final int DEFAULT_INACTIVITY_DELAY_IN_MILLISECS = 200;
 
     // for debugging
@@ -109,14 +111,20 @@ public class LocationMapFragment extends DialogFragment {
     private SeekBar mZoomBar;
     private ImageView mCurrentPhoto;
 
-    /** temporary 1x1 pix view where popup-menu is attached to */
+    /**
+     * temporary 1x1 pix view where popup-menu is attached to
+     */
     private View mTempPopupMenuParentView = null;
 
-    /** contain the markers with itmen-count that gets recalculated on every map move/zoom */
+    /**
+     * contain the markers with itmen-count that gets recalculated on every map move/zoom
+     */
     private FolderOverlayEx mFolderOverlayGreenPhotoMarker;
     private FolderOverlayEx mFolderOverlayBlueSelectionMarker;
 
-    /** Selected items in gallery */
+    /**
+     * Selected items in gallery
+     */
     private FolderOverlayEx mFolderOverlayBlueGpxMarker = null;
 
     // handling current selection
@@ -125,7 +133,6 @@ public class LocationMapFragment extends DialogFragment {
 
     // api to fragment owner
     protected OnDirectoryInteractionListener mDirectoryListener;
-
 
 
     /**
@@ -144,7 +151,7 @@ public class LocationMapFragment extends DialogFragment {
 
     public LocationMapFragment() {
         // Required empty public constructor
-        mDebugPrefix = "LocationMapFragment#" + (sId++)  + " ";
+        mDebugPrefix = "LocationMapFragment#" + (sId++) + " ";
         Global.debugMemory(mDebugPrefix, "ctor");
         // Required empty public constructor
         if (Global.debugEnabled || Global.debugEnabledMap) {
@@ -152,7 +159,8 @@ public class LocationMapFragment extends DialogFragment {
         }
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         saveLastViewPort(null);
         if (mCurrentFotoMarkerLoader != null) mCurrentFotoMarkerLoader.cancel(false);
         mCurrentFotoMarkerLoader = null;
@@ -169,7 +177,7 @@ public class LocationMapFragment extends DialogFragment {
         super.onAttach(activity);
         mPopup = new MarkerBubblePopup<GeoPointDtoEx>(activity);
         try {
-            if (activity instanceof  OnDirectoryInteractionListener) {
+            if (activity instanceof OnDirectoryInteractionListener) {
                 mDirectoryListener = (OnDirectoryInteractionListener) activity;
             }
         } catch (ClassCastException e) {
@@ -189,7 +197,9 @@ public class LocationMapFragment extends DialogFragment {
         mDirectoryListener = null;
     }
 
-    /** on ratation save current selelected view port */
+    /**
+     * on ratation save current selelected view port
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
@@ -254,7 +264,7 @@ public class LocationMapFragment extends DialogFragment {
         BoundingBox boundingBox = null;
         /** after ratation restore selelected view port */
         if (savedInstanceState != null) {
-            boundingBox =  savedInstanceState.getParcelable(STATE_LAST_VIEWPORT);
+            boundingBox = savedInstanceState.getParcelable(STATE_LAST_VIEWPORT);
         }
         if (boundingBox == null) {
             // if not initialized from outside show last used value
@@ -267,7 +277,7 @@ public class LocationMapFragment extends DialogFragment {
                     rectangle.getLatitude(),
                     rectangle.getLongitude());
         }
-        zoomToBoundingBox("onCreateView", boundingBox , zoomLevel);
+        zoomToBoundingBox("onCreateView", boundingBox, zoomLevel);
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_location_map, container, false);
@@ -411,10 +421,10 @@ public class LocationMapFragment extends DialogFragment {
         dismiss();
     }
 
-	public IGeoRectangle getCurrentGeoRectangle() {
-		IGeoRectangle result = getGeoRectangle(mMapView.getBoundingBox());
-		return result;
-	}
+    public IGeoRectangle getCurrentGeoRectangle() {
+        IGeoRectangle result = getGeoRectangle(mMapView.getBoundingBox());
+        return result;
+    }
 
     protected void onOk() {
         if (mDirectoryListener != null) {
@@ -500,8 +510,9 @@ public class LocationMapFragment extends DialogFragment {
 
     /**
      * Loads items from gpxAdditionalPointsContentUri into this.mFolderOverlayBlueGpxMarker.
+     *
      * @param gpxAdditionalPointsContentUri where the gpx data comes from or null if no gpx
-     * @param rectangle previous geo-rectangle-map-area
+     * @param rectangle                     previous geo-rectangle-map-area
      * @return new geo-rectangle-map-area from gpx
      */
     protected GeoRectangle defineGpxAdditionalPoints(Uri gpxAdditionalPointsContentUri, GeoRectangle rectangle) {
@@ -562,7 +573,7 @@ public class LocationMapFragment extends DialogFragment {
         GeoPointDtoEx position = (GeoPointDtoEx) point.clone();
         // MarkerEx.setDefaultIcon(mSelectedItemsHandler.mBlueMarker);
         // marker.setIcon(mSelectedItemsHandler.mBlueMarker); use global
-        return new MarkerEx<GeoPointDtoEx>(mPopup).set(mId++, position, mSelectedItemsHandler.mBlueMarker, position );
+        return new MarkerEx<GeoPointDtoEx>(mPopup).set(mId++, position, mSelectedItemsHandler.mBlueMarker, position);
     }
 
     private void zoomToBoundingBox(String why, BoundingBox boundingBox, int zoomLevel) {
@@ -587,7 +598,7 @@ public class LocationMapFragment extends DialogFragment {
                             + boundingBox
                             + " <= "
                             + mMapView.getBoundingBox()
-                            );
+                    );
                 }
                 setZoomBarZoomLevel(why, mMapView.getZoomLevel());
             } else {
@@ -598,7 +609,9 @@ public class LocationMapFragment extends DialogFragment {
         }
     }
 
-    /** all marker clicks will be delegated to LocationMapFragment#onFotoMarkerClicked() */
+    /**
+     * all marker clicks will be delegated to LocationMapFragment#onFotoMarkerClicked()
+     */
     private class FotoMarker extends ClickableIconOverlay<Object> {
 
         /**
@@ -673,7 +686,8 @@ public class LocationMapFragment extends DialogFragment {
         return result;
     }
 
-    /** translates map-zoomlevel to groupfactor
+    /**
+     * translates map-zoomlevel to groupfactor
      * that tells sql how geo-points are grouped together.
      */
     private double getGroupingFactor(int zoomlevel) {
@@ -684,21 +698,31 @@ public class LocationMapFragment extends DialogFragment {
     // for debugginc
     private static int sInstanceCountFotoLoader = 1;
 
-    /** caching support: if zoom level changes the cached items become invalid
-     * because the marker clustering is different */
+    /**
+     * caching support: if zoom level changes the cached items become invalid
+     * because the marker clustering is different
+     */
     private int mLastZoom = NO_ZOOM;
 
-    /** how much mCurrentFotoMarkerLoader are tirggerd while task is loading */
+    /**
+     * how much mCurrentFotoMarkerLoader are tirggerd while task is loading
+     */
     private int mFotoMarkerPendingLoads = 0;
 
-    /** The factory LocationMapFragment.FotoMarkerLoaderTask#createMarker() tries to recycle old
-     *     unused Fotomarkers before creating new */
+    /**
+     * The factory LocationMapFragment.FotoMarkerLoaderTask#createMarker() tries to recycle old
+     * unused Fotomarkers before creating new
+     */
     private Stack<FotoMarker> mFotoMarkerRecycler = new Stack<FotoMarker>();
 
-    /** To allow canceling of loading task. There are 0 or one tasks running at a time */
+    /**
+     * To allow canceling of loading task. There are 0 or one tasks running at a time
+     */
     private FotoMarkerLoaderTask mCurrentFotoMarkerLoader = null;
 
-    /** to load foto summary marker with numbers in the icons */
+    /**
+     * to load foto summary marker with numbers in the icons
+     */
     private class FotoMarkerLoaderTask extends MarkerLoaderTaskWithRecycling<FotoMarker> {
         public FotoMarkerLoaderTask(HashMap<Integer, FotoMarker> oldItems) {
             super(getActivity(), LocationMapFragment.this.mDebugPrefix + "-FotoMarkerLoaderTask#" + (sInstanceCountFotoLoader++) + "-",
@@ -750,7 +774,8 @@ public class LocationMapFragment extends DialogFragment {
 
     } // class FotoMarkerLoaderTask
 
-    /** gets called when FotoMarkerLoaderTask has finished.
+    /**
+     * gets called when FotoMarkerLoaderTask has finished.
      *
      * @param newFotoIcons null if there was an error
      */
@@ -827,13 +852,17 @@ public class LocationMapFragment extends DialogFragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDirectoryInteractionListener {
-        /** called when upresses "OK" button */
+        /**
+         * called when upresses "OK" button
+         */
         void onDirectoryPick(String selectedAbsolutePath, int queryTypeId);
     }
 
     private SelectedItemsHandler mSelectedItemsHandler = new SelectedItemsHandler();
 
-    /** Support for non-clustered selected items */
+    /**
+     * Support for non-clustered selected items
+     */
     private class SelectedItemsHandler {
 
         public void define(SelectedItems selectedItems) {
@@ -897,7 +926,8 @@ public class LocationMapFragment extends DialogFragment {
 
         } // class SelectionMarkerLoaderTask
 
-        /** gets called when MarkerLoaderTask has finished.
+        /**
+         * gets called when MarkerLoaderTask has finished.
          *
          * @param loadedBlueMarkers null if there was an error
          */
@@ -921,7 +951,7 @@ public class LocationMapFragment extends DialogFragment {
                 mMapView.invalidate();
 
                 GeoRectangle box = new GeoRectangle();
-                for (Overlay item: loadedBlueMarkers) {
+                for (Overlay item : loadedBlueMarkers) {
                     IGeoPoint pos = ((IconOverlay) item).getPosition();
 
                     box.inflate(pos.getLatitude(), pos.getLongitude());
@@ -968,8 +998,8 @@ public class LocationMapFragment extends DialogFragment {
         return oldItemsHash;
     }
 
-    protected   boolean showContextMenu(final View parent, final int markerId,
-                                        final IGeoPoint geoPosition, final Object markerData) {
+    protected boolean showContextMenu(final View parent, final int markerId,
+                                      final IGeoPoint geoPosition, final Object markerData) {
         closePopup();
         MenuInflater inflater = getActivity().getMenuInflater();
 
@@ -994,8 +1024,8 @@ public class LocationMapFragment extends DialogFragment {
                     case R.id.cmd_show_geo_as: {
                         IGeoPoint _geo = getGeoPointById(markerId, geoPosition);
                         GeoPointDto geo = new GeoPointDto(_geo.getLatitude(), _geo.getLongitude(), GeoPointDto.NO_ZOOM);
-                        geo.setId(""+markerId);
-                        geo.setName("#"+markerId);
+                        geo.setId("" + markerId);
+                        geo.setName("#" + markerId);
                         GeoUri PARSER = new GeoUri(GeoUri.OPT_PARSE_INFER_MISSING);
                         String uri = PARSER.toUriString(geo);
 
@@ -1003,8 +1033,6 @@ public class LocationMapFragment extends DialogFragment {
 
                         return true;
                     }
-
-
 
 
                     default:
@@ -1048,10 +1076,10 @@ public class LocationMapFragment extends DialogFragment {
         } else {
             double enlarge = delta * 0.2;
             BoundingBox = new BoundingBox(
-                    fittingRectangle.getLatitudeMax()+enlarge,
-                    fittingRectangle.getLogituedMax()+enlarge,
-                    fittingRectangle.getLatitudeMin()-enlarge,
-                    fittingRectangle.getLogituedMin()-enlarge);
+                    fittingRectangle.getLatitudeMax() + enlarge,
+                    fittingRectangle.getLogituedMax() + enlarge,
+                    fittingRectangle.getLatitudeMin() - enlarge,
+                    fittingRectangle.getLogituedMin() - enlarge);
         }
         if (Global.debugEnabledMap) {
             Log.i(Global.LOG_CONTEXT, "zoomToFit(): " + fittingRectangle +
@@ -1084,16 +1112,16 @@ public class LocationMapFragment extends DialogFragment {
         double delta = getMarkerDelta();
 
         return new BoundingBox(
-                geoPosition.getLatitude()+delta,
-                geoPosition.getLongitude()+delta,
-                geoPosition.getLatitude()-delta,
-                geoPosition.getLongitude()-delta);
+                geoPosition.getLatitude() + delta,
+                geoPosition.getLongitude() + delta,
+                geoPosition.getLatitude() - delta,
+                geoPosition.getLongitude() - delta);
     }
 
     private double getMarkerDelta() {
         int zoomLevel = this.mMapView.getZoomLevel();
         double groupingFactor = getGroupingFactor(zoomLevel);
-        return 1/groupingFactor/2;
+        return 1 / groupingFactor / 2;
     }
 
     private IGeoPoint getGeoPointById(int markerId, IGeoPoint notFoundValue) {

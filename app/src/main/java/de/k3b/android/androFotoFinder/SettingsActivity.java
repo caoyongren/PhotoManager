@@ -63,7 +63,7 @@ public class SettingsActivity extends PreferenceActivity {
         LocalizedActivity.fixLocale(this);
         super.onCreate(savedInstanceState);
         final Intent intent = getIntent();
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, "SettingsActivity onCreate " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
 
@@ -158,21 +158,21 @@ public class SettingsActivity extends PreferenceActivity {
 
         final SharedPreferences prefs = PreferenceManager
                 .getDefaultSharedPreferences(context.getApplicationContext());
-        Global.debugEnabled                     = getPref(prefs, "debugEnabled", Global.debugEnabled);
+        Global.debugEnabled = getPref(prefs, "debugEnabled", Global.debugEnabled);
         FotoLibGlobal.debugEnabled = Global.debugEnabled;
 
-        Global.debugEnabledViewItem             = getPref(prefs, "debugEnabledViewItem", Global.debugEnabledViewItem);
-        Global.debugEnabledSql                  = getPref(prefs, "debugEnabledSql", Global.debugEnabledSql);
+        Global.debugEnabledViewItem = getPref(prefs, "debugEnabledViewItem", Global.debugEnabledViewItem);
+        Global.debugEnabledSql = getPref(prefs, "debugEnabledSql", Global.debugEnabledSql);
 
-        Global.debugEnabledMap                  = getPref(prefs, "debugEnabledMap", Global.debugEnabledMap);
+        Global.debugEnabledMap = getPref(prefs, "debugEnabledMap", Global.debugEnabledMap);
 
-        Global.debugEnabledMemory               = getPref(prefs, "debugEnabledMemory", Global.debugEnabledMemory);
+        Global.debugEnabledMemory = getPref(prefs, "debugEnabledMemory", Global.debugEnabledMemory);
 
         // one setting for several 3d party debug-flags
-        boolean debug3rdParty                   = getPref(prefs, "debugEnableLibs", PhotoViewAttacher.DEBUG);
+        boolean debug3rdParty = getPref(prefs, "debugEnableLibs", PhotoViewAttacher.DEBUG);
 
-        PhotoViewAttacher.DEBUG                 = debug3rdParty;
-        HugeImageLoader.DEBUG                   = debug3rdParty;
+        PhotoViewAttacher.DEBUG = debug3rdParty;
+        HugeImageLoader.DEBUG = debug3rdParty;
         ThumbNailUtils.DEBUG = debug3rdParty;
         LogManager.setDebugEnabled(debug3rdParty);
         com.nostra13.universalimageloader.utils.L.writeDebugLogs(debug3rdParty);
@@ -185,26 +185,26 @@ public class SettingsActivity extends PreferenceActivity {
         // #26
         Global.initialImageDetailResolutionHigh = getPref(prefs, "initialImageDetailResolutionHigh", Global.initialImageDetailResolutionHigh);
 
-        Global.clearSelectionAfterCommand       = getPref(prefs, "clearSelectionAfterCommand", Global.clearSelectionAfterCommand);
+        Global.clearSelectionAfterCommand = getPref(prefs, "clearSelectionAfterCommand", Global.clearSelectionAfterCommand);
 
-        Global.mapsForgeEnabled                 = getPref(prefs, "mapsForgeEnabled", Global.mapsForgeEnabled);
+        Global.mapsForgeEnabled = getPref(prefs, "mapsForgeEnabled", Global.mapsForgeEnabled);
 
-                
-        Global.imageDetailThumbnailIfBiggerThan = getPref(prefs, "imageDetailThumbnailIfBiggerThan"     , Global.imageDetailThumbnailIfBiggerThan);
 
-        Global.maxSelectionMarkersInMap         = getPref(prefs, "maxSelectionMarkersInMap"     , Global.maxSelectionMarkersInMap);
+        Global.imageDetailThumbnailIfBiggerThan = getPref(prefs, "imageDetailThumbnailIfBiggerThan", Global.imageDetailThumbnailIfBiggerThan);
+
+        Global.maxSelectionMarkersInMap = getPref(prefs, "maxSelectionMarkersInMap", Global.maxSelectionMarkersInMap);
         Global.slideshowIntervalInMilliSecs = getPref(prefs, "slideshowIntervalInMilliSecs", Global.slideshowIntervalInMilliSecs);
-        Global.actionBarHideTimeInMilliSecs     = getPref(prefs, "actionBarHideTimeInMilliSecs" , Global.actionBarHideTimeInMilliSecs);
-        Global.pickHistoryMax = getPref(prefs, "pickHistoryMax"               , Global.pickHistoryMax);
+        Global.actionBarHideTimeInMilliSecs = getPref(prefs, "actionBarHideTimeInMilliSecs", Global.actionBarHideTimeInMilliSecs);
+        Global.pickHistoryMax = getPref(prefs, "pickHistoryMax", Global.pickHistoryMax);
 
-        Global.reportDir                        = getPref(prefs, "reportDir", Global.reportDir);
+        Global.reportDir = getPref(prefs, "reportDir", Global.reportDir);
 
-        Global.logCatDir                        = getPref(prefs, "logCatDir", Global.logCatDir);
+        Global.logCatDir = getPref(prefs, "logCatDir", Global.logCatDir);
 
-        Global.thumbCacheRoot                   = getPref(prefs, "thumbCacheRoot", Global.thumbCacheRoot);
-        Global.mapsForgeDir                     = getPref(prefs, "mapsForgeDir", Global.mapsForgeDir);
+        Global.thumbCacheRoot = getPref(prefs, "thumbCacheRoot", Global.thumbCacheRoot);
+        Global.mapsForgeDir = getPref(prefs, "mapsForgeDir", Global.mapsForgeDir);
 
-        Global.pickHistoryFile                  = getPref(prefs, "pickHistoryFile", Global.pickHistoryFile);
+        Global.pickHistoryFile = getPref(prefs, "pickHistoryFile", Global.pickHistoryFile);
 
         /*
         // bool
@@ -255,7 +255,8 @@ public class SettingsActivity extends PreferenceActivity {
         if (Global.mapsForgeDir == null) // || (!previousMapsForgeDir.exists()))
         {
             File externalStorageDirectory = Environment.getExternalStorageDirectory();
-            if (externalStorageDirectory == null) externalStorageDirectory = Environment.getDataDirectory();
+            if (externalStorageDirectory == null)
+                externalStorageDirectory = Environment.getDataDirectory();
             Global.mapsForgeDir = new File(externalStorageDirectory, "osmdroid");
             mustSave = true;
         }
@@ -286,19 +287,23 @@ public class SettingsActivity extends PreferenceActivity {
         return false;
     }
 
-    /** load File preference from SharedPreferences */
+    /**
+     * load File preference from SharedPreferences
+     */
     private static File getPref(SharedPreferences prefs, String key, File defaultValue) {
         String def = (defaultValue != null) ? defaultValue.getAbsolutePath() : null;
-        String value         = prefs.getString(key, def);
+        String value = prefs.getString(key, def);
 
         if ((def == null) || (def.trim().length() == 0)) return null;
         return new File(value);
     }
 
-    /** load value from SharedPreferences */
+    /**
+     * load value from SharedPreferences
+     */
     private static int getPref(SharedPreferences prefs, String key, int defaultValue) {
-        String def = "" + defaultValue ;
-        String value         = prefs.getString(key, def);
+        String def = "" + defaultValue;
+        String value = prefs.getString(key, def);
 
         if ((def != null) && (def.trim().length() > 0)) {
             // #73 fix NumberFormatException
@@ -306,14 +311,16 @@ public class SettingsActivity extends PreferenceActivity {
                 return Integer.valueOf(value);
             } catch (Exception ex) {
                 Log.i(Global.LOG_CONTEXT, "SettingsActivity.getPref(key=" + key
-                        +"): " + value+
-                        " => " + ex.getMessage(),ex);
+                        + "): " + value +
+                        " => " + ex.getMessage(), ex);
             }
         }
         return defaultValue;
     }
 
-    /** load value from SharedPreferences */
+    /**
+     * load value from SharedPreferences
+     */
     private static boolean getPref(SharedPreferences prefs, String key, boolean defaultValue) {
         return prefs.getBoolean(key, defaultValue);
 
@@ -330,6 +337,7 @@ public class SettingsActivity extends PreferenceActivity {
         Intent intent = new Intent(parent, SettingsActivity.class);
         parent.startActivity(intent);
     }
+
     // This is used to show the status of some preference in the description
     private void updateSummary() {
         final String languageKey = prefsInstance.getString(Global.PREF_KEY_USER_LOCALE, "");

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.osmdroid;
 
 import android.graphics.Rect;
@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  * A marker containing IGeoPoint, unique id and data. In a geographic map it will be shown as an icon.
- *
+ * <p>
  * Created by k3b on 17.07.2015.
  */
 public abstract class ClickableIconOverlay<DataType> extends IconOverlay {
@@ -50,7 +50,9 @@ public abstract class ClickableIconOverlay<DataType> extends IconOverlay {
      */
     abstract protected boolean onMarkerClicked(MapView mapView, int markerId, IGeoPoint makerPosition, DataType markerData);
 
-    /** used to recycle this */
+    /**
+     * used to recycle this
+     */
     public ClickableIconOverlay set(int id, IGeoPoint position, Drawable icon, DataType data) {
         set(position, icon);
         mId = id;
@@ -60,9 +62,10 @@ public abstract class ClickableIconOverlay<DataType> extends IconOverlay {
 
     /**
      * From org.osmdroid.bonuspack.overlays.Marker#hitTest
+     *
      * @return true, if this marker was taped.
      */
-    protected boolean hitTest(final MotionEvent event, final MapView mapView){
+    protected boolean hitTest(final MotionEvent event, final MapView mapView) {
         final Projection pj = mapView.getProjection();
 
         // sometime at higher zoomlevels pj is null
@@ -80,7 +83,8 @@ public abstract class ClickableIconOverlay<DataType> extends IconOverlay {
      * @return true: tap handeled. No following overlay/map should handle the event.
      * false: tap not handeled. A following overlay/map should handle the event.
      */
-    @Override public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView) {
+    @Override
+    public boolean onSingleTapConfirmed(final MotionEvent event, final MapView mapView) {
         boolean touched = hitTest(event, mapView);
         if (touched) {
             return onMarkerClicked(mapView, mId, mPosition, mData);

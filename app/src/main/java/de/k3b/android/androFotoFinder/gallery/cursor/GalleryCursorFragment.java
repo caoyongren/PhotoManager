@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.gallery.cursor;
 
 import android.app.Activity;
@@ -92,7 +92,7 @@ import de.k3b.tagDB.Tag;
  * Use the {@link GalleryCursorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class GalleryCursorFragment extends Fragment  implements Queryable, DirectoryGui,Common, TagsPickerFragment.ITagsPicker {
+public class GalleryCursorFragment extends Fragment implements Queryable, DirectoryGui, Common, TagsPickerFragment.ITagsPicker {
     private static final String INSTANCE_STATE_LAST_VISIBLE_POSITION = "lastVisiblePosition";
     private static final String INSTANCE_STATE_SELECTED_ITEM_IDS = "selectedItems";
     private static final String INSTANCE_STATE_OLD_TITLE = "oldTitle";
@@ -140,14 +140,17 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     /* false: prevent showing error message again */
     private boolean mNoShareError = true;
 
-    /** true pick geo; false pick image */
+    /**
+     * true pick geo; false pick image
+     */
     private boolean mGetGeo = false;
 
     private int mode = MODE_VIEW;
 
     /**************** construction ******************/
     /**
-     *使用此工厂方法使用提供的参数创建此片段的新实例.
+     * 使用此工厂方法使用提供的参数创建此片段的新实例.
+     *
      * @return A new instance of fragment GalleryCursorFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -163,11 +166,15 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     }
 
     class LocalCursorLoader implements LoaderManager.LoaderCallbacks<Cursor> {
-        /** incremented every time a new curster/query is generated */
+        /**
+         * incremented every time a new curster/query is generated
+         */
         private int mRequeryInstanceCount = 0;
 
-        /** called by LoaderManager.getLoader(ACTIVITY_ID) to (re)create loader
-         * that attaches to last query/cursor if it still exist i.e. after rotation */
+        /**
+         * called by LoaderManager.getLoader(ACTIVITY_ID) to (re)create loader
+         * that attaches to last query/cursor if it still exist i.e. after rotation
+         */
         @Override
         public Loader<Cursor> onCreateLoader(int aLoaderID, Bundle bundle) {
             if (loaderID == aLoaderID) {
@@ -185,7 +192,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
             return null;
         }
 
-        /** called after media db content has changed */
+        /**
+         * called after media db content has changed
+         */
         @Override
         public void onLoadFinished(Loader<Cursor> _loader, Cursor data) {
             mLastVisiblePosition = mGalleryView.getLastVisiblePosition();
@@ -241,7 +250,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
             multiSelectionReplaceTitleIfNecessary();
         }
 
-        /** called by LoaderManager. after search criteria were changed or if activity is destroyed. */
+        /**
+         * called by LoaderManager. after search criteria were changed or if activity is destroyed.
+         */
         @Override
         public void onLoaderReset(Loader<Cursor> loader) {
             if (Global.debugEnabled) {
@@ -284,7 +295,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     }
 
     public GalleryCursorFragment() {
-        mDebugPrefix = "GalleryCursorFragment#" + (id++)  + " ";
+        mDebugPrefix = "GalleryCursorFragment#" + (id++) + " ";
         Global.debugMemory(mDebugPrefix, "ctor");
 
         // Required empty public constructor
@@ -346,14 +357,14 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
         Intent intent = (parent == null) ? null : parent.getIntent();
 
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + "onCreateView " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
 
         String action = (intent != null) ? intent.getAction() : null;
 
         if ((action != null) && ((Intent.ACTION_PICK.compareTo(action) == 0) || (Intent.ACTION_GET_CONTENT.compareTo(action) == 0))) {
-            this.mode = (intent.getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE,false)) ? MODE_PICK_MULTIBLE : MODE_PICK_SINGLE;
+            this.mode = (intent.getBooleanExtra(Intent.EXTRA_ALLOW_MULTIPLE, false)) ? MODE_PICK_MULTIBLE : MODE_PICK_SINGLE;
             mMustReplaceMenue = true;
             String schema = intent.getScheme();
             mGetGeo = ((schema != null) && ("geo".compareTo(schema) == 0));
@@ -446,7 +457,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
         if (Global.debugEnabledMemory) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + " - onResume cmd (" +
-                            MoveOrCopyDestDirPicker.sFileCommands + ") => (" + mFileCommands +
+                    MoveOrCopyDestDirPicker.sFileCommands + ") => (" + mFileCommands +
                     ")");
 
         }
@@ -524,7 +535,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     public void requery(Activity context, QueryParameter parameters, String why) {
         this.mGalleryContentQuery = parameters;
 
-        FotoSql.setWhereVisibility(this.mGalleryContentQuery,IGalleryFilter.VISIBILITY_DEFAULT);
+        FotoSql.setWhereVisibility(this.mGalleryContentQuery, IGalleryFilter.VISIBILITY_DEFAULT);
         requery(why);
     }
 
@@ -559,7 +570,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     }
 
     /*********************** local helper *******************************************/
-    /** an Image in the FotoGallery was clicked */
+    /**
+     * an Image in the FotoGallery was clicked
+     */
     private void onGalleryImageClick(final GalleryCursorAdapter.GridCellViewHolder holder, int position) {
         if ((!multiSelectionHandleClick(holder)) && (mGalleryListener != null)) {
             if (holder.filter != null) {
@@ -589,7 +602,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
     private String mCurrentPath = null;
 
-    /** Defines Directory Navigation */
+    /**
+     * Defines Directory Navigation
+     */
     @Override
     public void defineDirectoryNavigation(IDirectory root, int dirTypId, String initialAbsolutePath) {
         mDirectoryRoot = root;
@@ -598,7 +613,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
     }
 
-    /** Set curent selection to absolutePath */
+    /**
+     * Set curent selection to absolutePath
+     */
     @Override
     public void navigateTo(String absolutePath) {
         mCurrentPath = absolutePath;
@@ -650,7 +667,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return result;
     }
 
-    /** path/directory was clicked */
+    /**
+     * path/directory was clicked
+     */
     private View.OnClickListener onPathButtonClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -658,7 +677,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
     };
 
-    /** path/directory was clicked */
+    /**
+     * path/directory was clicked
+     */
     private void onPathButtonClick(IDirectory newSelection) {
         if ((mDirectoryListener != null) && (newSelection != null)) {
             mCurrentPath = newSelection.getAbsolute();
@@ -666,7 +687,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
     }
 
-    /** getFrom tree display text */
+    /**
+     * getFrom tree display text
+     */
     private static String getDirectoryDisplayText(String prefix, IDirectory directory, int options) {
         StringBuilder result = new StringBuilder();
         if (prefix != null) result.append(prefix);
@@ -679,7 +702,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     /********************** Multi selection support ***********************************************************/
     private boolean mMustReplaceMenue = false;
 
-    /** starts mutliselection */
+    /**
+     * starts mutliselection
+     */
     private boolean onGalleryLongImageClick(final GalleryCursorAdapter.GridCellViewHolder holder, int position) {
         if (!isMultiSelectionActive()) {
             startMultiSelectionMode();
@@ -753,10 +778,10 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
         switch (menuItem.getItemId()) {
             case R.id.cmd_cancel_multiselect:
-                    return multiSelectionCancel();
+                return multiSelectionCancel();
             case R.id.cmd_cancel_pick:
-                    getActivity().finish();
-                    return true;
+                getActivity().finish();
+                return true;
             case R.id.cmd_ok:
                 return onPickOk();
             case R.id.cmd_selected_only:
@@ -795,7 +820,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
     private void cmdShowDetails() {
         SelectedItems ids = getSelectedItems();
-        String files = (ids != null) ? new SelectedFiles(ids, mAdapter).toString().replace(",","\n") : null;
+        String files = (ids != null) ? new SelectedFiles(ids, mAdapter).toString().replace(",", "\n") : null;
         ImageDetailMetaDialogBuilder.createImageDetailDialog(
                 this.getActivity(),
                 getActivity().getTitle().toString(),
@@ -809,7 +834,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     private class TagUpdateTask extends TagTask<List<String>> {
 
         TagUpdateTask(SelectedFiles fotos) {
-            super(getActivity(),R.string.tags_activity_title);
+            super(getActivity(), R.string.tags_activity_title);
             this.getWorkflow().init(getActivity(), fotos, null);
 
         }
@@ -820,6 +845,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
 
     }
+
     private boolean tagsShowEditDialog(SelectedFiles fotos) {
         mTagWorflow = new TagUpdateTask(fotos);
         TagsPickerFragment dlg = new TagsPickerFragment();
@@ -832,7 +858,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onCancel(String msg) {
         if (mTagWorflow != null) mTagWorflow.destroy();
@@ -840,7 +868,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onOk(List<String> addNames, List<String> removeNames) {
         if (mTagWorflow != null) {
@@ -850,7 +880,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return true;
     }
 
-    /** called by {@link TagsPickerFragment} */
+    /**
+     * called by {@link TagsPickerFragment}
+     */
     @Override
     public boolean onTagPopUpClick(int menuItemItemId, Tag selectedTag) {
         return TagsPickerFragment.handleMenuShow(menuItemItemId, selectedTag, this.getActivity(), null);
@@ -858,7 +890,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
 
 
     private void tagsUpdate(TagWorflow fotos, List<String> addNames, List<String> removeNames) {
-        fotos.updateTags(addNames,removeNames);
+        fotos.updateTags(addNames, removeNames);
     }
 
     public static class MoveOrCopyDestDirPicker extends DirectoryPickerFragment {
@@ -879,9 +911,12 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
             return f;
         }
 
-        /** do not use activity callback */
+        /**
+         * do not use activity callback
+         */
         @Override
-        protected void setDirectoryListener(Activity activity) {}
+        protected void setDirectoryListener(Activity activity) {
+        }
 
         public boolean getMove() {
             return getArguments().getBoolean("move", false);
@@ -902,7 +937,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
             sFileCommands.onMoveOrCopyDirectoryPick(getMove(), selection, getSrcFotos());
             dismiss();
         }
-    };
+    }
+
+    ;
 
     private boolean cmdMoveOrCopyWithDestDirPicker(final boolean move, String lastCopyToPath, final SelectedFiles fotos) {
         if (AndroidFileCommands.canProcessFile(this.getActivity())) {
@@ -951,7 +988,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
                 if (initialPoint != null) {
                     GeoUri PARSER = new GeoUri(GeoUri.OPT_PARSE_INFER_MISSING);
 
-                    resultUri = Uri.parse(PARSER.toUriString(new GeoPointDto(initialPoint.getLatitude(),initialPoint.getLongitude(), IGeoPointInfo.NO_ZOOM)));
+                    resultUri = Uri.parse(PARSER.toUriString(new GeoPointDto(initialPoint.getLatitude(), initialPoint.getLongitude(), IGeoPointInfo.NO_ZOOM)));
                 }
 
 
@@ -980,9 +1017,8 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
     private void clearSelections() {
         mSelectedItems.clear();
 
-        for (int i = mGalleryView.getChildCount() - 1; i >= 0; i--)
-        {
-            GalleryCursorAdapter.GridCellViewHolder holder =  (GalleryCursorAdapter.GridCellViewHolder) mGalleryView.getChildAt(i).getTag();
+        for (int i = mGalleryView.getChildCount() - 1; i >= 0; i--) {
+            GalleryCursorAdapter.GridCellViewHolder holder = (GalleryCursorAdapter.GridCellViewHolder) mGalleryView.getChildAt(i).getTag();
             if (holder != null) {
                 holder.icon.setVisibility(View.GONE);
             }
@@ -1058,6 +1094,7 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
 
     }
+
     private void removeAllFromSelection() {
         SqlJobTaskBase task = new SqlJobTaskBase(this.getActivity(), "removeAllFromSelection", this.mSelectedItems) {
             @Override
@@ -1121,7 +1158,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         }
     }
 
-    /** image entries may not have DISPLAY_NAME which is essential for calculating the item-s folder. */
+    /**
+     * image entries may not have DISPLAY_NAME which is essential for calculating the item-s folder.
+     */
     private void repairMissingDisplayNames() {
         SqlJobTaskBase task = new SqlJobTaskBase(this.getActivity(), "Searching media database for missing 'displayname'-s:\n", null) {
             private int mPathColNo = -2;
@@ -1145,7 +1184,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         task.execute(query);
     }
 
-    /** called after MissingDisplayNamesComplete finished */
+    /**
+     * called after MissingDisplayNamesComplete finished
+     */
     private void onMissingDisplayNamesComplete(StringBuffer debugMessage) {
         if (debugMessage != null) {
             Log.w(Global.LOG_CONTEXT, mDebugPrefix + debugMessage);
@@ -1162,8 +1203,8 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
                             .append("\nduplicate found ")
                             .append(id)
                             .append("#")
-                            .append(DBUtils.getString(cursor,FotoSql.SQL_COL_DISPLAY_TEXT,"???"))
-                            //.append("\n")
+                            .append(DBUtils.getString(cursor, FotoSql.SQL_COL_DISPLAY_TEXT, "???"))
+                    //.append("\n")
                     ;
                 }
             }
@@ -1190,7 +1231,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         task.execute(query);
     }
 
-    /** is called when removeDuplicates() found duplicates */
+    /**
+     * is called when removeDuplicates() found duplicates
+     */
     private void onDuplicatesFound(SelectedItems selectedItems, StringBuffer debugMessage) {
         if (debugMessage != null) {
             Log.w(Global.LOG_CONTEXT, mDebugPrefix + debugMessage);
@@ -1230,7 +1273,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return !mSelectedItems.isEmpty();
     }
 
-    /** return true if multiselection is active */
+    /**
+     * return true if multiselection is active
+     */
     private boolean multiSelectionHandleClick(GalleryCursorAdapter.GridCellViewHolder holder) {
         if (isMultiSelectionActive()) {
             long imageID = holder.imageID;
@@ -1242,7 +1287,9 @@ public class GalleryCursorFragment extends Fragment  implements Queryable, Direc
         return false;
     }
 
-    /** return true if included; false if excluded */
+    /**
+     * return true if included; false if excluded
+     */
     private boolean toggleSelection(long imageID) {
         boolean contains = mSelectedItems.contains(imageID);
         if (mode == MODE_PICK_SINGLE) {

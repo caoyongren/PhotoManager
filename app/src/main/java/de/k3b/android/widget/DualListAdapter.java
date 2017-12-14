@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.widget;
 
 import android.database.DataSetObserver;
@@ -27,7 +27,7 @@ import android.widget.ListAdapter;
 
 /**
  * Combine two ListAdapter  for a ListAdapter-client.
- *
+ * <p>
  * Created by k3b on 26.06.2015.
  */
 public class DualListAdapter implements ListAdapter {
@@ -76,7 +76,7 @@ public class DualListAdapter implements ListAdapter {
      */
     @Override
     public boolean isEnabled(int position) {
-        if (position >= this.adapter1Size) return adapter2.isEnabled(position-this.adapter1Size);
+        if (position >= this.adapter1Size) return adapter2.isEnabled(position - this.adapter1Size);
         return adapter1.isEnabled(position);
     }
 
@@ -169,7 +169,8 @@ public class DualListAdapter implements ListAdapter {
      */
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (position >= this.adapter1Size) return adapter2.getView(position - this.adapter1Size, convertView, parent);
+        if (position >= this.adapter1Size)
+            return adapter2.getView(position - this.adapter1Size, convertView, parent);
         return adapter1.getView(position, convertView, parent);
     }
 

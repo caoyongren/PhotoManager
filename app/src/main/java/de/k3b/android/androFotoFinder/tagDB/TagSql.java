@@ -41,7 +41,7 @@ import de.k3b.tagDB.TagConverter;
 
 /**
  * Database related code to handle non standard image processing (Tags, Description)
- *
+ * <p>
  * Created by k3b on 30.09.2016.
  */
 public class TagSql extends FotoSql {
@@ -53,8 +53,10 @@ public class TagSql extends FotoSql {
     public static final String SQL_COL_EXT_TITLE = MediaStore.Images.Media.TITLE;
     public static final String SQL_COL_EXT_RATING = MediaStore.Video.Media.BOOKMARK;
 
-    /** The date & time when last non standard media-scan took place
-     *  <P>Type: INTEGER (long) as milliseconds since jan 1, 1970</P> */
+    /**
+     * The date & time when last non standard media-scan took place
+     * <P>Type: INTEGER (long) as milliseconds since jan 1, 1970</P>
+     */
     private static final String SQL_COL_EXT_XMP_LAST_MODIFIED_DATE = MediaStore.Video.Media.DURATION;
 
     public static final int EXT_LAST_EXT_SCAN_UNKNOWN = 0;
@@ -70,15 +72,17 @@ public class TagSql extends FotoSql {
             + " like ?) OR  (" + SQL_COL_EXT_TAGS + " like ?) OR  (" + SQL_COL_EXT_TITLE + " like ?))";
 
     protected static final String FILTER_EXPR_TAGS_NONE_OR_LIST = "((" + SQL_COL_EXT_TAGS
-            + " is null) or (" + SQL_COL_EXT_TAGS +" like ?))";
-    protected static final String FILTER_EXPR_TAGS_LIST         = "(" + SQL_COL_EXT_TAGS + " like ?)";
-    protected static final String FILTER_EXPR_TAGS_NONE         = "(" + SQL_COL_EXT_TAGS + " is null)";
-    protected static final String FILTER_EXPR_NO_TAG            = "(" + SQL_COL_EXT_TAGS + " not like ?)";
+            + " is null) or (" + SQL_COL_EXT_TAGS + " like ?))";
+    protected static final String FILTER_EXPR_TAGS_LIST = "(" + SQL_COL_EXT_TAGS + " like ?)";
+    protected static final String FILTER_EXPR_TAGS_NONE = "(" + SQL_COL_EXT_TAGS + " is null)";
+    protected static final String FILTER_EXPR_NO_TAG = "(" + SQL_COL_EXT_TAGS + " not like ?)";
 
-    /** translates a query back to filter */
+    /**
+     * translates a query back to filter
+     */
     public static IGalleryFilter parseQueryEx(QueryParameter query, boolean remove) {
         if (query != null) {
-            GalleryFilterParameter resultFilter = (GalleryFilterParameter) parseQuery(query,remove);
+            GalleryFilterParameter resultFilter = (GalleryFilterParameter) parseQuery(query, remove);
             parseTagsFromQuery(query, remove, resultFilter);
 
             String[] params;
@@ -108,7 +112,8 @@ public class TagSql extends FotoSql {
             resultFilter.setTagsAllExcluded(null);
             List<String> excluded = resultFilter.getTagsAllExcluded();
             do {
-                if ((param.startsWith("%;") && (param.endsWith(";%")))) param = param.substring(2, param.length() -2);
+                if ((param.startsWith("%;") && (param.endsWith(";%"))))
+                    param = param.substring(2, param.length() - 2);
                 excluded.add(param);
                 param = getParam(query, FILTER_EXPR_NO_TAG, remove);
             } while (remove && (param != null));
@@ -159,7 +164,9 @@ public class TagSql extends FotoSql {
         }
     }
 
-    /** return number of applied tags */
+    /**
+     * return number of applied tags
+     */
     public static int addWhereAnyOfTags(QueryParameter resultQuery, List<Tag> tags) {
         StringBuilder sqlWhereStatement = new StringBuilder();
         int index = 0;
@@ -188,6 +195,7 @@ public class TagSql extends FotoSql {
         }
         return index;
     }
+
     public static void addWhereTagsIncluded(QueryParameter resultQuery, List<String> _includes, boolean withNoTags) {
         List<String> includes = _includes;
         if ((includes != null) && (includes.size() == 0)) includes = null;
@@ -261,7 +269,9 @@ public class TagSql extends FotoSql {
         return exexUpdateImpl(dbgContext, context, values, FILTER_EXPR_PATH_LIKE_XMP_DATE, new String[]{path, Long.toString(xmpFileDate)});
     }
 
-    /** return how many photos exist that have one or more tags from list */
+    /**
+     * return how many photos exist that have one or more tags from list
+     */
     public static int getTagRefCount(Context context, List<Tag> tags) {
         QueryParameter query = new QueryParameter()
                 .addColumn("count(*)").addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
@@ -298,9 +308,10 @@ public class TagSql extends FotoSql {
 
     /**
      * converts selectedItemPks and/or anyOfTags to TagWorflowItem-s
+     *
      * @param context
      * @param selectedItemPks if not null list of comma seperated item-pks
-     * @param anyOfTags if not null list of tag-s where at least one oft the tag must be in the photo.
+     * @param anyOfTags       if not null list of tag-s where at least one oft the tag must be in the photo.
      * @return
      */
     public static List<TagWorflowItem> loadTagWorflowItems(Context context, String selectedItemPks, List<Tag> anyOfTags) {

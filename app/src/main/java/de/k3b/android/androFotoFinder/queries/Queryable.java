@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.queries;
 
 import android.app.Activity;
@@ -25,7 +25,7 @@ import de.k3b.database.QueryParameter;
 
 /**
  * An Api that clients to getFrom the content of of it-s fragment(s) and/or adapter(s).
- *
+ * <p>
  * Created by k3b on 04.06.2015.
  */
 public interface Queryable {

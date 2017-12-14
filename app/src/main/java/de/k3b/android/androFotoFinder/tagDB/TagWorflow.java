@@ -46,8 +46,8 @@ import de.k3b.tagDB.TagRepository;
 import de.k3b.transactionlog.MediaTransactionLogEntryType;
 
 /**
- *  Class to handle tag update for one or more photos.
- *
+ * Class to handle tag update for one or more photos.
+ * <p>
  * Created by k3b on 09.01.2017.
  */
 
@@ -55,10 +55,12 @@ public class TagWorflow extends TagProcessor {
     private List<TagSql.TagWorflowItem> items = null;
     private Activity context;
 
-    /** Get current assigned tags from selectedItemPks and/or anyOfTags
+    /**
+     * Get current assigned tags from selectedItemPks and/or anyOfTags
+     *
      * @param context
      * @param selectedItems if not null list of comma seperated item-pks
-     * @param anyOfTags if not null list of tag-s where at least one oft the tag must be in the photo.
+     * @param anyOfTags     if not null list of tag-s where at least one oft the tag must be in the photo.
      */
     public TagWorflow init(Activity context, SelectedFiles selectedItems, List<Tag> anyOfTags) {
         this.context = context;
@@ -66,7 +68,7 @@ public class TagWorflow extends TagProcessor {
         for (TagSql.TagWorflowItem item : items) {
             List<String> tags = item.tags;
             File xmpFile = FileUtils.getXmpFile(item.path);
-            if (xmpFile.exists() && (item.xmpLastModifiedDate < xmpFile.lastModified())){ // || (tags == null) || (tags.size() == 0)) {
+            if (xmpFile.exists() && (item.xmpLastModifiedDate < xmpFile.lastModified())) { // || (tags == null) || (tags.size() == 0)) {
                 // xmp has been updated since last db update.
                 tags = loadTags(xmpFile);
                 item.xmpMoreRecentThanSql = true;
@@ -78,7 +80,9 @@ public class TagWorflow extends TagProcessor {
         return this;
     }
 
-    /** execute the updates for all affected files in the Workflow. */
+    /**
+     * execute the updates for all affected files in the Workflow.
+     */
     public int updateTags(List<String> addedTags, List<String> removedTags) {
         int itemCount = 0;
         if (items != null) {
@@ -98,7 +102,9 @@ public class TagWorflow extends TagProcessor {
         return itemCount;
     }
 
-    /** update one file if tags change or xmp does not exist yet: xmp-sidecar-file, media-db and batch */
+    /**
+     * update one file if tags change or xmp does not exist yet: xmp-sidecar-file, media-db and batch
+     */
     @NonNull
     protected File updateTags(TagSql.TagWorflowItem tagWorflowItemFromDB, List<String> addedTags, List<String> removedTags) {
         boolean mustSave = tagWorflowItemFromDB.xmpMoreRecentThanSql;
@@ -136,7 +142,7 @@ public class TagWorflow extends TagProcessor {
 
         if (mustSave) {
             if (xmp == null) {
-        // xmp does not exist yet: add original content from exif to xmp
+                // xmp does not exist yet: add original content from exif to xmp
 
                 xmp = new MediaXmpSegment();
                 xmp.setOriginalFileName(new File(tagWorflowItemFromDB.path).getName());
@@ -157,32 +163,32 @@ public class TagWorflow extends TagProcessor {
             try {
                 xmp.save(xmpFile, Global.saveXmpAsHumanReadable);
                 if (Global.debugEnabledSql) {
-                    Log.d(Global.LOG_CONTEXT,"saveXmp(" + xmpFile + "): " + dbgSaveReason);
+                    Log.d(Global.LOG_CONTEXT, "saveXmp(" + xmpFile + "): " + dbgSaveReason);
                 }
             } catch (IOException e) {
-                Log.e(Global.LOG_CONTEXT,"error: saveXmp(" + xmpFile + ", " + dbgSaveReason + ") : " + e.getMessage(),e);
+                Log.e(Global.LOG_CONTEXT, "error: saveXmp(" + xmpFile + ", " + dbgSaveReason + ") : " + e.getMessage(), e);
             }
 
-        // update tag repository
+            // update tag repository
             TagRepository.getInstance().include(TagRepository.getInstance().getImportRoot(), currentItemTags);
 
-        // update media database
+            // update media database
             ContentValues dbValues = new ContentValues();
             MediaContentValues mediaContentValues = new MediaContentValues().set(dbValues, null);
 
             // #77: does only copy non-null values
-            MediaUtil.copyXmp(mediaContentValues, xmp,false, true);
+            MediaUtil.copyXmp(mediaContentValues, xmp, false, true);
 
             // #77: fix make shure that tags might be set to null
             mediaContentValues.setTags(currentItemTags);
 
             // #77: make shure that db-date is newer than xmp-file-date
-            TagSql.setXmpFileModifyDate(dbValues, new Date(xmpFile.lastModified() +1));
+            TagSql.setXmpFileModifyDate(dbValues, new Date(xmpFile.lastModified() + 1));
 
 
             TagSql.execUpdate("updateTags " + dbgSaveReason, this.context, tagWorflowItemFromDB.id, dbValues);
 
-        // update batch
+            // update batch
             long now = new Date().getTime();
             String tagsString = TagConverter.asBatString(removedTags);
             AndroidFileCommands cmd = AndroidFileCommands.createFileCommand(context);
@@ -208,7 +214,9 @@ public class TagWorflow extends TagProcessor {
         return xmpFile;
     }
 
-    /** periodically called while work in progress. can be overwritten to supply feedback to user */
+    /**
+     * periodically called while work in progress. can be overwritten to supply feedback to user
+     */
     protected void onProgress(int itemCount, int total, String message) {
     }
 
@@ -224,17 +232,19 @@ public class TagWorflow extends TagProcessor {
                 MediaXmpSegment xmp = new MediaXmpSegment();
                 xmp.load(xmpFile);
                 if (Global.debugEnabledSql) {
-                    Log.d(Global.LOG_CONTEXT,"loadXmp(" + xmpFile + ")");
+                    Log.d(Global.LOG_CONTEXT, "loadXmp(" + xmpFile + ")");
                 }
                 return xmp;
             } catch (IOException e) {
-                Log.e(Global.LOG_CONTEXT,"error: loadXmp(" + xmpFile +  ") : " + e.getMessage(),e);
+                Log.e(Global.LOG_CONTEXT, "error: loadXmp(" + xmpFile + ") : " + e.getMessage(), e);
             }
         }
         return null;
     }
 
-    /** same as {@link TagSql#loadTagWorflowItems(Context, String, List)} but can be overwritten for unittests. */
+    /**
+     * same as {@link TagSql#loadTagWorflowItems(Context, String, List)} but can be overwritten for unittests.
+     */
     protected List<TagSql.TagWorflowItem> loadTagWorflowItems(Context context, String selectedItems, List<Tag> anyOfTags) {
         return TagSql.loadTagWorflowItems(context, selectedItems, anyOfTags);
     }

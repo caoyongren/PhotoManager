@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.imagedetail;
 
 import android.app.Activity;
@@ -129,7 +129,7 @@ public class ImageDetailMetaDialogBuilder {
                     result.append(NL).append(line).append(NL);
                     result.append(NL).append(TagSql.SQL_TABLE_EXTERNAL_CONTENT_URI_FILE).append(NL).append(NL);
                     // sort by keys
-                    List<String> sortedKeys=new ArrayList(dbContent.keySet());
+                    List<String> sortedKeys = new ArrayList(dbContent.keySet());
                     Collections.sort(sortedKeys);
                     for (String key : sortedKeys) {
                         Object value = dbContent.get(key);
@@ -150,6 +150,7 @@ public class ImageDetailMetaDialogBuilder {
     }
 
     private static String line = "------------------";
+
     private static void addExif(StringBuilder builder, File file) throws ImageProcessingException, IOException {
         if (file.exists()) {
             builder.append(NL).append(file).append(NL).append(NL);

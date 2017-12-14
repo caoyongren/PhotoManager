@@ -55,7 +55,7 @@ import de.k3b.transactionlog.MediaTransactionLogEntryType;
 /**
  * Api to manipulate files/photos.
  * Same as FileCommands with update media database.
- *
+ * <p>
  * Created by k3b on 03.08.2015.
  */
 public class AndroidFileCommands extends FileCommands {
@@ -78,6 +78,7 @@ public class AndroidFileCommands extends FileCommands {
             mActiveAlert = null;
         }
     }
+
     public String getDefaultLogFile() {
         Boolean isSDPresent = true; // Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED);
 
@@ -89,7 +90,9 @@ public class AndroidFileCommands extends FileCommands {
         return zipfile;
     }
 
-    /** called before copy/move/rename/delete */
+    /**
+     * called before copy/move/rename/delete
+     */
     @Override
     protected void onPreProcess(String what, String[] oldPathNames, String[] newPathNames, int opCode) {
         if (Global.debugEnabled) {
@@ -101,7 +104,9 @@ public class AndroidFileCommands extends FileCommands {
         super.onPreProcess(what, oldPathNames, newPathNames, opCode);
     }
 
-    /** called for each modified/deleted file */
+    /**
+     * called for each modified/deleted file
+     */
     @Override
     protected void onPostProcess(String what, String[] oldPathNames, String[] newPathNames, int modifyCount, int itemCount, int opCode) {
         if (Global.debugEnabled) {
@@ -124,7 +129,9 @@ public class AndroidFileCommands extends FileCommands {
         Toast.makeText(mContext, message, Toast.LENGTH_LONG).show();
     }
 
-    /** called for every cath(Exception...). Version with Android specific logging */
+    /**
+     * called for every cath(Exception...). Version with Android specific logging
+     */
     @Override
     protected void onException(final Throwable e, Object... params) {
         StringBuffer message = new StringBuffer();
@@ -142,12 +149,18 @@ public class AndroidFileCommands extends FileCommands {
 
     private int getResourceId(int opCode) {
         switch (opCode) {
-            case OP_COPY: return R.string.copy_result_format;
-            case OP_MOVE: return R.string.move_result_format;
-            case OP_DELETE: return R.string.delete_result_format;
-            case OP_RENAME: return R.string.rename_result_format;
-            case OP_UPDATE: return R.string.update_result_format;
-            default:break;
+            case OP_COPY:
+                return R.string.copy_result_format;
+            case OP_MOVE:
+                return R.string.move_result_format;
+            case OP_DELETE:
+                return R.string.delete_result_format;
+            case OP_RENAME:
+                return R.string.rename_result_format;
+            case OP_UPDATE:
+                return R.string.update_result_format;
+            default:
+                break;
         }
         return 0;
 
@@ -159,7 +172,8 @@ public class AndroidFileCommands extends FileCommands {
             switch (item.getItemId()) {
                 case R.id.cmd_delete:
                     return cmdDeleteFileWithQuestion(selectedFileNames);
-                default:break;
+                default:
+                    break;
             }
         }
         return false;
@@ -272,7 +286,7 @@ public class AndroidFileCommands extends FileCommands {
             String[] fileNames = fotos.getFileNames();
             deleteCount = super.deleteFiles(fileNames);
             long now = new Date().getTime();
-            for(int i = 0; i < nameCount; i++) {
+            for (int i = 0; i < nameCount; i++) {
                 addTransactionLog(fotos.getId(i), fotos.getFileName(i), now, MediaTransactionLogEntryType.DELETE, null);
             }
         }
@@ -280,7 +294,7 @@ public class AndroidFileCommands extends FileCommands {
         if ((nameCount == 0) || (nameCount == deleteCount)) {
             // no delete file error so also delete media-items
             QueryParameter where = new QueryParameter();
-            FotoSql.setWhereSelectionPks (where, fotos.toIdString());
+            FotoSql.setWhereSelectionPks(where, fotos.toIdString());
 
             FotoSql.deleteMedia("AndroidFileCommands.deleteFiles", mContext, where.toAndroidWhere(), null, true);
         }
@@ -289,8 +303,12 @@ public class AndroidFileCommands extends FileCommands {
 
     @SuppressLint("ValidFragment")
     class MediaScannerDirectoryPickerFragment extends DirectoryPickerFragment {
-        /** do not use activity callback */
-        @Override protected void setDirectoryListener(Activity activity) {}
+        /**
+         * do not use activity callback
+         */
+        @Override
+        protected void setDirectoryListener(Activity activity) {
+        }
 
         @Override
         protected void onDirectoryPick(IDirectory selection) {
@@ -313,7 +331,9 @@ public class AndroidFileCommands extends FileCommands {
             // show dialog to get start parameter
             DirectoryPickerFragment destDir = new MediaScannerDirectoryPickerFragment() {
                 /** do not use activity callback */
-                @Override protected void setDirectoryListener(Activity activity) {}
+                @Override
+                protected void setDirectoryListener(Activity activity) {
+                }
 
                 @Override
                 protected void onDirectoryPick(IDirectory selection) {
@@ -347,9 +367,11 @@ public class AndroidFileCommands extends FileCommands {
         return false;
     }
 
-    /** answer from "which directory to start scanner from"? */
+    /**
+     * answer from "which directory to start scanner from"?
+     */
     private void onMediaScannerAnswer(String scanRootDir) {
-        if  ((AndroidFileCommands.canProcessFile(mContext)) || (RecursiveMediaScannerAsyncTask.sScanner == null)){
+        if ((AndroidFileCommands.canProcessFile(mContext)) || (RecursiveMediaScannerAsyncTask.sScanner == null)) {
 
             // remove ".nomedia" file from scan root
             File nomedia = new File(scanRootDir, MediaScanner.MEDIA_IGNORE_FILENAME);
@@ -399,7 +421,7 @@ public class AndroidFileCommands extends FileCommands {
                 Toast.makeText(this.mContext, errorMessage, Toast.LENGTH_LONG).show();
             } else if (files != null) {
                 Context applicationContext = this.mContext.getApplicationContext();
-                int maxCount = files.length+1;
+                int maxCount = files.length + 1;
                 openLogfile();
                 int resultFile = 0;
 
@@ -421,20 +443,22 @@ public class AndroidFileCommands extends FileCommands {
                 int resultSql = FotoSql.execUpdateGeo(applicationContext, latitude, longitude, selectedItems);
 
                 long now = new Date().getTime();
-                for(int i = 0; i < selectedItems.size(); i++) {
+                for (int i = 0; i < selectedItems.size(); i++) {
                     addTransactionLog(selectedItems.getId(i), selectedItems.getFileName(i), now, MediaTransactionLogEntryType.GPS, latLong);
                 }
 
                 closeLogFile();
                 onProgress(++itemcount, maxCount);
 
-                return Math.max(resultFile,resultSql);
+                return Math.max(resultFile, resultSql);
             }
         }
         return 0;
     }
 
-    /** called every time when command makes some little progress. Can be mapped to async progress-bar */
+    /**
+     * called every time when command makes some little progress. Can be mapped to async progress-bar
+     */
     protected void onProgress(int itemcount, int size) {
     }
 

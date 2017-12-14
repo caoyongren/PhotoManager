@@ -39,7 +39,7 @@ import de.k3b.tagDB.TagRepository;
 
 /**
  * Extensions to Android Media Scanner that are not supported by original scanner.
- *
+ * <p>
  * Created by k3b on 04.10.2016.
  */
 
@@ -65,10 +65,10 @@ public class MediaScannerEx extends MediaScanner {
     /**
      * Loads xmp content from xmp-file
      *
-     * @param mediaContentValuesToReceiveLastUpdated   if not null: xmp-content-lastModified is
-     *                                                 updated from xmpFileSource.lastModified
-     * @param xmpFileSource i.e. "/path/to/file.xmp"
-     * @return              the loaded segment or null if not found or error
+     * @param mediaContentValuesToReceiveLastUpdated if not null: xmp-content-lastModified is
+     *                                               updated from xmpFileSource.lastModified
+     * @param xmpFileSource                          i.e. "/path/to/file.xmp"
+     * @return the loaded segment or null if not found or error
      */
     public MediaXmpSegment loadXmp(MediaContentValues mediaContentValuesToReceiveLastUpdated, File xmpFileSource) {
         MediaXmpSegment xmp = null;
@@ -79,7 +79,7 @@ public class MediaScannerEx extends MediaScanner {
                 xmp.load(xmpFileSource);
                 TagRepository.getInstance().include(getImportRoot(), xmp.getTags());
             } catch (FileNotFoundException e) {
-                Log.e(Global.LOG_CONTEXT, "MediaScannerEx:loadXmp(xmpFileSource=" + xmpFileSource +") failed " + e.getMessage(),e);
+                Log.e(Global.LOG_CONTEXT, "MediaScannerEx:loadXmp(xmpFileSource=" + xmpFileSource + ") failed " + e.getMessage(), e);
                 xmp = null;
             }
         }
@@ -138,12 +138,14 @@ public class MediaScannerEx extends MediaScanner {
         return result;
     }
 
-    private int addTags(ContentValues values,  Date xmpFileModifyDate, String... tags) {
+    private int addTags(ContentValues values, Date xmpFileModifyDate, String... tags) {
         TagSql.setTags(values, xmpFileModifyDate, tags);
         return TagRepository.getInstance().includeChildTags(getImportRoot(), Tag.toList(tags));
     }
 
-    /** get or create parent-tag where alle imports are appendend as children */
+    /**
+     * get or create parent-tag where alle imports are appendend as children
+     */
     public Tag getImportRoot() {
         if (mImportRoot == null) {
             mImportRoot = TagRepository.getInstance().getImportRoot();

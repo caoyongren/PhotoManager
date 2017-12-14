@@ -30,7 +30,7 @@ import de.k3b.tagDB.TagConverter;
 
 /**
  * r {@link IMetaApi} Implementation for {@link Cursor}.
- *
+ * <p>
  * Created by k3b on 10.10.2016.
  */
 public class MediaCursor implements IMetaApi {
@@ -48,15 +48,15 @@ public class MediaCursor implements IMetaApi {
     public MediaCursor(Cursor cursor) {
         this.cursor = cursor;
 
-        colId               = getColumnIndex(TagSql.SQL_COL_PK);
-        colFilePath         = getColumnIndex(TagSql.SQL_COL_PATH);
-        colDateTimeTaken    = getColumnIndex(TagSql.SQL_COL_DATE_TAKEN);
-        colTitle            = getColumnIndex(TagSql.SQL_COL_EXT_TITLE);
-        colDescription      = getColumnIndex(TagSql.SQL_COL_EXT_DESCRIPTION);
-        colTags             = getColumnIndex(TagSql.SQL_COL_EXT_TAGS);
-        colLatitude         = getColumnIndex(TagSql.SQL_COL_LAT);
-        colLongitude        = getColumnIndex(TagSql.SQL_COL_LON);
-        colRating           = getColumnIndex(TagSql.SQL_COL_EXT_RATING);
+        colId = getColumnIndex(TagSql.SQL_COL_PK);
+        colFilePath = getColumnIndex(TagSql.SQL_COL_PATH);
+        colDateTimeTaken = getColumnIndex(TagSql.SQL_COL_DATE_TAKEN);
+        colTitle = getColumnIndex(TagSql.SQL_COL_EXT_TITLE);
+        colDescription = getColumnIndex(TagSql.SQL_COL_EXT_DESCRIPTION);
+        colTags = getColumnIndex(TagSql.SQL_COL_EXT_TAGS);
+        colLatitude = getColumnIndex(TagSql.SQL_COL_LAT);
+        colLongitude = getColumnIndex(TagSql.SQL_COL_LON);
+        colRating = getColumnIndex(TagSql.SQL_COL_EXT_RATING);
     }
 
     public Integer getID() {

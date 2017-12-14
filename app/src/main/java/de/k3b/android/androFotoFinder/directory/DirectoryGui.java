@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.directory;
 
 import de.k3b.io.IDirectory;
@@ -25,9 +25,13 @@ import de.k3b.io.IDirectory;
  * Created by k3b on 02.07.2015.
  */
 public interface DirectoryGui {
-    /** Defines Directory Navigation */
+    /**
+     * Defines Directory Navigation
+     */
     void defineDirectoryNavigation(IDirectory root, int dirTypId, String initialAbsolutePath);
 
-    /** Set curent selection to absolutePath */
+    /**
+     * Set curent selection to absolutePath
+     */
     void navigateTo(String absolutePath);
 }

@@ -64,7 +64,9 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
 
     private PickerLocationMapFragment mMap;
 
-    /** true: if activity started without special intent-parameters, the last mFilter is saved/loaded for next use */
+    /**
+     * true: if activity started without special intent-parameters, the last mFilter is saved/loaded for next use
+     */
     private boolean mSaveLastUsedFilterToSharedPrefs = true;
     private boolean mSaveLastUsedGeoToSharedPrefs = true;
 
@@ -86,7 +88,7 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
             if (initialPoint != null) {
                 GeoUri PARSER = new GeoUri(GeoUri.OPT_PARSE_INFER_MISSING);
 
-                initalUri = Uri.parse(PARSER.toUriString(new GeoPointDto(initialPoint.getLatitude(),initialPoint.getLongitude(), IGeoPointInfo.NO_ZOOM)));
+                initalUri = Uri.parse(PARSER.toUriString(new GeoPointDto(initialPoint.getLatitude(), initialPoint.getLongitude(), IGeoPointInfo.NO_ZOOM)));
                 intent.setData(initalUri);
             }
             GalleryFilterParameter filter = new GalleryFilterParameter();
@@ -108,12 +110,12 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         Intent intent = this.getIntent();
-        if (Global.debugEnabled && (intent != null)){
+        if (Global.debugEnabled && (intent != null)) {
             Log.d(Global.LOG_CONTEXT, mDebugPrefix + "onCreate " + intent.toUri(Intent.URI_INTENT_SCHEME));
         }
 
         mBookmarkController = new BookmarkController(this);
-        mBookmarkController.loadState(intent,savedInstanceState);
+        mBookmarkController.loadState(intent, savedInstanceState);
 
         GeoPointDto geoPointFromIntent = getGeoPointDtoFromIntent(intent);
         // no geo: from intent: use last used value
@@ -125,9 +127,12 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
         IGeoPointInfo lastGeo = mGeoUriParser.fromUri(lastGeoUri);
         if ((geoPointFromIntent != null) && (lastGeo != null)) {
             // apply default values if part is missing
-            if (Double.isNaN(geoPointFromIntent.getLongitude())) geoPointFromIntent.setLongitude(lastGeo.getLongitude());
-            if (Double.isNaN(geoPointFromIntent.getLatitude())) geoPointFromIntent.setLatitude(lastGeo.getLatitude());
-            if (geoPointFromIntent.getZoomMin() == IGeoPointInfo.NO_ZOOM) geoPointFromIntent.setZoomMin(lastGeo.getZoomMin());
+            if (Double.isNaN(geoPointFromIntent.getLongitude()))
+                geoPointFromIntent.setLongitude(lastGeo.getLongitude());
+            if (Double.isNaN(geoPointFromIntent.getLatitude()))
+                geoPointFromIntent.setLatitude(lastGeo.getLatitude());
+            if (geoPointFromIntent.getZoomMin() == IGeoPointInfo.NO_ZOOM)
+                geoPointFromIntent.setZoomMin(lastGeo.getZoomMin());
         }
 
         IGeoPointInfo initalZoom = (mSaveLastUsedGeoToSharedPrefs) ? lastGeo : geoPointFromIntent;
@@ -252,10 +257,10 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
             case R.id.cmd_settings:
                 SettingsActivity.show(this);
                 return true;
-			case R.id.cmd_photo:
-				return showPhoto(mMap.getCurrentGeoRectangle());
-			case R.id.cmd_gallery:
-				return showGallery(mMap.getCurrentGeoRectangle());
+            case R.id.cmd_photo:
+                return showPhoto(mMap.getCurrentGeoRectangle());
+            case R.id.cmd_gallery:
+                return showGallery(mMap.getCurrentGeoRectangle());
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -278,7 +283,7 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
         return true;
     }
 
-	
+
     /**
      * Call back from sub-activities.<br/>
      * Process Change StartTime (longpress start), Select StopTime before stop
@@ -290,7 +295,7 @@ public class MapGeoPickerActivity extends LocalizedActivity implements Common {
         super.onActivityResult(requestCode, resultCode, intent);
 
         switch (requestCode) {
-            case GalleryFilterActivity.resultID :
+            case GalleryFilterActivity.resultID:
                 mBookmarkController.loadState(intent, null);
                 onFilterChanged(GalleryFilterActivity.getFilter(intent));
                 break;

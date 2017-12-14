@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder;
 
 import android.app.Activity;
@@ -45,16 +45,22 @@ import de.k3b.io.FileUtils;
  * Created by k3b on 07.10.2015.
  */
 public class BookmarkController {
-    /** #76: used as default for save-as */
+    /**
+     * #76: used as default for save-as
+     */
     private static final String STATE_LastBookmarkFileName = "LastBookmarkFileName";
 
-    /** virtual bookmarkfile to reset is sourounden by this. */
+    /**
+     * virtual bookmarkfile to reset is sourounden by this.
+     */
     private static final String RESET_PREFIX = "<< ";
     private static final String RESET_SUFFIX = " >>";
 
     private QueryParameter mCurrentFilter = null;
 
-    /** #76: used as default for save-as */
+    /**
+     * #76: used as default for save-as
+     */
     private String mLastBookmarkFileName = null;
 
     private final Activity mContext;
@@ -71,8 +77,13 @@ public class BookmarkController {
         return (intent != null) ? intent.getStringExtra(BookmarkController.STATE_LastBookmarkFileName) : null;
     }
 
-    public String getlastBookmarkFileName() {return mLastBookmarkFileName;}
-    public void setlastBookmarkFileName(String lastBookmarkFileName) {mLastBookmarkFileName = lastBookmarkFileName;}
+    public String getlastBookmarkFileName() {
+        return mLastBookmarkFileName;
+    }
+
+    public void setlastBookmarkFileName(String lastBookmarkFileName) {
+        mLastBookmarkFileName = lastBookmarkFileName;
+    }
 
     public void saveState(Intent intent, Bundle savedInstanceState) {
         saveState(getlastBookmarkFileName(), intent, savedInstanceState);
@@ -140,7 +151,7 @@ public class BookmarkController {
                         }
                     }
                 };
-                dialog.yesNoQuestion(mContext, mContext.getString(R.string.overwrite_question_title) ,
+                dialog.yesNoQuestion(mContext, mContext.getString(R.string.overwrite_question_title),
                         mContext.getString(R.string.image_err_file_exists_format, outFile.getAbsoluteFile()));
             } else {
                 PrintWriter out = null;
@@ -173,7 +184,8 @@ public class BookmarkController {
         List<String> fileNamesPlusReset = new ArrayList<String>();
         fileNamesPlusReset.add(RESET_PREFIX + mContext.getString(R.string.bookmark_reset) + RESET_SUFFIX);
         String[] fileNames = Global.reportDir.list(new FilenameFilter() {
-            @Override public boolean accept(File dir, String filename) {
+            @Override
+            public boolean accept(File dir, String filename) {
                 return ((filename != null) && (filename.endsWith(Global.reportExt)));
             }
         });
@@ -182,11 +194,15 @@ public class BookmarkController {
             fileNamesPlusReset.addAll(Arrays.asList(fileNames));
         }
         Dialogs dlg = new Dialogs() {
-            @Override protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
+            @Override
+            protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
                 return onBookmarkMenuItemClick(menuItemId, itemIndex, items);
             }
 
-            @Override protected void onDialogResult(String fileName, Object[] parameters) {onLoadFromAnswer(fileName, consumer);}
+            @Override
+            protected void onDialogResult(String fileName, Object[] parameters) {
+                onLoadFromAnswer(fileName, consumer);
+            }
         };
         dlg.pickFromStrings(mContext, mContext.getString(R.string.bookmark_load_from_menu_title), R.menu.menu_bookmark_context, fileNamesPlusReset);
     }
@@ -224,14 +240,16 @@ public class BookmarkController {
         if ((itemIndex > 0) && (itemIndex < items.length)) {
             switch (menuItemId) {
                 case R.id.action_save_as:
-                    onSaveAsQuestion(mLastBookmarkFileName, mCurrentFilter); return true;
+                    onSaveAsQuestion(mLastBookmarkFileName, mCurrentFilter);
+                    return true;
                 case R.id.action_edit:
                     return onEdit(getFile(items[itemIndex]));
                 case R.id.menu_item_rename:
                     return onRenameQuestion(items[itemIndex], items[itemIndex]);
                 case R.id.cmd_delete:
                     return onDeleteQuestion(itemIndex, items);
-                default:break;
+                default:
+                    break;
             }
         } // ignore index 0 = reset.
         return false;
@@ -277,7 +295,8 @@ public class BookmarkController {
 
     private boolean onDeleteQuestion(final int itemIndex, final String[] items) {
         Dialogs dlg = new Dialogs() {
-            @Override protected void onDialogResult(String result, Object[] parameters) {
+            @Override
+            protected void onDialogResult(String result, Object[] parameters) {
                 if (result != null) {
                     onDeleteAnswer(getFile(items[itemIndex]), itemIndex, items);
                 }
@@ -290,14 +309,14 @@ public class BookmarkController {
 
     private void onDeleteAnswer(File file, int itemIndex, String[] items) {
         if (file.exists() && file.delete()) {
-            String message = mContext.getString(R.string.bookmark_delete_answer_format, file.getAbsoluteFile() );
+            String message = mContext.getString(R.string.bookmark_delete_answer_format, file.getAbsoluteFile());
             Toast.makeText(mContext,
-                     message,
+                    message,
                     Toast.LENGTH_LONG).show();
             Log.d(Global.LOG_CONTEXT, message);
             items[itemIndex] = null;
         } else {
-            String message = mContext.getString(R.string.bookmark_delete_error_format, file.getAbsoluteFile() );
+            String message = mContext.getString(R.string.bookmark_delete_error_format, file.getAbsoluteFile());
             Toast.makeText(mContext,
                     message,
                     Toast.LENGTH_LONG).show();

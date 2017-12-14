@@ -31,7 +31,9 @@ public class FotoSqlBase {
     public static Uri SQL_TABLE_EXTERNAL_CONTENT_URI_FILE = null; // = MediaStore.Files.getContentUri("external");
     public static String SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME = "content:/unittest/file"; // = SQL_TABLE_EXTERNAL_CONTENT_URI_FILE.toString();
 
-    /** if not called: run in unittests. else use calculated methods that require android */
+    /**
+     * if not called: run in unittests. else use calculated methods that require android
+     */
     public static void init() {
         // required calls to android methods which is not possible in host run unittests.
         SQL_TABLE_EXTERNAL_CONTENT_URI = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;

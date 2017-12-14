@@ -35,7 +35,7 @@ import microsoft.mappoint.TileSystem;
 
 /**
  * Helper for OsmDroid lib.
- *
+ * <p>
  * Created by k3b on 16.03.2015.
  */
 public class OsmdroidUtil {
@@ -44,6 +44,7 @@ public class OsmdroidUtil {
 
     /**
      * Similar to MapView.zoomToBoundingBox that seems to be to inexact.
+     *
      * @param zoom if NO_ZOOM (-1) zoom is calculated from min and max
      */
     public static void zoomTo(MapView mapView, int zoom, IGeoPoint min, IGeoPoint max) {
@@ -89,10 +90,11 @@ public class OsmdroidUtil {
 
     /**
      * Creates view on top of mapView at the specified geoPosition + offset where pop-windows can be attached to.
-     *
+     * <p>
      * Every view opend by {@link #openMapPopupView(MapView, int, IGeoPoint)} must be
      * closed by {@link #closeMapPopupView(MapView, View)}.
      * This code was inspired by org.osmdroid.bonuspack.overlays.InfoWindow.
+     *
      * @param layoutResId layout resource id or 0 if for a 1x1 pix view that can host a popupmenu.
      * @param geoPosition to place the window on the map
      */
@@ -103,14 +105,15 @@ public class OsmdroidUtil {
 
     /**
      * Creates view on top of mapView at the specified geoPosition + offset where pop-windows can be attached to.
-     *
+     * <p>
      * Every view opend by {@link #openMapPopupView(MapView, int, IGeoPoint)} must be
      * closed by {@link #closeMapPopupView(MapView, View)}.
      * This code was inspired by org.osmdroid.bonuspack.overlays.InfoWindow.
-     * @param layoutResId layout resource id or 0 if for a 1x1 pix view that can host a popupmenu.
-     * @param geoPosition to place the window on the map
+     *
+     * @param layoutResId    layout resource id or 0 if for a 1x1 pix view that can host a popupmenu.
+     * @param geoPosition    to place the window on the map
      * @param layoutposition one of the {@link MapView.LayoutParams} constants
-     * @param offsetX (&offsetY) the offset of the view to the position, in pixels.
+     * @param offsetX        (&offsetY) the offset of the view to the position, in pixels.
      */
     @NonNull
     public static View openMapPopupView(MapView mapView, int layoutResId, IGeoPoint geoPosition, int layoutposition, int offsetX, int offsetY) {
@@ -120,9 +123,9 @@ public class OsmdroidUtil {
             layoutSize = 1;
             popupView = new View(mapView.getContext());
         } else {
-            ViewGroup parent=(ViewGroup)mapView.getParent();
+            ViewGroup parent = (ViewGroup) mapView.getParent();
             Context context = mapView.getContext();
-            LayoutInflater inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             popupView = inflater.inflate(layoutResId, parent, false);
 
         }
@@ -142,7 +145,7 @@ public class OsmdroidUtil {
      * Every view opend by {@link #openMapPopupView(MapView, int, IGeoPoint)} must be
      * closed by {@link #closeMapPopupView(MapView, View)}.
      *
-     * @param mapView owner of the popup.
+     * @param mapView   owner of the popup.
      * @param popupView popup to be closed.
      */
     public static void closeMapPopupView(MapView mapView, View popupView) {

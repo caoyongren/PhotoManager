@@ -40,7 +40,9 @@ public abstract class SqlJobTaskBase extends AsyncTask<QueryParameter, Integer, 
     protected final String mDebugPrefix;
     protected SelectedItems mSelectedItems;
 
-    /** collects debug infos */
+    /**
+     * collects debug infos
+     */
     protected StringBuffer mStatus = null;
     protected int mColumnIndexPK = -1;
 
@@ -97,7 +99,7 @@ public abstract class SqlJobTaskBase extends AsyncTask<QueryParameter, Integer, 
             }
 
             return this.mSelectedItems;
-        } catch (Exception ex){
+        } catch (Exception ex) {
             Log.e(Global.LOG_CONTEXT, mDebugPrefix + query, ex);
             throw new RuntimeException(mDebugPrefix + query + "\n" + ex.getMessage(), ex);
         } finally {

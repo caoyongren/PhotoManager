@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.util;
 
 import android.app.Activity;
@@ -46,7 +46,9 @@ public class IntentUtil implements Common {
         return intent.setDataAndType(data, type);
     }
 
-    /** get uri from data. if there is no data from EXTRA_STREAM */
+    /**
+     * get uri from data. if there is no data from EXTRA_STREAM
+     */
     @Nullable
     public static Uri getUri(Intent intent) {
         Uri uri = (intent == null) ? null : intent.getData();
@@ -58,7 +60,9 @@ public class IntentUtil implements Common {
         return uri;
     }
 
-    /** return null if uri is not a valid file scheam */
+    /**
+     * return null if uri is not a valid file scheam
+     */
     @Nullable
     public static File getFile(Uri uri) {
         if (isFileUri(uri)) {
@@ -91,14 +95,14 @@ public class IntentUtil implements Common {
     /**
      * Helper to Execute parent.startActivity(ForResult)()
      *
-     * @param parentActivity    activity used to start and to receive actionResult
-     * @param currentFilePath   for setData: null or file-path that also defines the content type.
-     * @param currentUri        for setData: null or uri to be procesed (i.e. content:...)
-     * @param extraPath         null or uri for EXTRA_STREAM
-     * @param action            edit, send, view, ....
-     * @param idChooserCaption  if != 0 string-resource-id for chooser caption. if 0 no chooser.
-     * @param idEditError       string-resource-id for error message if there is no hadler for action
-     * @param idActivityResultRequestCode  if != 0 execute startActivityForResult else startActivity
+     * @param parentActivity              activity used to start and to receive actionResult
+     * @param currentFilePath             for setData: null or file-path that also defines the content type.
+     * @param currentUri                  for setData: null or uri to be procesed (i.e. content:...)
+     * @param extraPath                   null or uri for EXTRA_STREAM
+     * @param action                      edit, send, view, ....
+     * @param idChooserCaption            if != 0 string-resource-id for chooser caption. if 0 no chooser.
+     * @param idEditError                 string-resource-id for error message if there is no hadler for action
+     * @param idActivityResultRequestCode if != 0 execute startActivityForResult else startActivity
      */
     public static void cmdStartIntent(Activity parentActivity,
                                       String currentFilePath, String currentUri,
@@ -148,7 +152,7 @@ public class IntentUtil implements Common {
                 parentActivity.startActivityForResult(execIntent, idActivityResultRequestCode);
             }
         } catch (ActivityNotFoundException ex) {
-            Toast.makeText(parentActivity, idEditError,Toast.LENGTH_LONG).show();
+            Toast.makeText(parentActivity, idEditError, Toast.LENGTH_LONG).show();
         }
     }
 

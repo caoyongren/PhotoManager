@@ -29,7 +29,7 @@ import de.k3b.android.androFotoFinder.R;
 
 /**
  * An {@link AsyncTask} that handles {@link TagWorflow} a {@link android.app.ProgressDialog}.
- *
+ * <p>
  * Created by k3b on 30.01.2017.
  */
 

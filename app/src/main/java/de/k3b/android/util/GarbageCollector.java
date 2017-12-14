@@ -28,7 +28,9 @@ import android.widget.ImageView;
  * Created by k3b on 05.07.2015.
  */
 public class GarbageCollector {
-    /** free resources. Used to reduce memory leaks. */
+    /**
+     * free resources. Used to reduce memory leaks.
+     */
     // http://stackoverflow.com/questions/1147172/what-android-tools-and-methods-work-best-to-find-memory-resource-leaks
     public static void freeMemory(View view) {
         if (view != null) {

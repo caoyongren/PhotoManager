@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.widget;
 
 import android.app.Activity;
@@ -42,134 +42,139 @@ import static android.view.MenuItem.SHOW_AS_ACTION_IF_ROOM;
 
 /**
  * Helper Dialogs
- *
+ * <p>
  * Created by k3b on 05.10.2015.
  */
 public abstract class Dialogs {
-	// showStringPicker(this, "Open query", "FileName1.query", "FileName2.query");
-	public void pickFromStrings(final Activity parent, String title, final int idContextMenu, List<String> strings) {
-		pickFromStrings(parent, title, idContextMenu, strings.toArray(new String[strings.size()]));
-	}
-	// showStringPicker(this, "Open query", "FileName1.query", "FileName2.query");
-	public void pickFromStrings(final Activity parent, String title, final int idContextMenu, final String... strings) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-		builder.setTitle(title);
+    // showStringPicker(this, "Open query", "FileName1.query", "FileName2.query");
+    public void pickFromStrings(final Activity parent, String title, final int idContextMenu, List<String> strings) {
+        pickFromStrings(parent, title, idContextMenu, strings.toArray(new String[strings.size()]));
+    }
 
-		builder.setItems(strings, new DialogInterface.OnClickListener() {
-	        // when an item is clicked, notify our interface "onDialogResult"
-	    	public void onClick(DialogInterface d, int position) {
-				d.dismiss();
-				onDialogResult(strings[position],(Object[]) strings);
-			}
-		});
+    // showStringPicker(this, "Open query", "FileName1.query", "FileName2.query");
+    public void pickFromStrings(final Activity parent, String title, final int idContextMenu, final String... strings) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+        builder.setTitle(title);
 
-		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-			// when user clicks cancel, notify our interface
-			public void onClick(DialogInterface d, int n) {
-				d.dismiss();
-				onDialogResult(null, 0);
-			}
-		});
+        builder.setItems(strings, new DialogInterface.OnClickListener() {
+            // when an item is clicked, notify our interface "onDialogResult"
+            public void onClick(DialogInterface d, int position) {
+                d.dismiss();
+                onDialogResult(strings[position], (Object[]) strings);
+            }
+        });
 
-		final AlertDialog dialog = builder.create();
-		if (idContextMenu != 0) {
-			dialog.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-				@Override
-				public boolean onItemLongClick(final AdapterView<?> listView, View view, final int position, long id) {
-					MenuInflater inflater = parent.getMenuInflater();
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            // when user clicks cancel, notify our interface
+            public void onClick(DialogInterface d, int n) {
+                d.dismiss();
+                onDialogResult(null, 0);
+            }
+        });
+
+        final AlertDialog dialog = builder.create();
+        if (idContextMenu != 0) {
+            dialog.getListView().setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(final AdapterView<?> listView, View view, final int position, long id) {
+                    MenuInflater inflater = parent.getMenuInflater();
                     view.setFocusable(true);
                     view.setFocusableInTouchMode(true);
-					PopupMenu menu = new PopupMenu(parent, view);
+                    PopupMenu menu = new PopupMenu(parent, view);
 
-					inflater.inflate(idContextMenu, menu.getMenu());
+                    inflater.inflate(idContextMenu, menu.getMenu());
 
-					menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-						@Override
-						public boolean onMenuItemClick(MenuItem item) {
-							final boolean result = onContextMenuItemClick(item.getItemId(), position, strings);
-							dialog.dismiss();
-							return result;
-						}
-					});
-					menu.show();
+                    menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            final boolean result = onContextMenuItemClick(item.getItemId(), position, strings);
+                            dialog.dismiss();
+                            return result;
+                        }
+                    });
+                    menu.show();
 
-					return false;
-				}
-			});
-		}
+                    return false;
+                }
+            });
+        }
 
-		dialog.show();
-	}
+        dialog.show();
+    }
 
-	public AlertDialog editFileName(Activity parent, String title, String name, final Object... parameters) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-		builder.setTitle(title); // R.string.cmd_save_bookmark_as);
-		View content = onCreateContentView(parent);
+    public AlertDialog editFileName(Activity parent, String title, String name, final Object... parameters) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+        builder.setTitle(title); // R.string.cmd_save_bookmark_as);
+        View content = onCreateContentView(parent);
 
-		final EditText edit = (EditText) content.findViewById(R.id.edName);
+        final EditText edit = (EditText) content.findViewById(R.id.edName);
 
-		if (name != null) {
-			edit.setText(name);
+        if (name != null) {
+            edit.setText(name);
 
-			// select text without extension
-			int selectLen = name.lastIndexOf(".");
-			if (selectLen == -1) selectLen = name.length();
-			edit.setSelection(0, selectLen);
-		}
+            // select text without extension
+            int selectLen = name.lastIndexOf(".");
+            if (selectLen == -1) selectLen = name.length();
+            edit.setSelection(0, selectLen);
+        }
 
-		// on my android 4.4 cellphone i have SHOW_AS_ACTION_ALWAYS|SHOW_AS_ACTION_WITH_TEXT.
-		// Consequence: not enough space so show cut/copy actions - they are not reachable.
-		// This will fix it
-		MenuUtils.changeShowAsActionFlags(edit, SHOW_AS_ACTION_IF_ROOM, android.R.id.copy, android.R.id.cut, android.R.id.selectAll);
+        // on my android 4.4 cellphone i have SHOW_AS_ACTION_ALWAYS|SHOW_AS_ACTION_WITH_TEXT.
+        // Consequence: not enough space so show cut/copy actions - they are not reachable.
+        // This will fix it
+        MenuUtils.changeShowAsActionFlags(edit, SHOW_AS_ACTION_IF_ROOM, android.R.id.copy, android.R.id.cut, android.R.id.selectAll);
 
-		builder.setView(content);
-		builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				onDialogResult(null);
-				dialog.dismiss();
-			}
-		});
-		builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				onDialogResult(edit.getText().toString(), parameters);
-				dialog.dismiss();
-			}
-		});
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
+        builder.setView(content);
+        builder.setNegativeButton(R.string.btn_cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onDialogResult(null);
+                dialog.dismiss();
+            }
+        });
+        builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                onDialogResult(edit.getText().toString(), parameters);
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
 
-		fixLayout(alertDialog, edit);
-		setEditFocus(alertDialog, edit);
-		return alertDialog;
-	}
+        fixLayout(alertDialog, edit);
+        setEditFocus(alertDialog, edit);
+        return alertDialog;
+    }
 
-	protected View onCreateContentView(Activity parent) {
-		return parent.getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
-	}
+    protected View onCreateContentView(Activity parent) {
+        return parent.getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
+    }
 
-	private void setEditFocus(AlertDialog alertDialog, EditText edit) {
-		edit.requestFocus();
+    private void setEditFocus(AlertDialog alertDialog, EditText edit) {
+        edit.requestFocus();
 
-		// request keyboard. See http://stackoverflow.com/questions/2403632/android-show-soft-keyboard-automatically-when-focus-is-on-an-edittext
-		alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-	}
+        // request keyboard. See http://stackoverflow.com/questions/2403632/android-show-soft-keyboard-automatically-when-focus-is-on-an-edittext
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    }
 
-	private static void fixLayout(Dialog alertDialog, TextView edit) {
-		int width = (int) (8 * edit.getTextSize());
-		// DisplayMetrics metrics = getResources().getDisplayMetrics();
-		// int width = metrics.widthPixels;
-		alertDialog.getWindow().setLayout(width * 2, LinearLayout.LayoutParams.WRAP_CONTENT);
-	}
+    private static void fixLayout(Dialog alertDialog, TextView edit) {
+        int width = (int) (8 * edit.getTextSize());
+        // DisplayMetrics metrics = getResources().getDisplayMetrics();
+        // int width = metrics.widthPixels;
+        alertDialog.getWindow().setLayout(width * 2, LinearLayout.LayoutParams.WRAP_CONTENT);
+    }
 
-	/** can be overwritten to handle context menu */
-	protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
-		return false;
-	}
+    /**
+     * can be overwritten to handle context menu
+     */
+    protected boolean onContextMenuItemClick(int menuItemId, int itemIndex, String[] items) {
+        return false;
+    }
 
-	/** must be overwritten to implement dialog result. null==canceled */
-	abstract protected void onDialogResult(String result, Object... parameters);
+    /**
+     * must be overwritten to implement dialog result. null==canceled
+     */
+    abstract protected void onDialogResult(String result, Object... parameters);
 
     public void yesNoQuestion(Activity parent, final String title, String question, final Object... parameters) {
         AlertDialog.Builder builder = new AlertDialog.Builder(parent);
@@ -196,19 +201,20 @@ public abstract class Dialogs {
 
         fixLayout(alertDialog, textView);
     }
-	public static void messagebox(Activity parent, final String title, String question, final Object... parameters) {
-		AlertDialog.Builder builder = new AlertDialog.Builder(parent);
-		builder.setTitle(title);
-		final TextView textView = new TextView(parent);
-		textView.setText(question);
-		builder.setView(textView);
-		builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				dialog.dismiss();
-			}
-		});
-		AlertDialog alertDialog = builder.create();
-		alertDialog.show();
-	}
+
+    public static void messagebox(Activity parent, final String title, String question, final Object... parameters) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(parent);
+        builder.setTitle(title);
+        final TextView textView = new TextView(parent);
+        textView.setText(question);
+        builder.setView(textView);
+        builder.setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 }

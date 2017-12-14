@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.osmdroid;
 
 import android.content.res.Resources;
@@ -29,24 +29,30 @@ import android.graphics.drawable.Drawable;
 
 /**
  * Creates Icon with text.
- *
+ * <p>
  * Created by k3b on 16.07.2015.
  */
 public class IconFactory {
     private final Resources resources;
     /** cluster icon anchor */
-    /** anchor point to draw the number of markers inside the cluster icon */
+    /**
+     * anchor point to draw the number of markers inside the cluster icon
+     */
     private float mTextAnchorU = ClickableIconOverlay.ANCHOR_CENTER, mTextAnchorV = ClickableIconOverlay.ANCHOR_CENTER;
 
     private final Bitmap mBackground;
     private Paint mTextPaint;
 
-    /** must be called from the gui-Thread */
+    /**
+     * must be called from the gui-Thread
+     */
     public IconFactory(Resources resources, Drawable background) {
         this(resources, ((BitmapDrawable) background).getBitmap());
     }
 
-    /** must be called from the gui-Thread */
+    /**
+     * must be called from the gui-Thread
+     */
     public IconFactory(Resources resources, Bitmap background) {
         this.resources = resources;
         mTextPaint = new Paint();
@@ -71,6 +77,6 @@ public class IconFactory {
                     mTextAnchorV * finalIcon.getHeight() - textHeight / 2,
                     mTextPaint);
         }
-        return new BitmapDrawable(resources,  finalIcon);
+        return new BitmapDrawable(resources, finalIcon);
     }
 }

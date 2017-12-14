@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.queries;
 
 import android.app.Activity;
@@ -57,7 +57,7 @@ import de.k3b.io.IGeoRectangle;
 
 /**
  * contains all SQL needed to query the android gallery
- *
+ * <p>
  * Created by k3b on 04.06.2015.
  */
 public class FotoSql extends FotoSqlBase {
@@ -98,9 +98,9 @@ public class FotoSql extends FotoSqlBase {
     // only works with api >= 16
     public static final String SQL_COL_MAX_WITH =
             (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN)
-                ? "max(" + MediaStore.Images.Media.WIDTH + "," +
-                                                MediaStore.Images.Media.HEIGHT +")"
-                : "1024";
+                    ? "max(" + MediaStore.Images.Media.WIDTH + "," +
+                    MediaStore.Images.Media.HEIGHT + ")"
+                    : "1024";
 
 
     public static final String SQL_COL_EXT_MEDIA_TYPE = MediaStore.Files.FileColumns.MEDIA_TYPE;
@@ -110,7 +110,7 @@ public class FotoSql extends FotoSqlBase {
     protected static final String FILTER_EXPR_PRIVATE
             = "(" + SQL_COL_EXT_MEDIA_TYPE + " = " + MEDIA_TYPE_IMAGE_PRIVATE + ")";
     protected static final String FILTER_EXPR_PRIVATE_PUBLIC
-            = "(" + SQL_COL_EXT_MEDIA_TYPE + " in (" + MEDIA_TYPE_IMAGE_PRIVATE + "," + MEDIA_TYPE_IMAGE +"))";
+            = "(" + SQL_COL_EXT_MEDIA_TYPE + " in (" + MEDIA_TYPE_IMAGE_PRIVATE + "," + MEDIA_TYPE_IMAGE + "))";
     protected static final String FILTER_EXPR_PUBLIC
             = "(" + SQL_COL_EXT_MEDIA_TYPE + " = " + MEDIA_TYPE_IMAGE + ")";
 
@@ -182,20 +182,20 @@ public class FotoSql extends FotoSqlBase {
                     SQL_COL_PATH,
                     MediaStore.MediaColumns.DISPLAY_NAME,
                     MediaStore.MediaColumns.TITLE)
-            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME)
-            ;
+            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
 
     /* image entries may not have DISPLAY_NAME which is essential for calculating the item-s folder. */
     public static final QueryParameter queryGetMissingDisplayNames = new QueryParameter(queryChangePath)
             .addWhere(MediaStore.MediaColumns.DISPLAY_NAME + " is null")
-            .addWhere(FILTER_EXPR_PRIVATE_PUBLIC)
-            ;
+            .addWhere(FILTER_EXPR_PRIVATE_PUBLIC);
 
     // the bigger the smaller the area
     private static final double GROUPFACTOR_FOR_Z0 = 0.025;
 
-    /** to avoid cascade delete of linked file when mediaDB-item is deleted
-     *  the links are first set to null before delete. */
+    /**
+     * to avoid cascade delete of linked file when mediaDB-item is deleted
+     * the links are first set to null before delete.
+     */
     private static final String DELETED_FILE_MARKER = null;
 
     public static final double getGroupFactor(final int _zoomLevel) {
@@ -223,9 +223,9 @@ public class FotoSql extends FotoSqlBase {
         // "- 0.5" else rounding "10.6" becomes 11.0
         // + (1/groupingFactor/2) in the middle of grouping area
         String SQL_EXPR_LAT = "((round((" + SQL_COL_LAT + " * " + groupingFactor + ") - 0.5) /"
-                + groupingFactor + ") + " + (1/groupingFactor/2) + ")";
+                + groupingFactor + ") + " + (1 / groupingFactor / 2) + ")";
         String SQL_EXPR_LON = "((round((" + SQL_COL_LON + " * " + groupingFactor + ") - 0.5) /"
-                + groupingFactor + ") + " + (1/groupingFactor/2) + ")";
+                + groupingFactor + ") + " + (1 / groupingFactor / 2) + ")";
 
         QueryParameter result = new QueryParameter();
 
@@ -254,8 +254,7 @@ public class FotoSql extends FotoSqlBase {
             .setID(QUERY_TYPE_GALLERY)
             .addColumn(
                     DEFAULT_GALLERY_COLUMNS)
-            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME)
-            ;
+            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
 
     public static final QueryParameter queryGps = new QueryParameter()
             .setID(QUERY_TYPE_UNDEFINED)
@@ -264,8 +263,7 @@ public class FotoSql extends FotoSqlBase {
                     // SQL_COL_PATH + " AS " + SQL_COL_DISPLAY_TEXT,
                     // "0 AS " + SQL_COL_COUNT,
                     SQL_COL_LAT, SQL_COL_LON)
-            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME)
-            ;
+            .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
 
     public static void filter2Query(QueryParameter resultQuery, IGalleryFilter filter, boolean clearWhereBefore) {
         if ((resultQuery != null) && (!GalleryFilterParameter.isEmpty(filter))) {
@@ -279,15 +277,20 @@ public class FotoSql extends FotoSqlBase {
                 addWhereFilterLatLon(resultQuery, filter);
             }
 
-            if (filter.getDateMin() != 0) resultQuery.addWhere(FILTER_EXPR_DATE_MIN, Long.toString(filter.getDateMin()));
-            if (filter.getDateMax() != 0) resultQuery.addWhere(FILTER_EXPR_DATE_MAX, Long.toString(filter.getDateMax()));
+            if (filter.getDateMin() != 0)
+                resultQuery.addWhere(FILTER_EXPR_DATE_MIN, Long.toString(filter.getDateMin()));
+            if (filter.getDateMax() != 0)
+                resultQuery.addWhere(FILTER_EXPR_DATE_MAX, Long.toString(filter.getDateMax()));
 
             String path = filter.getPath();
-            if ((path != null) && (path.length() > 0)) resultQuery.addWhere(FILTER_EXPR_PATH_LIKE, path);
+            if ((path != null) && (path.length() > 0))
+                resultQuery.addWhere(FILTER_EXPR_PATH_LIKE, path);
         }
     }
 
-    /** translates a query back to filter */
+    /**
+     * translates a query back to filter
+     */
     public static IGalleryFilter parseQuery(QueryParameter query, boolean remove) {
         if (query != null) {
             GalleryFilterParameter filter = new GalleryFilterParameter();
@@ -298,7 +301,7 @@ public class FotoSql extends FotoSqlBase {
                 filter.setLatitude(getParam(query, FILTER_EXPR_LAT_MIN, remove), getParam(query, FILTER_EXPR_LAT_MAX, remove));
             }
 
-	        filter.setDate(getParam(query, FILTER_EXPR_DATE_MIN, remove), getParam(query, FILTER_EXPR_DATE_MAX, remove));
+            filter.setDate(getParam(query, FILTER_EXPR_DATE_MIN, remove), getParam(query, FILTER_EXPR_DATE_MAX, remove));
             filter.setPath(getParam(query, FILTER_EXPR_PATH_LIKE, remove));
 
             return filter;
@@ -306,13 +309,17 @@ public class FotoSql extends FotoSqlBase {
         return null;
     }
 
-    /** @return return param for expression inside query. null if expression is not in query or number of params is not 1. */
+    /**
+     * @return return param for expression inside query. null if expression is not in query or number of params is not 1.
+     */
     protected static String getParam(QueryParameter query, String expresion, boolean remove) {
         final String[] result = getParams(query, expresion, remove);
         return ((result != null) && (result.length > 0)) ? result[0] : null;
     }
 
-    /** @return return all params for expression inside query. null if expression is not in query */
+    /**
+     * @return return all params for expression inside query. null if expression is not in query
+     */
     protected static String[] getParams(QueryParameter query, String expresion, boolean remove) {
         return query.getWhereParameter(expresion, remove);
     }
@@ -363,10 +370,14 @@ public class FotoSql extends FotoSqlBase {
     }
 
     public static void addWhereFilterLatLon(QueryParameter query, double latitudeMin, double latitudeMax, double logituedMin, double logituedMax) {
-        if (!Double.isNaN(latitudeMin)) query.addWhere(FILTER_EXPR_LAT_MIN, DirectoryFormatter.parseLatLon(latitudeMin));
-        if (!Double.isNaN(latitudeMax)) query.addWhere(FILTER_EXPR_LAT_MAX, DirectoryFormatter.parseLatLon(latitudeMax));
-        if (!Double.isNaN(logituedMin)) query.addWhere(FILTER_EXPR_LON_MIN, DirectoryFormatter.parseLatLon(logituedMin));
-        if (!Double.isNaN(logituedMax)) query.addWhere(FILTER_EXPR_LON_MAX, DirectoryFormatter.parseLatLon(logituedMax));
+        if (!Double.isNaN(latitudeMin))
+            query.addWhere(FILTER_EXPR_LAT_MIN, DirectoryFormatter.parseLatLon(latitudeMin));
+        if (!Double.isNaN(latitudeMax))
+            query.addWhere(FILTER_EXPR_LAT_MAX, DirectoryFormatter.parseLatLon(latitudeMax));
+        if (!Double.isNaN(logituedMin))
+            query.addWhere(FILTER_EXPR_LON_MIN, DirectoryFormatter.parseLatLon(logituedMin));
+        if (!Double.isNaN(logituedMax))
+            query.addWhere(FILTER_EXPR_LON_MAX, DirectoryFormatter.parseLatLon(logituedMax));
     }
 
     public static void addPathWhere(QueryParameter newQuery, String selectedAbsolutePath, int dirQueryID) {
@@ -387,7 +398,7 @@ public class FotoSql extends FotoSqlBase {
         if (FotoViewerParameter.includeSubItems) {
             newQuery
                     .addWhere(FotoSql.SQL_COL_PATH + " like ?", selectedAbsolutePath + "%")
-                            // .addWhere(FotoSql.SQL_COL_PATH + " like '" + selectedAbsolutePath + "%'")
+                    // .addWhere(FotoSql.SQL_COL_PATH + " like '" + selectedAbsolutePath + "%'")
                     .addOrderBy(FotoSql.SQL_COL_PATH);
         } else {
             // foldername exact match
@@ -492,8 +503,9 @@ public class FotoSql extends FotoSqlBase {
                 return result.replaceOrderBy(SQL_COL_GPS + asc, MediaStore.Images.Media.LATITUDE + asc);
             case SORT_BY_NAME_LEN_OLD:
             case SORT_BY_NAME_LEN:
-                return result.replaceOrderBy("length(" + SQL_COL_PATH + ")"+asc);
-            default: return  result;
+                return result.replaceOrderBy("length(" + SQL_COL_PATH + ")" + asc);
+            default:
+                return result;
         }
     }
 
@@ -517,18 +529,21 @@ public class FotoSql extends FotoSqlBase {
                     dest.get(geo);
                 }
                 return true;
-            default:break;
+            default:
+                break;
         }
         return false;
     }
 
-	/** converts content-Uri-with-id to full path */
+    /**
+     * converts content-Uri-with-id to full path
+     */
     public static String execGetFotoPath(Context context, Uri uriWithID) {
         Cursor c = null;
         try {
             c = createCursorForQuery("execGetFotoPath", context, uriWithID.toString(), null, null, null, FotoSql.SQL_COL_PATH);
             if (c.moveToFirst()) {
-                return DBUtils.getString(c,FotoSql.SQL_COL_PATH, null);
+                return DBUtils.getString(c, FotoSql.SQL_COL_PATH, null);
             }
         } catch (Exception ex) {
             Log.e(Global.LOG_CONTEXT, "FotoSql.execGetFotoPath() Cannot get path from " + uriWithID, ex);
@@ -538,20 +553,22 @@ public class FotoSql extends FotoSqlBase {
         return null;
     }
 
-	/** search for all full-image-file-paths that matches pathfilter  */
+    /**
+     * search for all full-image-file-paths that matches pathfilter
+     */
     public static List<String> execGetFotoPaths(Context context, String pathFilter) {
         ArrayList<String> result = new ArrayList<String>();
 
         Cursor c = null;
         try {
-            c = createCursorForQuery("execGetFotoPaths", context,SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
-                        FotoSql.SQL_COL_PATH + " like ? and " + FILTER_EXPR_PRIVATE_PUBLIC,
-                        new String[]{pathFilter}, FotoSql.SQL_COL_PATH, FotoSql.SQL_COL_PATH);
+            c = createCursorForQuery("execGetFotoPaths", context, SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
+                    FotoSql.SQL_COL_PATH + " like ? and " + FILTER_EXPR_PRIVATE_PUBLIC,
+                    new String[]{pathFilter}, FotoSql.SQL_COL_PATH, FotoSql.SQL_COL_PATH);
             while (c.moveToNext()) {
                 result.add(c.getString(0));
             }
         } catch (Exception ex) {
-            Log.e(Global.LOG_CONTEXT, "FotoSql.execGetFotoPaths() Cannot get path from: " + FotoSql.SQL_COL_PATH + " like '" + pathFilter +"'", ex);
+            Log.e(Global.LOG_CONTEXT, "FotoSql.execGetFotoPaths() Cannot get path from: " + FotoSql.SQL_COL_PATH + " like '" + pathFilter + "'", ex);
         } finally {
             if (c != null) c.close();
         }
@@ -568,7 +585,7 @@ public class FotoSql extends FotoSqlBase {
     public static int execUpdateGeo(final Context context, double latitude, double longitude, SelectedFiles selectedItems) {
         QueryParameter where = new QueryParameter();
         setWhereSelectionPaths(where, selectedItems);
-		setWhereVisibility(where, IGalleryFilter.VISIBILITY_PRIVATE_PUBLIC);
+        setWhereVisibility(where, IGalleryFilter.VISIBILITY_PRIVATE_PUBLIC);
 
         ContentValues values = new ContentValues(2);
         values.put(SQL_COL_LAT, DirectoryFormatter.parseLatLon(latitude));
@@ -577,7 +594,7 @@ public class FotoSql extends FotoSqlBase {
 
         return exexUpdateImpl("execUpdateGeo", context, values, where.toAndroidWhere(), where.toAndroidParameters());
     }
-	
+
     public static Cursor createCursorForQuery(String dbgContext, final Context context, QueryParameter parameters, int visibility) {
         setWhereVisibility(parameters, visibility);
         return createCursorForQuery(dbgContext, context, parameters.toFrom(), parameters.toAndroidWhere(),
@@ -586,14 +603,16 @@ public class FotoSql extends FotoSqlBase {
         );
     }
 
-    /** every cursor query should go through this. adds logging if enabled */
+    /**
+     * every cursor query should go through this. adds logging if enabled
+     */
     private static Cursor createCursorForQuery(String dbgContext, final Context context, final String from, final String sqlWhereStatement,
                                                final String[] sqlWhereParameters, final String sqlSortOrder,
                                                final String... sqlSelectColums) {
         ContentResolver resolver = context.getContentResolver();
         Cursor query = resolver.query(Uri.parse(from), sqlSelectColums, sqlWhereStatement, sqlWhereParameters, sqlSortOrder);
         if (Global.debugEnabledSql) {
-            Log.i(Global.LOG_CONTEXT, dbgContext +": FotoSql.createCursorForQuery:\n" +
+            Log.i(Global.LOG_CONTEXT, dbgContext + ": FotoSql.createCursorForQuery:\n" +
                     QueryParameter.toString(sqlSelectColums, null, from, sqlWhereStatement,
                             sqlWhereParameters, sqlSortOrder, query.getCount()));
         }
@@ -611,8 +630,7 @@ public class FotoSql extends FotoSqlBase {
                         "max(" + SQL_COL_LON + ") AS LON_MAX",
                         "count(*)"
                 )
-                .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME)
-                ;
+                .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
 
         if (!GalleryFilterParameter.isEmpty(filter)) {
             filter2Query(query, filter, true);
@@ -645,10 +663,12 @@ public class FotoSql extends FotoSqlBase {
         return null;
     }
 
-    /** gets IGeoPoint either from file if fullPath is not null else from db via id */
+    /**
+     * gets IGeoPoint either from file if fullPath is not null else from db via id
+     */
     public static IGeoPoint execGetPosition(Context context, String fullPath, long id) {
         QueryParameter query = new QueryParameter()
-        .setID(QUERY_TYPE_UNDEFINED)
+                .setID(QUERY_TYPE_UNDEFINED)
                 .addColumn(SQL_COL_LAT, SQL_COL_LON)
                 .addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME)
                 .addWhere(SQL_COL_LAT + " IS NOT NULL")
@@ -665,7 +685,7 @@ public class FotoSql extends FotoSqlBase {
         try {
             c = createCursorForQuery("execGetPosition", context, query, IGalleryFilter.VISIBILITY_PRIVATE_PUBLIC);
             if (c.moveToFirst()) {
-                GeoPoint result = new GeoPoint(c.getDouble(0),c.getDouble(1));
+                GeoPoint result = new GeoPoint(c.getDouble(0), c.getDouble(1));
                 return result;
             }
         } catch (Exception ex) {
@@ -694,7 +714,7 @@ public class FotoSql extends FotoSqlBase {
             try {
                 c = createCursorForQuery("execGetPathIdMap", context, query, IGalleryFilter.VISIBILITY_PRIVATE_PUBLIC);
                 while (c.moveToNext()) {
-                    result.put(c.getString(1),c.getLong(0));
+                    result.put(c.getString(1), c.getLong(0));
                 }
             } catch (Exception ex) {
                 Log.e(Global.LOG_CONTEXT, "FotoSql.execGetPathIdMap: error executing " + query, ex);
@@ -712,7 +732,7 @@ public class FotoSql extends FotoSqlBase {
 
             int count = 0;
             for (String fileName : fileNames) {
-                if ((fileName != null) &&!FileCommands.isSidecar(fileName)) {
+                if ((fileName != null) && !FileCommands.isSidecar(fileName)) {
                     if (count > 0) filter.append(", ");
                     filter.append("'").append(fileName).append("'");
                     count++;
@@ -734,15 +754,17 @@ public class FotoSql extends FotoSqlBase {
         return exexUpdateImpl(dbgContext, context, values, getFilterExprPathLikeWithVisibility(visibility), new String[]{path});
     }
 
-    /** every database update should go through this. adds logging if enabled */
+    /**
+     * every database update should go through this. adds logging if enabled
+     */
     protected static int exexUpdateImpl(String dbgContext, Context context, ContentValues values, String sqlWhere, String[] selectionArgs) {
         int result = context.getContentResolver().update(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE,
-                    values, sqlWhere,
-                    selectionArgs);
+                values, sqlWhere,
+                selectionArgs);
         if (Global.debugEnabledSql) {
             Log.i(Global.LOG_CONTEXT, dbgContext + ":FotoSql.exexUpdate\n" +
                     QueryParameter.toString(null, values.toString(), SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
-                    sqlWhere, selectionArgs, null, result));
+                            sqlWhere, selectionArgs, null, result));
         }
         return result;
     }
@@ -752,7 +774,9 @@ public class FotoSql extends FotoSqlBase {
         return FotoSql.FILTER_EXPR_PATH_LIKE + " AND " + getFilterExpressionVisibility(visibility);
     }
 
-    /** every database insert should go through this. adds logging if enabled */
+    /**
+     * every database insert should go through this. adds logging if enabled
+     */
     public static Uri execInsert(String dbgContext, Context context, ContentValues values) {
         Uri result = context.getContentResolver().insert(SQL_TABLE_EXTERNAL_CONTENT_URI, values);
         if (Global.debugEnabledSql) {
@@ -770,15 +794,14 @@ public class FotoSql extends FotoSqlBase {
     }
 
     public static int execDeleteByPath(String dbgContext, Activity context, String parentDirString, int visibility) {
-        int delCount = FotoSql.deleteMedia(dbgContext, context, getFilterExprPathLikeWithVisibility(visibility), new String[] {parentDirString + "/%"}, true);
+        int delCount = FotoSql.deleteMedia(dbgContext, context, getFilterExprPathLikeWithVisibility(visibility), new String[]{parentDirString + "/%"}, true);
         return delCount;
     }
 
     /**
      * Deletes media items specified by where with the option to prevent cascade delete of the image.
      */
-    public static int deleteMedia(String dbgContext, Context context, String where, String[] selectionArgs, boolean preventDeleteImageFile)
-    {
+    public static int deleteMedia(String dbgContext, Context context, String where, String[] selectionArgs, boolean preventDeleteImageFile) {
         String[] lastSelectionArgs = selectionArgs;
         String lastUsedWhereClause = where;
         int delCount = 0;
@@ -798,13 +821,13 @@ public class FotoSql extends FotoSqlBase {
                 if (Global.debugEnabledSql) {
                     Log.i(Global.LOG_CONTEXT, dbgContext + "-b: FotoSql.deleteMedia delete\n" +
                             QueryParameter.toString(null, null, SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
-                            lastUsedWhereClause, lastSelectionArgs, null, delCount));
+                                    lastUsedWhereClause, lastSelectionArgs, null, delCount));
                 }
             } else {
                 delCount = context.getContentResolver()
                         .delete(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE, lastUsedWhereClause, lastSelectionArgs);
                 if (Global.debugEnabledSql) {
-                    Log.i(Global.LOG_CONTEXT, dbgContext +": FotoSql.deleteMedia\ndelete " +
+                    Log.i(Global.LOG_CONTEXT, dbgContext + ": FotoSql.deleteMedia\ndelete " +
                             QueryParameter.toString(null, null,
                                     SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
                                     lastUsedWhereClause, lastSelectionArgs, null, delCount));
@@ -814,7 +837,7 @@ public class FotoSql extends FotoSqlBase {
             // null pointer exception when delete matches not items??
             final String msg = dbgContext + ": Exception in FotoSql.deleteMedia:\n" +
                     QueryParameter.toString(null, null, SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME,
-                    lastUsedWhereClause, lastSelectionArgs, null, -1)
+                            lastUsedWhereClause, lastSelectionArgs, null, -1)
                     + " : " + ex.getMessage();
             Log.e(Global.LOG_CONTEXT, msg, ex);
 
@@ -822,7 +845,9 @@ public class FotoSql extends FotoSqlBase {
         return delCount;
     }
 
-    /** converts imageID to content-uri */
+    /**
+     * converts imageID to content-uri
+     */
     public static Uri getUri(long imageID) {
         return Uri.parse(
                 getUriString(imageID));
@@ -869,13 +894,15 @@ public class FotoSql extends FotoSqlBase {
         }
 
         if (Global.debugEnabled) {
-            Log.d(Global.LOG_CONTEXT, "FotoSql.getSelectedfiles result count=" + ((result != null) ? result.size():0));
+            Log.d(Global.LOG_CONTEXT, "FotoSql.getSelectedfiles result count=" + ((result != null) ? result.size() : 0));
         }
 
         return result;
     }
 
-    /** converts internal ID-list to string array of filenNames via media database. */
+    /**
+     * converts internal ID-list to string array of filenNames via media database.
+     */
     public static String[] getFileNames(Context context, SelectedItems items) {
         if (!items.isEmpty()) {
             ArrayList<String> result = new ArrayList<>();
@@ -930,14 +957,16 @@ public class FotoSql extends FotoSqlBase {
         }
     }
 
-    /** adds visibility to sql of parameters, if not set yet */
+    /**
+     * adds visibility to sql of parameters, if not set yet
+     */
     public static QueryParameter setWhereVisibility(QueryParameter parameters, int visibility) {
         if (parameters.toFrom() == null) {
             parameters.addFrom(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME);
         }
         String sqlWhere = parameters.toAndroidWhere();
         if ((sqlWhere == null) || (parameters.toFrom().contains(SQL_TABLE_EXTERNAL_CONTENT_URI_FILE_NAME) && !sqlWhere.contains(SQL_COL_EXT_MEDIA_TYPE))) {
-           parameters.addWhere(getFilterExpressionVisibility(visibility));
+            parameters.addWhere(getFilterExpressionVisibility(visibility));
         }
 
         return parameters;

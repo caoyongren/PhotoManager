@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.imagedetail;
 
 import android.app.Activity;
@@ -45,7 +45,7 @@ import de.k3b.database.SelectedItems;
 
 /**
  * Adapter for android.support.v4.view.ViewPager that allows swiping next/previous image.<br>
- *
+ * <p>
  * Translates between position in ViewPager and content page content with image
  * Created by k3b on 04.07.2015.
  */
@@ -129,12 +129,12 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
     public CharSequence getPageTitle(int position) {
         Cursor cursor = getCursorAt(position);
         if (cursor != null) {
-            String name = DBUtils.getString(cursor,FotoSql.SQL_COL_DISPLAY_TEXT, null);
+            String name = DBUtils.getString(cursor, FotoSql.SQL_COL_DISPLAY_TEXT, null);
             if (name != null) {
                 StringBuilder result = new StringBuilder();
 
                 if (Global.debugEnabled) {
-                    long imageID = DBUtils.getLong(cursor, FotoSql.SQL_COL_PK,0);
+                    long imageID = DBUtils.getLong(cursor, FotoSql.SQL_COL_PK, 0);
                     result.append("#").append(imageID).append(":");
                 }
 
@@ -153,18 +153,20 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
 
     public String getFullFilePath(int position) {
         Cursor cursor = getCursorAt(position);
-        return DBUtils.getString(cursor,FotoSql.SQL_COL_DISPLAY_TEXT, null);
+        return DBUtils.getString(cursor, FotoSql.SQL_COL_DISPLAY_TEXT, null);
     }
 
-    /** translates offset in adapter to id of image */
+    /**
+     * translates offset in adapter to id of image
+     */
     public long getImageId(int position) {
         Cursor cursor = getCursorAt(position);
-        return DBUtils.getLong(cursor, FotoSql.SQL_COL_PK,0);
+        return DBUtils.getLong(cursor, FotoSql.SQL_COL_PK, 0);
     }
 
     public boolean hasGeo(int position) {
         Cursor cursor = getCursorAt(position);
-        return !DBUtils.isNull(cursor,FotoSql.SQL_COL_GPS,true);
+        return !DBUtils.isNull(cursor, FotoSql.SQL_COL_GPS, true);
     }
 
     /**
@@ -175,7 +177,7 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
      * {@link #finishUpdate(ViewGroup)}.
      *
      * @param container The containing View in which the page will be shown.
-     * @param position The page position to be instantiated.
+     * @param position  The page position to be instantiated.
      * @return Returns an Object representing the new page.  This does not
      * need to be a View, but can be some other container of the page.
      */
@@ -196,7 +198,9 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
         return null;
     }
 
-    /** internal helper. return null if position is not available */
+    /**
+     * internal helper. return null if position is not available
+     */
     private Cursor getCursorAt(int position) {
         if ((this.mCursor != null) && (position >= 0) && (position < this.mCursor.getCount())) {
             this.mCursor.moveToPosition(position);
@@ -205,7 +209,9 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
         return null;
     }
 
-    /** internal helper. return -1 if position is not available */
+    /**
+     * internal helper. return -1 if position is not available
+     */
     public int getPositionFromPath(String path) {
         int result = -1;
         if ((this.mCursor != null) && (path != null)) {
@@ -219,7 +225,8 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
                 } while (mCursor.moveToNext());
             }
         }
-        if (Global.debugEnabledViewItem) Log.i(Global.LOG_CONTEXT, mDebugPrefix + "getPositionFromPath(" + path +") => " + result);
+        if (Global.debugEnabledViewItem)
+            Log.i(Global.LOG_CONTEXT, mDebugPrefix + "getPositionFromPath(" + path + ") => " + result);
         return result;
     }
 
@@ -251,7 +258,7 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
         }
         photoView.setRotationTo(JpgMetaWorkflow.getRotationFromExifOrientation(fullPhotoPath));
         if (Global.debugEnabledViewItem) {
-            Log.i(Global.LOG_CONTEXT, mDebugPrefix + debugContext + position +", "
+            Log.i(Global.LOG_CONTEXT, mDebugPrefix + debugContext + position + ", "
                     + loadType + ") => " + fullPhotoPath + " => " + photoView);
         }
 
@@ -274,13 +281,14 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
      * this is done by the time it returns from {@link #finishUpdate(ViewGroup)}.
      *
      * @param container The containing View from which the page will be removed.
-     * @param position The page position to be removed.
-     * @param object The same object that was returned by
-     * {@link #instantiateItem(View, int)}.
+     * @param position  The page position to be removed.
+     * @param object    The same object that was returned by
+     *                  {@link #instantiateItem(View, int)}.
      */
     @Override
     public void destroyItem(ViewGroup container, int position, Object object) {
-        if (Global.debugEnabledViewItem) Log.i(Global.LOG_CONTEXT, mDebugPrefix + "destroyItem(#" + position +") " + object);
+        if (Global.debugEnabledViewItem)
+            Log.i(Global.LOG_CONTEXT, mDebugPrefix + "destroyItem(#" + position + ") " + object);
         container.removeView((View) object);
         GarbageCollector.freeMemory((View) object); // to reduce memory leaks
     }
@@ -291,7 +299,7 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
      * as returned by {@link #instantiateItem(ViewGroup, int)}. This method is
      * required for a PagerAdapter to function properly.
      *
-     * @param view Page View to check for association with <code>object</code>
+     * @param view   Page View to check for association with <code>object</code>
      * @param object Object to check for association with <code>view</code>
      * @return true if <code>view</code> is associated with the key object <code>object</code>
      */
@@ -306,16 +314,18 @@ public class ImagePagerAdapterFromCursor extends PagerAdapter implements Selecte
      * be the "primary", that is the one show to the user as the current page.
      *
      * @param container The containing View from which the page will be removed.
-     * @param position The page position that is now the primary.
-     * @param object The same object that was returned by
-     * {@link #instantiateItem(View, int)}.
+     * @param position  The page position that is now the primary.
+     * @param object    The same object that was returned by
+     *                  {@link #instantiateItem(View, int)}.
      */
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         super.setPrimaryItem(container, position, object);
         this.mActivity.setTitle(this.getPageTitle(position));
     }
 
-    /** SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database. */
+    /**
+     * SelectedItems.Id2FileNameConverter: converts items.id-s to string array of filenNames via media database.
+     */
     @Override
     public String[] getFileNames(SelectedItems items) {
         return FotoSql.getFileNames(mActivity, items);

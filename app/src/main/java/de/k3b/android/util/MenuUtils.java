@@ -32,6 +32,7 @@ import static android.view.MenuItem.SHOW_AS_ACTION_NEVER;
  */
 public class MenuUtils {
     private final static int id_more = 199827;
+
     public static void mov2SubMenu(Menu menue, String subMenue, int... ids2move) {
         if (menue != null) {
             MenuItem subMenuOwner = menue.findItem(id_more);
@@ -45,7 +46,7 @@ public class MenuUtils {
                     menue.removeItem(idSub);
                     menue.removeItem(idSub);
                     menue.removeItem(idSub);
-                    MenuItem newMenuItem = subMenu.add(oldMenuItem.getGroupId(), oldMenuItem.getItemId(), oldMenuItem.getOrder(),oldMenuItem.getTitle());
+                    MenuItem newMenuItem = subMenu.add(oldMenuItem.getGroupId(), oldMenuItem.getItemId(), oldMenuItem.getOrder(), oldMenuItem.getTitle());
                     newMenuItem.setCheckable(oldMenuItem.isCheckable());
                     newMenuItem.setVisible(oldMenuItem.isVisible());
                 }
@@ -54,12 +55,11 @@ public class MenuUtils {
     }
 
     /**
-     *
      * @param menu
      * @param actionEnum How the item should display. One of
-     *      {@link MenuItem#SHOW_AS_ACTION_ALWAYS}, {@link MenuItem#SHOW_AS_ACTION_IF_ROOM}, or
-     *      {@link MenuItem#SHOW_AS_ACTION_NEVER}. SHOW_AS_ACTION_NEVER is the default.
-     * @param menuIds 0 or more menu-ids to be modified.
+     *                   {@link MenuItem#SHOW_AS_ACTION_ALWAYS}, {@link MenuItem#SHOW_AS_ACTION_IF_ROOM}, or
+     *                   {@link MenuItem#SHOW_AS_ACTION_NEVER}. SHOW_AS_ACTION_NEVER is the default.
+     * @param menuIds    0 or more menu-ids to be modified.
      */
     public static void setShowAsActionFlags(Menu menu, int actionEnum, int... menuIds) {
         for (int idEdit : menuIds) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.directory;
 
 import android.app.Activity;
@@ -74,10 +74,10 @@ import java.util.List;
 
 /**
  * A fragment with a Listing of Directories to be picked.
- *
+ * <p>
  * [parentPathBar]
  * [treeView]
- *
+ * <p>
  * Activities that contain this fragment must implement the
  * {@link OnDirectoryInteractionListener} interface
  * to handle interaction events.
@@ -86,8 +86,10 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
 
     private static final int FIRST_RADIO = 5000;
 
-    /** executer for background task, that updates status-message and stops if cancel is pressed */
-    private abstract class AsyncTaskEx<Params> extends AsyncTask<Params, Integer,Integer> {
+    /**
+     * executer for background task, that updates status-message and stops if cancel is pressed
+     */
+    private abstract class AsyncTaskEx<Params> extends AsyncTask<Params, Integer, Integer> {
         private final int mProgressMessageResourceId;
 
         AsyncTaskEx(int progressMessageResourceId) {
@@ -110,11 +112,13 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
             }
         }
 
-        @Override protected void onCancelled() {
+        @Override
+        protected void onCancelled() {
             onDirectoryCancel();
         }
 
-        @Override protected void onPostExecute(Integer result) {
+        @Override
+        protected void onPostExecute(Integer result) {
             String message = getActivity().getString(mProgressMessageResourceId) +
                     ": " + result;
             Toast.makeText(getActivity(), message,
@@ -166,7 +170,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
 
     public DirectoryPickerFragment() {
         // Required empty public constructor
-        debugPrefix = "DirectoryPickerFragment#" + (id++)  + " ";
+        debugPrefix = "DirectoryPickerFragment#" + (id++) + " ";
         Global.debugMemory(debugPrefix, "ctor");
         // Required empty public constructor
         if (Global.debugEnabled) {
@@ -197,7 +201,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         View view = inflater.inflate(R.layout.fragment_directory, container, false);
 
         mContext = this.getActivity();
-        if (Global.debugEnabled && (mContext != null) && (mContext.getIntent() != null)){
+        if (Global.debugEnabled && (mContext != null) && (mContext.getIntent() != null)) {
             Log.d(Global.LOG_CONTEXT, "DirectoryPickerFragment onCreateView " + mContext.getIntent().toUri(Intent.URI_INTENT_SCHEME));
         }
 
@@ -222,7 +226,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         this.mParentPathBar = (LinearLayout) view.findViewById(R.id.parent_owner);
         this.mParentPathBarScroller = (HorizontalScrollView) view.findViewById(R.id.parent_scroller);
 
-        mTreeView = (ExpandableListView)view.findViewById(R.id.directory_tree);
+        mTreeView = (ExpandableListView) view.findViewById(R.id.directory_tree);
         mTreeView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
@@ -263,11 +267,13 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         return view;
     }
 
-    /** handle init for dialog-only controlls: cmdOk, cmdCancel, status */
+    /**
+     * handle init for dialog-only controlls: cmdOk, cmdCancel, status
+     */
     private void onCreateViewDialog(View view) {
         this.mStatus = (TextView) view.findViewById(R.id.status);
         this.mStatus.setVisibility(View.VISIBLE);
-        
+
         this.mCmdOk = (Button) view.findViewById(R.id.cmd_ok);
         this.mCmdOk.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,7 +311,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         if (mDirTypId != 0) {
             String title = mContext.getString(
                     R.string.folder_dialog_title_format,
-                    FotoSql.getName(mContext,mDirTypId));
+                    FotoSql.getName(mContext, mDirTypId));
             getDialog().setTitle(title);
             // no api for setIcon ????
         } else if (mTitleId != 0) {
@@ -313,7 +319,9 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         }
     }
 
-    /** called via pathBar-Button-LongClick, tree-item-LongClick, popUp-button */
+    /**
+     * called via pathBar-Button-LongClick, tree-item-LongClick, popUp-button
+     */
     private void onShowPopUp(View anchor, IDirectory selection) {
         PopupMenu popup = onCreatePopupMenu(anchor, selection);
 
@@ -368,7 +376,8 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
             case R.id.cmd_folder_hide_images:
                 onHideFolderMediaQuestion(mPopUpSelection.getAbsolute());
                 return true;
-            default:break;
+            default:
+                break;
         }
         return false;
     }
@@ -381,7 +390,8 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
                     if (result != null) {
                         MediaScanner.hideFolderMedia(mContext, path);
                         onDirectoryCancel();
-                        if (mDirectoryListener != null) mDirectoryListener.invalidateDirectories("hide folder " + path);
+                        if (mDirectoryListener != null)
+                            mDirectoryListener.invalidateDirectories("hide folder " + path);
                     }
                 }
             };
@@ -400,7 +410,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
                 if (newFileName != null) {
                     onCreateSubDirAnswer(parentDir, newFileName);
                 }
-                mSubDialog=null;
+                mSubDialog = null;
             }
         };
         mSubDialog = dialog.editFileName(getActivity(), getString(R.string.mk_dir_menu_title), defaultName);
@@ -437,17 +447,17 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
             if (FileUtils.isSymlinkDir(linkFile, false)) {
                 String canonicalPath = FileUtils.tryGetCanonicalPath(linkFile, null);
                 if ((canonicalPath != null) && linkFile.exists() && linkFile.isDirectory()) {
-                    if (!linkPath.endsWith("/")) linkPath+="/";
-                    if (!canonicalPath.endsWith("/")) canonicalPath+="/";
+                    if (!linkPath.endsWith("/")) linkPath += "/";
+                    if (!canonicalPath.endsWith("/")) canonicalPath += "/";
 
                     String sqlWhereLink = FotoSql.SQL_COL_PATH + " like '" + linkPath + "%'";
                     SelectedFiles linkFiles = FotoSql.getSelectedfiles(context, sqlWhereLink);
 
                     String sqlWhereCanonical = FotoSql.SQL_COL_PATH + " in (" + linkFiles.toString() + ")";
-                    sqlWhereCanonical = sqlWhereCanonical.replace(linkPath,canonicalPath);
+                    sqlWhereCanonical = sqlWhereCanonical.replace(linkPath, canonicalPath);
                     SelectedFiles canonicalFiles = FotoSql.getSelectedfiles(context, sqlWhereCanonical);
                     HashMap<String, String> link2canonical = new HashMap<String, String>();
-                    for(String cann : canonicalFiles.getFileNames()) {
+                    for (String cann : canonicalFiles.getFileNames()) {
                         link2canonical.put(linkPath + cann.substring(canonicalPath.length()), cann);
                     }
 
@@ -460,7 +470,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
 
                     String[] linkFileNames = linkFiles.getFileNames();
                     Long[] linkIds = linkFiles.getIds();
-                    for(int i = linkFileNames.length -1; i >= 0; i--) {
+                    for (int i = linkFileNames.length - 1; i >= 0; i--) {
                         String lin = linkFileNames[i];
                         String cann = link2canonical.get(lin);
                         if (Global.debugEnabled) {
@@ -470,9 +480,9 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
                         if (cann == null) {
                             // rename linkFile to canonicalFile
                             updateValues.put(FotoSql.SQL_COL_PATH, canonicalPath + lin.substring(linkPath.length()));
-                            FotoSql.execUpdate("fixLinks", context, linkIds[i].intValue() ,updateValues);
+                            FotoSql.execUpdate("fixLinks", context, linkIds[i].intValue(), updateValues);
                         } else {
-                            FotoSql.deleteMedia("DirectoryPickerFragment.fixLinks", context, FotoSql.FILTER_COL_PK, new String[] {linkIds[i].toString()}, true);
+                            FotoSql.deleteMedia("DirectoryPickerFragment.fixLinks", context, FotoSql.FILTER_COL_PK, new String[]{linkIds[i].toString()}, true);
                         }
                     }
                     MediaScanner.notifyChanges(context, "Fixed link/canonical duplicates");
@@ -503,8 +513,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         String pathFilter = (selectedDir != null) ? selectedDir.getAbsolute() : null;
         if (pathFilter != null) {
             GalleryFilterParameter filter = new GalleryFilterParameter(); //.setPath(pathFilter);
-            if (!FotoSql.set(filter, pathFilter, mDirTypId))
-            {
+            if (!FotoSql.set(filter, pathFilter, mDirTypId)) {
                 filter.setPath(pathFilter + "/%");
             }
 
@@ -521,8 +530,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         String pathFilter = (selectedDir != null) ? selectedDir.getAbsolute() : null;
         if (pathFilter != null) {
             GalleryFilterParameter filter = new GalleryFilterParameter(); //.setPath(pathFilter);
-            if (!FotoSql.set(filter, pathFilter, mDirTypId))
-            {
+            if (!FotoSql.set(filter, pathFilter, mDirTypId)) {
                 filter.setPath(pathFilter + "/%");
             }
 
@@ -560,7 +568,9 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         Dialog result = super.onCreateDialog(savedInstanceState);
 
         return result;
-    };
+    }
+
+    ;
 
     public void onResume() {
         super.onResume();
@@ -580,7 +590,8 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         mSubTask = null;
     }
 
-    @Override public void onDestroy() {
+    @Override
+    public void onDestroy() {
         closeAll();
         super.onDestroy();
         // RefWatcher refWatcher = AndroFotoFinderApp.getRefWatcher(getActivity());
@@ -645,7 +656,8 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
     }
 
     protected void notifySelectionChanged(IDirectory selectedChild) {
-        if ((mDirectoryListener != null) && (selectedChild != null)) mDirectoryListener.onDirectorySelectionChanged(selectedChild.getAbsolute(), mDirTypId);
+        if ((mDirectoryListener != null) && (selectedChild != null))
+            mDirectoryListener.onDirectorySelectionChanged(selectedChild.getAbsolute(), mDirTypId);
     }
 
     /**
@@ -663,7 +675,7 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
 
         String selectedPath = (this.mCurrentSelection != null) ? this.mCurrentSelection.getAbsolute() : null;
 
-        String statusMessage = (itemCount == 0) ? mContext.getString(R.string.selection_none_hint)  : getStatusErrorMessage(selectedPath);
+        String statusMessage = (itemCount == 0) ? mContext.getString(R.string.selection_none_hint) : getStatusErrorMessage(selectedPath);
         boolean canPressOk = (statusMessage == null);
 
         if (mCmdOk != null) mCmdOk.setEnabled(canPressOk);
@@ -687,8 +699,8 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
 
         Directory directory = (Directory) _directory;
         return (FotoViewerParameter.includeSubItems)
-                        ? directory.getNonDirSubItemCount()
-                        : directory.getNonDirItemCount();
+                ? directory.getNonDirSubItemCount()
+                : directory.getNonDirItemCount();
     }
 
     /*********************** local helper *******************************************/
@@ -771,7 +783,9 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         navigateTo(initialAbsolutePath);
     }
 
-    /** refreshLocal tree to new newGrandParent by preserving selection */
+    /**
+     * refreshLocal tree to new newGrandParent by preserving selection
+     */
     private void navigateTo(int newGroupSelection, IDirectory newGrandParent) {
         if (newGrandParent != null) {
             Log.d(TAG, debugPrefix + "navigateTo(" +
@@ -804,7 +818,9 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
         reloadTreeViewIfAvailable();
     }
 
-    /** Does nothing if either OnCreate() or defineDirectoryNavigation() has NOT been called yet */
+    /**
+     * Does nothing if either OnCreate() or defineDirectoryNavigation() has NOT been called yet
+     */
     private boolean reloadTreeViewIfAvailable() {
         if ((mTreeView != null) && (mNavigation != null)) {
             if (mAdapter == null) {
@@ -835,16 +851,24 @@ public class DirectoryPickerFragment extends DialogFragment implements Directory
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnDirectoryInteractionListener {
-        /** called when user picks a new directory */
+        /**
+         * called when user picks a new directory
+         */
         void onDirectoryPick(String selectedAbsolutePath, int queryTypeId);
 
-        /** called when user cancels picking of a new directory */
+        /**
+         * called when user cancels picking of a new directory
+         */
         void onDirectoryCancel(int queryTypeId);
 
-        /** called after the selection in tree has changed */
+        /**
+         * called after the selection in tree has changed
+         */
         void onDirectorySelectionChanged(String selectedChild, int queryTypeId);
 
-        /** remove cached directories */
+        /**
+         * remove cached directories
+         */
         void invalidateDirectories(String why);
     }
 }

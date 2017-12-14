@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.util;
 
 import android.app.Activity;
@@ -39,16 +39,18 @@ import de.k3b.media.MediaUtil;
 
 /**
  * Special MediaScanner that can only handle inserNew/updateExisting for directories or jp(e)g files.
- *
+ * <p>
  * Can handle pause/resume scanning after a directory was scanned before
  * continuing scanning other dirs.
- *
+ * <p>
  * Created by k3b on 22.10.2015.
  */
 public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
-    /** Either
+    /**
+     * Either
      * - current running scanner instance
-     * - or reumable instanc */
+     * - or reumable instanc
+     */
     public static RecursiveMediaScannerAsyncTask sScanner = null;
 
     // statistics displayed in the status dialog
@@ -59,9 +61,11 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
     private Handler mTimerHandler = null;
     private Runnable mTimerRunner = null;
 
-    /** if not null scanner is either
+    /**
+     * if not null scanner is either
      * - in resume mode (can be started without parameters to resume interrupted scan)
-     * - or in pausing mode collecting all canceled scans here to be processed in resumeIfNecessary() */
+     * - or in pausing mode collecting all canceled scans here to be processed in resumeIfNecessary()
+     */
     private List<String> mPaused = null;
 
     public RecursiveMediaScannerAsyncTask(MediaScanner scanner, Context context, String why) {
@@ -126,10 +130,11 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
         return resultCount;
     }
 
-    /** @return true if scanner was resumable and started resume operation. */
+    /**
+     * @return true if scanner was resumable and started resume operation.
+     */
     public boolean resumeIfNeccessary() {
-        if ((getStatus() == AsyncTask.Status.PENDING) && (mPaused != null))
-        {
+        if ((getStatus() == AsyncTask.Status.PENDING) && (mPaused != null)) {
             execute(mPaused.toArray(new String[mPaused.size()]));
             mPaused = null;
             return true;
@@ -137,7 +142,9 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
         return false;
     }
 
-    /** call the original background scanner and update the statistics */
+    /**
+     * call the original background scanner and update the statistics
+     */
     private Integer runScanner(String parentPath, String... fileNames) {
         this.mCurrentFolder = parentPath;
         final Integer resultCount = super.doInBackground(null, fileNames);
@@ -147,7 +154,8 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
         return resultCount;
     }
 
-    @Override protected void onPostExecute(Integer modifyCount) {
+    @Override
+    protected void onPostExecute(Integer modifyCount) {
         super.onPostExecute(modifyCount);
         if (isCancelled()) {
             handleScannerCancel();
@@ -169,7 +177,7 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
         }
 
         if (mustCreateResumeScanner) {
-            RecursiveMediaScannerAsyncTask newScanner = new RecursiveMediaScannerAsyncTask(mScanner, mScanner.mContext,"resumed " + mWhy);
+            RecursiveMediaScannerAsyncTask newScanner = new RecursiveMediaScannerAsyncTask(mScanner, mScanner.mContext, "resumed " + mWhy);
             newScanner.mPaused = this.mPaused;
             RecursiveMediaScannerAsyncTask.sScanner = newScanner;
         }
@@ -181,7 +189,9 @@ public class RecursiveMediaScannerAsyncTask extends MediaScannerAsyncTask {
         handleScannerCancel();
     }
 
-    /** returns null if scanner is not busy-active */
+    /**
+     * returns null if scanner is not busy-active
+     */
     public static RecursiveMediaScannerAsyncTask getBusyScanner() {
         if ((RecursiveMediaScannerAsyncTask.sScanner != null) && (RecursiveMediaScannerAsyncTask.sScanner.getStatus() == Status.RUNNING)) {
             return RecursiveMediaScannerAsyncTask.sScanner;

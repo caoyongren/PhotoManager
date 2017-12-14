@@ -52,12 +52,15 @@ import de.k3b.tagDB.TagRepository;
 public class MediaDBActivity extends Activity {
     public static final String DBG_CONTEXT = "MediaDB-Import(Csv): ";
 
-    /** Does the import into MediaDB in background task */
-    private AsyncTask<Uri,String,String> mTask = null;
+    /**
+     * Does the import into MediaDB in background task
+     */
+    private AsyncTask<Uri, String, String> mTask = null;
     private TextView mStatus;
     private TextView mFolder;
 
-    @Override protected void onDestroy() {
+    @Override
+    protected void onDestroy() {
         if (mTask != null) {
             // cancel background import if active
             mTask.cancel(false);
@@ -66,7 +69,8 @@ public class MediaDBActivity extends Activity {
         super.onDestroy();
     }
 
-    @Override protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final Uri uri = getUri();
         if (uri == null) {
@@ -106,14 +110,16 @@ public class MediaDBActivity extends Activity {
 
     private Uri getUri() {
         final String action = getIntent().getAction();
-        if(Intent.ACTION_VIEW.equals(action)) {
+        if (Intent.ACTION_VIEW.equals(action)) {
             return IntentUtil.getUri(getIntent());
         }
         return null;
     }
 
-    /** Does the import into MediaDB in background task */
-    private class TaskLoadMediaDB extends AsyncTask<Uri,String,String> {
+    /**
+     * Does the import into MediaDB in background task
+     */
+    private class TaskLoadMediaDB extends AsyncTask<Uri, String, String> {
         private int mItemCount = 0;
         private int mUpdateCount = 0;
         private int mProgressCountDown = 0;
@@ -260,7 +266,9 @@ public class MediaDBActivity extends Activity {
                 }
             }
 
-            /** get or create parent-tag where alle imports are appendend as children */
+            /**
+             * get or create parent-tag where alle imports are appendend as children
+             */
             public Tag getImportRoot() {
                 if (mImportRoot == null) {
                     mImportRoot = TagRepository.getInstance().getImportRoot();

@@ -75,7 +75,7 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
 
     @Override
     public Date getDateTimeTaken() {
-        String dateTimeString =  this.getAttribute(ExifInterfaceEx.TAG_DATETIME);
+        String dateTimeString = this.getAttribute(ExifInterfaceEx.TAG_DATETIME);
         if (dateTimeString == null) return null;
 
         ParsePosition pos = new ParsePosition(0);
@@ -108,7 +108,7 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
             f.setAccessible(true);//Abracadabra
             Object field = f.get((ExifInterface) this);
             Map<String, String> exifAttributes = (field instanceof Map) ? (Map<String, String>) field : null;
-            if  ((exifAttributes != null) && (exifAttributes.size() > 0)) return exifAttributes;
+            if ((exifAttributes != null) && (exifAttributes.size() > 0)) return exifAttributes;
 
         } catch (Exception ex) {
             // ??? add logging to find out what goes wrong
@@ -158,14 +158,16 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
         if (mFilename != null) {
             File filePath = new File(mFilename);
             Date date = new Date(filePath.lastModified());
-            builder.append(seperator).append("filedate: ").append(ExifInterfaceEx.toExifDateTimeString(date)).append(seperator);;
-            builder.append("filemode: ").append( "" + (filePath.canRead() ? "r":"-") + (filePath.canWrite() ? "w":"-") + (filePath.canExecute() ? "x":"-")).append(seperator);;
+            builder.append(seperator).append("filedate: ").append(ExifInterfaceEx.toExifDateTimeString(date)).append(seperator);
+            ;
+            builder.append("filemode: ").append("" + (filePath.canRead() ? "r" : "-") + (filePath.canWrite() ? "w" : "-") + (filePath.canExecute() ? "x" : "-")).append(seperator);
+            ;
         }
 
         return builder.toString();
     }
 
-    private String getExifTag(String tag){
+    private String getExifTag(String tag) {
         String attribute = getAttribute(tag);
 
         return (null != attribute ? attribute : "");
@@ -173,41 +175,44 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
 
     /**
      * returns ref for latitude which is S or N.
+     *
      * @return S or N
      */
     private String latitudeRef(Double latitude) {
         if (latitude == null) return null;
-        return latitude<0.0d?"S":"N";
+        return latitude < 0.0d ? "S" : "N";
     }
 
     /**
      * returns ref for latitude which is S or N.
+     *
      * @return W or E
      */
     private String longitudeRef(Double longitude) {
         if (longitude == null) return null;
-        return longitude<0.0d?"W":"E";
+        return longitude < 0.0d ? "W" : "E";
     }
 
     /**
      * convert latitude into DMS (degree minute second) format. For instance<br/>
      * -79.948862 becomes<br/>
      * -79 degrees, 56 minutes, 55903 millisecs (equals 55.903 seconds)
-     *  79/1,56/1,55903/1000<br/>
+     * 79/1,56/1,55903/1000<br/>
      * It works for latitude and longitude<br/>
+     *
      * @param _latitude could be longitude.
      */
     private final String convert(Double _latitude) {
         if (_latitude == null) return null;
 
-        double latitude=Math.abs(_latitude);
+        double latitude = Math.abs(_latitude);
         int degree = (int) latitude;
         latitude *= 60;
         latitude -= (degree * 60.0d);
         int minute = (int) latitude;
         latitude *= 60;
         latitude -= (minute * 60.0d);
-        int milliSecond = (int) (latitude*1000.0d);
+        int milliSecond = (int) (latitude * 1000.0d);
 
         String sb = String.valueOf(degree) +
                 "/1," +
@@ -220,6 +225,7 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
 
     private Double mLatitude = null;
     private Double mLongitude = null;
+
     @Override
     public ExifInterfaceEx setLatitude(Double latitude) {
         setAttribute(ExifInterfaceEx.TAG_GPS_LATITUDE, convert(latitude));
@@ -252,49 +258,65 @@ public class ExifInterfaceEx extends ExifInterface implements IMetaApi {
         return mLongitude;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public String getTitle() {
         return null;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public IMetaApi setTitle(String title) {
         return this;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public String getDescription() {
         return null;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public IMetaApi setDescription(String description) {
         return this;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public List<String> getTags() {
         return null;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public IMetaApi setTags(List<String> tags) {
         return this;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public Integer getRating() {
         return null;
     }
 
-    /** not implemented in {@link ExifInterface} */
+    /**
+     * not implemented in {@link ExifInterface}
+     */
     @Override
     public IMetaApi setRating(Integer value) {
         return this;

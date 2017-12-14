@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.util;
 
 import android.content.Context;
@@ -35,7 +35,7 @@ import de.k3b.android.androFotoFinder.Global;
 
 /**
  * UncaughtException writes apps own logcat content to logfile, if Global.logCatDir is defined.
- *
+ * <p>
  * Created by k3b on 04.11.2015.
  */
 public class LogCat implements Thread.UncaughtExceptionHandler {
@@ -66,9 +66,9 @@ public class LogCat implements Thread.UncaughtExceptionHandler {
         // Datetime as part of the crash-log-filename
         // i.e. /mnt/sdcard/copy/log/androFotofinder.logcat-20160509-195217.txt
         File logFile = (logDirectory == null) ? null : new File(logDirectory,
-                            "androFotofinder.logcat-"
-                                    + fmtDateTime2String.format(new Date(System.currentTimeMillis()))
-                                    + ".txt");
+                "androFotofinder.logcat-"
+                        + fmtDateTime2String.format(new Date(System.currentTimeMillis()))
+                        + ".txt");
         String message = (logFile != null)
                 ? "saving errorlog ('LocCat') to " + logFile.getAbsolutePath()
                 : "Saving errorlog ('LocCat') is disabled. See Settings 'Diagnostics' for details";
@@ -123,7 +123,7 @@ public class LogCat implements Thread.UncaughtExceptionHandler {
 
         try {
             // Do your stuff with the exception
-            Log.e(Global.LOG_CONTEXT,"LogCat.uncaughtException " + ex, ex);
+            Log.e(Global.LOG_CONTEXT, "LogCat.uncaughtException " + ex, ex);
             saveToFile();
         } catch (Exception e) {
             /* Ignore */

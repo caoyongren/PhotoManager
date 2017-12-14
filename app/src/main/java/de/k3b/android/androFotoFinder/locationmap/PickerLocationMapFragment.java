@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * this program. If not, see <http://www.gnu.org/licenses/>
  */
- 
+
 package de.k3b.android.androFotoFinder.locationmap;
 
 import android.app.Activity;
@@ -48,7 +48,7 @@ import de.k3b.io.GeoRectangle;
 
 /**
  * LocationMapFragment working as Picker. Current result is the red marker.
- *
+ * <p>
  * Created by k3b on 30.08.2015.
  */
 public class PickerLocationMapFragment extends LocationMapFragment {
@@ -61,6 +61,7 @@ public class PickerLocationMapFragment extends LocationMapFragment {
         mDebugPrefix = "PickerLocationMapFragment ";
         STATE_LAST_VIEWPORT = "LAST_PICKER_VIEWPORT";
     }
+
     /**
      * non tap-able marker that moves to last tap position
      */
@@ -110,6 +111,7 @@ public class PickerLocationMapFragment extends LocationMapFragment {
         }
 
     }
+
     @Override
     protected void definteOverlays(MapView mapView) {
         super.definteOverlays(mapView);
@@ -127,7 +129,9 @@ public class PickerLocationMapFragment extends LocationMapFragment {
         */
     }
 
-    /** get all important parameters for displaying the map */
+    /**
+     * get all important parameters for displaying the map
+     */
     public void defineNavigation(GalleryFilterParameter rootFilter, IGeoPointInfo selectedItem,
                                  GeoRectangle rectangle, int zoomlevel,
                                  SelectedItems selectedItems, Uri additionalPointsContentUri) {
@@ -149,7 +153,8 @@ public class PickerLocationMapFragment extends LocationMapFragment {
     protected IGeoPoint getCurrentSelectionPosition() {
         if (this.mCurrrentSelectionRedMarker == null) return null;
         IGeoPoint pos = this.mCurrrentSelectionRedMarker.getPosition();
-        if ((pos == null) || GeoPointDto.isEmpty(pos.getLatitude(), pos.getLongitude())) return null;
+        if ((pos == null) || GeoPointDto.isEmpty(pos.getLatitude(), pos.getLongitude()))
+            return null;
         return pos;
     }
 

@@ -31,7 +31,7 @@ import de.k3b.tagDB.TagConverter;
 
 /**
  * r/w {@link IMetaApi} Implementation for android databse/contentprovider {@link ContentValues}.
- *
+ * <p>
  * Created by k3b on 10.10.2016.
  */
 
@@ -45,7 +45,7 @@ public class MediaContentValues implements IMetaApi {
         return this;
     }
 
-    public ContentValues getContentValues(){
+    public ContentValues getContentValues() {
         return mData;
     }
 
@@ -58,7 +58,7 @@ public class MediaContentValues implements IMetaApi {
         return mData.getAsInteger(FotoSql.SQL_COL_PK);
     }
 
-    public MediaContentValues clear(){
+    public MediaContentValues clear() {
         mData.clear();
         return this;
     }
@@ -103,12 +103,12 @@ public class MediaContentValues implements IMetaApi {
 
     @Override
     public Double getLatitude() {
-        return  mData.getAsDouble(FotoSql.SQL_COL_LAT);
+        return mData.getAsDouble(FotoSql.SQL_COL_LAT);
     }
 
     @Override
     public Double getLongitude() {
-        return  mData.getAsDouble(FotoSql.SQL_COL_LON);
+        return mData.getAsDouble(FotoSql.SQL_COL_LON);
     }
 
     @Override
@@ -140,7 +140,7 @@ public class MediaContentValues implements IMetaApi {
 
     @Override
     public IMetaApi setTags(List<String> tags) {
-        mData.put(TagSql.SQL_COL_EXT_TAGS, TagConverter.asDbString("",tags));
+        mData.put(TagSql.SQL_COL_EXT_TAGS, TagConverter.asDbString("", tags));
         setLastXmpFileModifyDate();
         return this;
     }
